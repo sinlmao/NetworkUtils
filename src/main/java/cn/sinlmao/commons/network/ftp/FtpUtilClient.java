@@ -37,7 +37,7 @@ import org.apache.commons.net.ftp.FTPReply;
 public class FtpUtilClient {
 
     /**
-     * Description: 向FTP服务器上传文件
+     * 向FTP服务器上传文件
      *
      * @param host           FTP服务器hostname
      * @param port           FTP服务器端口

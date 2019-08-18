@@ -41,6 +41,12 @@ import java.util.Set;
  */
 public class HttpUtilClient {
 
+    /**
+     * 发送请求
+     * @param httpUtilRequest
+     * @return HttpUtilResponse
+     * @throws Exception
+     */
     public static HttpUtilResponse send(HttpUtilRequest httpUtilRequest) throws Exception {
 
         HttpUtilResponse httpUtilResponse = new HttpUtilResponse();
