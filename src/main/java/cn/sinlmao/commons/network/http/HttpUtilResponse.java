@@ -109,4 +109,9 @@ public class HttpUtilResponse {
 	public int getHeaderSize() {
 		return headers.size();
 	}
+
+	///////////////////////////////////////////////////////////////////////
+
+	protected HttpUtilResponse() {
+	}
 }

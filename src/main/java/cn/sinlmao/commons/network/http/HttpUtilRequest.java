@@ -15,6 +15,8 @@
  */
 package cn.sinlmao.commons.network.http;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -29,111 +31,127 @@ import java.util.Set;
  */
 public class HttpUtilRequest {
 
-	private String url;
-	private HttpUtilMethod method;
-	private String charset = "utf-8";
-	private String inputData;
-	private int bytesLength = 4096;
-	private HttpUtilContentType contentType = HttpUtilContentType.APPLICATION_X_WWW_FORM_URLENCODED;
-	private String contentTypeStr;
+    private String url;
+    private HttpUtilMethod method;
+    private String charset = "utf-8";
+    private Object inputData;
+    private int bytesLength = 4096;
+    private HttpUtilContentType contentType = HttpUtilContentType.APPLICATION_X_WWW_FORM_URLENCODED;
+    private String contentTypeStr;
 
-	private Map<String, String> headers = new HashMap<String, String>();
-	private Map<String, String> cookies = new HashMap<String, String>();
+    private Map<String, String> headers = new HashMap<String, String>();
+    private Map<String, String> cookies = new HashMap<String, String>();
 
-	public HttpUtilRequest(String url) {
-		this.url = url;
-	}
+    public HttpUtilRequest(String url) {
+        this.url = url;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public HttpUtilMethod getMethod() {
-		return method;
-	}
+    public HttpUtilMethod getMethod() {
+        return method;
+    }
 
-	public void setMethod(HttpUtilMethod method) {
-		this.method = method;
-	}
+    public void setMethod(HttpUtilMethod method) {
+        this.method = method;
+    }
 
-	public String getCharset() {
-		return charset;
-	}
+    public String getCharset() {
+        return charset;
+    }
 
-	public void setCharset(String charset) {
-		this.charset = charset;
-	}
+    public void setCharset(String charset) {
+        this.charset = charset;
+    }
 
-	public String getInputData() {
-		return inputData;
-	}
+    ///////////////////////////////////////////////////////////////////////
 
-	public void setInputData(String inputData) {
-		this.inputData = inputData;
-	}
+    public Object getInputData() {
+        return inputData;
+    }
 
-	public int getBytesLength() {
-		return bytesLength;
-	}
+    public <T> T getInputData(Class<T> type) {
+        return (T) inputData;
+    }
 
-	public void setBytesLength(int bytesLength) {
-		this.bytesLength = bytesLength;
-	}
+    public void setInputData(String inputData) {
+        this.inputData = inputData;
+    }
 
-	public HttpUtilContentType getContentType() {
-		return contentType;
-	}
+    public void setInputData(Map<String, String> inputData) {
+        this.inputData = inputData;
+    }
 
-	public void setContentType(HttpUtilContentType contentType) {
-		this.contentType = contentType;
-	}
+    public void setInputData(JSONObject inputData) {
+        this.inputData = inputData;
+    }
 
-	public void setContentType(String contentType) {
-		this.contentTypeStr = contentType;
-	}
+    ///////////////////////////////////////////////////////////////////////
 
-	public String getContentTypeStr() {
-		return this.contentTypeStr;
-	}
+    public int getBytesLength() {
+        return bytesLength;
+    }
 
-	///////////////////////////////////////////////////////////////////////
+    public void setBytesLength(int bytesLength) {
+        this.bytesLength = bytesLength;
+    }
 
-	public void addHeader(String name, String value) {
-		headers.put(name, value);
-	}
+    public HttpUtilContentType getContentType() {
+        return contentType;
+    }
 
-	public String getHeaderValue(String name) {
-		return headers.get(name);
-	}
+    public void setContentType(HttpUtilContentType contentType) {
+        this.contentType = contentType;
+    }
 
-	public Set<String> getHeaderNames() {
-		return headers.keySet();
-	}
+    public void setContentType(String contentType) {
+        this.contentTypeStr = contentType;
+    }
 
-	public int getHeaderSize() {
-		return headers.size();
-	}
+    public String getContentTypeStr() {
+        return this.contentTypeStr;
+    }
 
-	///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
 
-	public void addCookie(String name, String value) {
-		cookies.put(name, value);
-	}
+    public void addHeader(String name, String value) {
+        headers.put(name, value);
+    }
 
-	public String getCookieData(String name) {
-		return cookies.get(name);
-	}
+    public String getHeaderValue(String name) {
+        return headers.get(name);
+    }
 
-	public Set<String> getCookieNames() {
-		return cookies.keySet();
-	}
+    public Set<String> getHeaderNames() {
+        return headers.keySet();
+    }
 
-	public int getCookieSize() {
-		return cookies.size();
-	}
+    public int getHeaderSize() {
+        return headers.size();
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+
+    public void addCookie(String name, String value) {
+        cookies.put(name, value);
+    }
+
+    public String getCookieData(String name) {
+        return cookies.get(name);
+    }
+
+    public Set<String> getCookieNames() {
+        return cookies.keySet();
+    }
+
+    public int getCookieSize() {
+        return cookies.size();
+    }
 
 }

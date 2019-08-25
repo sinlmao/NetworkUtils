@@ -15,6 +15,9 @@
  */
 package cn.sinlmao.commons.network.http;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -43,24 +46,29 @@ public class HttpUtilClient {
 
     /**
      * 发送请求
+     *
      * @param httpUtilRequest
      * @return HttpUtilResponse
      * @throws Exception
      */
     public static HttpUtilResponse send(HttpUtilRequest httpUtilRequest) throws Exception {
 
+        //初始化对象
         HttpUtilResponse httpUtilResponse = new HttpUtilResponse();
 
+        //初始化JDK HTTP对象
         URL restServiceURL = new URL(httpUtilRequest.getUrl());
         HttpURLConnection httpConnection = (HttpURLConnection) restServiceURL.openConnection();
         httpConnection.setRequestMethod(httpUtilRequest.getMethod().toString());
         httpConnection.setRequestProperty("Accept", "*/*");
         httpConnection.setRequestProperty("Content-Type", getContentType(httpUtilRequest.getContentType()) + ";charset=" + httpUtilRequest.getCharset());
 
+        //如果存在ContentType定义，则设置ContentType值
         if (httpUtilRequest.getContentTypeStr() != null && !"".equals(httpUtilRequest.getContentTypeStr())) {
             httpConnection.setRequestProperty("Content-Type", httpUtilRequest.getContentTypeStr());
         }
 
+        //如果存在Header定义，则设置Header值
         if (httpUtilRequest.getHeaderSize() > 0) {
             Set<String> headerNames = httpUtilRequest.getHeaderNames();
             for (String headerName : headerNames) {
@@ -68,6 +76,7 @@ public class HttpUtilClient {
             }
         }
 
+        //如果存在Cookie定义，则设置Cookie值
         if (httpUtilRequest.getCookieSize() > 0) {
             Set<String> cookieNames = httpUtilRequest.getHeaderNames();
             StringBuilder cookieStrs = new StringBuilder();
@@ -79,30 +88,76 @@ public class HttpUtilClient {
             httpConnection.setRequestProperty("Cookie", cookieStr);
         }
 
-        if ("POST".equals(httpUtilRequest.getMethod().toString())
-                || "PUT".equals(httpUtilRequest.getMethod().toString())) {
-            httpConnection.setDoOutput(true);
-            httpConnection.setDoInput(true);
-            httpConnection.setRequestProperty("Accept-Charset", httpUtilRequest.getCharset());
+        //如果存在InputData值，则设置InputData值
+        if (httpUtilRequest.getInputData() != null) {
 
-            if (httpUtilRequest.getInputData() != null && httpUtilRequest.getInputData().length() > 0) {
+            String inputData = "";
+
+            //当使用POST、PUT Method
+            if ("POST".equals(httpUtilRequest.getMethod().toString())
+                    || "PUT".equals(httpUtilRequest.getMethod().toString())) {
+
+                //如果是String类型
+                if (httpUtilRequest.getInputData() instanceof String) {
+                    inputData = httpUtilRequest.getInputData(String.class);
+                }
+                //如果是JSON类型
+                if (httpUtilRequest.getInputData() instanceof JSONObject) {
+                    inputData = httpUtilRequest.getInputData(JSONObject.class).toJSONString();
+                }
+                //如果是Map类型
+                if (httpUtilRequest.getInputData() instanceof Map) {
+                    inputData = JSON.toJSONString(httpUtilRequest.getInputData(Map.class));
+                }
+
+                httpConnection.setDoOutput(true);
+                httpConnection.setDoInput(true);
+                httpConnection.setRequestProperty("Accept-Charset", httpUtilRequest.getCharset());
+
                 // httpConnection.setRequestProperty("Content-Type", getContentType(httpUtilRequest.getContentType()) + ";charset=" + httpUtilRequest.getCharset());
                 OutputStream outputStream = httpConnection.getOutputStream();
-                outputStream.write(httpUtilRequest.getInputData().getBytes(Charset.forName(httpUtilRequest.getCharset())));
+                outputStream.write(inputData.getBytes(Charset.forName(httpUtilRequest.getCharset())));
                 outputStream.flush();
                 outputStream.close();
+
+            } else {
+                //如果使用GET或者其它Method
+
+                //如果是String类型
+                if (httpUtilRequest.getInputData() instanceof String) {
+                    inputData = httpUtilRequest.getInputData(String.class);
+                }
+                //如果是JSON类型
+                if (httpUtilRequest.getInputData() instanceof JSONObject) {
+                    JSONObject json = httpUtilRequest.getInputData(JSONObject.class);
+                    for (String key : json.keySet()) {
+                        inputData += (key + "=" + json.getString(key) + "&");
+                    }
+                    inputData = inputData.substring(0, inputData.length() - 1);
+                }
+                //如果是Map类型
+                if (httpUtilRequest.getInputData() instanceof Map) {
+                    Map<String, String> map = httpUtilRequest.getInputData(Map.class);
+                    for (String key : map.keySet()) {
+                        inputData += (key + "=" + map.get(key) + "&");
+                    }
+                    inputData = inputData.substring(0, inputData.length() - 1);
+                }
+
+                httpConnection.setDoOutput(true);
+
+                DataOutputStream dataOutputStream = new DataOutputStream(httpConnection.getOutputStream());
+                // 正文，正文内容其实跟get的URL中 '? '后的参数字符串一致
+                // String content = "字段名=" + URLEncoder.encode("字符串值", "编码");
+                // DataOutputStream.writeBytes将字符串中的16位的unicode字符以8位的字符形式写到流里面
+                dataOutputStream.writeBytes(inputData);
+                //关闭流
+                dataOutputStream.flush();
+                dataOutputStream.close();
             }
-        } else {
-            DataOutputStream dataOutputStream = new DataOutputStream(httpConnection.getOutputStream());
-            // 正文，正文内容其实跟get的URL中 '? '后的参数字符串一致  
-            // String content = "字段名=" + URLEncoder.encode("字符串值", "编码");  
-            // DataOutputStream.writeBytes将字符串中的16位的unicode字符以8位的字符形式写到流里面  
-            dataOutputStream.writeBytes(httpUtilRequest.getInputData());
-            //关闭流  
-            dataOutputStream.flush();
-            dataOutputStream.close();
         }
 
+        //返回 Response Code
         httpUtilResponse.setResponseCode(httpConnection.getResponseCode());
 
         // if (httpUtilResponse.getResponseCode() != 200) {
@@ -128,9 +183,10 @@ public class HttpUtilClient {
         // httpUtilResponse.setBytesContent(output.toString().getBytes(Charset.forName(httpUtilRequest.getCharset())));
         httpUtilResponse.setBytesContent(bytes);
 
-        // 获取cookie
+        //获取Cookie
         String cookieStr = "";
 
+        //获得Header和Cookie
         Map<String, List<String>> headers = httpConnection.getHeaderFields();
         Set<String> headerNames = headers.keySet();
         for (Iterator<String> iterator = headerNames.iterator(); iterator.hasNext(); ) {
@@ -150,6 +206,7 @@ public class HttpUtilClient {
             }
         }
 
+        //返回Header和Cookie
         httpUtilResponse.setHeaders(headers);
         httpUtilResponse.setCookie(cookieStr);
 
