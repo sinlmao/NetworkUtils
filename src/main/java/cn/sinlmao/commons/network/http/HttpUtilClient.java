@@ -37,10 +37,10 @@ import java.util.Set;
 /**
  * HTTP Client工具类
  *
- * @program: Sinlmao Commons Network Utils
- * @description: HTTP Client工具类
- * @author: Sinlmao
- * @create: 2019-08-01 11:11
+ * @program Sinlmao Commons Network Utils
+ * @description HTTP Client工具类
+ * @author Sinlmao
+ * @create 2019-08-01 11:11
  */
 public class HttpUtilClient {
 
@@ -103,11 +103,27 @@ public class HttpUtilClient {
                 }
                 //如果是JSON类型
                 if (httpUtilRequest.getInputData() instanceof JSONObject) {
-                    inputData = httpUtilRequest.getInputData(JSONObject.class).toJSONString();
+                    if (httpUtilRequest.getContentType() == HttpUtilContentType.APPLICATION_JSON) {
+                        inputData = httpUtilRequest.getInputData(JSONObject.class).toJSONString();
+                    } else {
+                        JSONObject json = httpUtilRequest.getInputData(JSONObject.class);
+                        for (String key : json.keySet()) {
+                            inputData += (key + "=" + json.getString(key) + "&");
+                        }
+                        inputData = inputData.substring(0, inputData.length() - 1);
+                    }
                 }
                 //如果是Map类型
                 if (httpUtilRequest.getInputData() instanceof Map) {
-                    inputData = JSON.toJSONString(httpUtilRequest.getInputData(Map.class));
+                    if (httpUtilRequest.getContentType() == HttpUtilContentType.APPLICATION_JSON) {
+                        inputData = JSON.toJSONString(httpUtilRequest.getInputData(Map.class));
+                    } else {
+                        Map<String, String> map = httpUtilRequest.getInputData(Map.class);
+                        for (String key : map.keySet()) {
+                            inputData += (key + "=" + map.get(key) + "&");
+                        }
+                        inputData = inputData.substring(0, inputData.length() - 1);
+                    }
                 }
 
                 httpConnection.setDoOutput(true);

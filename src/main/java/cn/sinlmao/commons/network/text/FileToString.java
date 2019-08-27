@@ -24,10 +24,10 @@ import java.io.InputStreamReader;
 /**
  * 从文件读取String工具类
  *
- * @program: Sinlmao Commons Network Utils
- * @description: 从文件读取String工具类
- * @author: Sinlmao
- * @create: 2019-08-01 11:11
+ * @program Sinlmao Commons Network Utils
+ * @description 从文件读取String工具类
+ * @author Sinlmao
+ * @create 2019-08-01 11:11
  */
 public class FileToString {
 

@@ -20,10 +20,10 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 从HttpServletRequest获得IP地址类
  *
- * @program: Sinlmao Commons Network Utils
- * @description: 从HttpServletRequest获得IP地址类
- * @author: Sinlmao
- * @create: 2019-08-01 11:11
+ * @program Sinlmao Commons Network Utils
+ * @description 从HttpServletRequest获得IP地址类
+ * @author Sinlmao
+ * @create 2019-08-01 11:11
  */
 public class IPTool {
 

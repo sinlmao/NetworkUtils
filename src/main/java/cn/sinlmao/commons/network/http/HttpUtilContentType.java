@@ -18,10 +18,10 @@ package cn.sinlmao.commons.network.http;
 /**
  * HTTP ContentType枚举类
  *
- * @program: Sinlmao Commons Network Utils
- * @description: HTTP ContentType枚举类
- * @author: Sinlmao
- * @create: 2019-08-01 11:11
+ * @program Sinlmao Commons Network Utils
+ * @description HTTP ContentType枚举类
+ * @author Sinlmao
+ * @create 2019-08-01 11:11
  */
 public enum HttpUtilContentType {
     APPLICATION_JSON,

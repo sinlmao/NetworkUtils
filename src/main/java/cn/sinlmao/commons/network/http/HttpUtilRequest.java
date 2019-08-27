@@ -24,10 +24,10 @@ import java.util.Set;
 /**
  * HTTP Request类
  *
- * @program: Sinlmao Commons Network Utils
- * @description: HTTP Request类
- * @author: Sinlmao
- * @create: 2019-08-01 11:11
+ * @program Sinlmao Commons Network Utils
+ * @description HTTP Request类
+ * @author Sinlmao
+ * @create 2019-08-01 11:11
  */
 public class HttpUtilRequest {
 
