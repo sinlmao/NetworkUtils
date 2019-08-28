@@ -25,24 +25,22 @@ import java.util.Map;
  * @description HTTP 方法枚举类
  * @author Sinlmao
  * @create 2019-08-01 11:11
- * @deprecated 自v1.2+版本起不再维护
  */
-@Deprecated
-public enum HttpUtilMethod {
+public enum ImMethod {
 
 	GET, POST, PUT, DELETE;
 
 	// Implementing a fromString method on an enum type
-	private static final Map<String, HttpUtilMethod> stringToEnum = new HashMap<String, HttpUtilMethod>();
+	private static final Map<String, ImMethod> stringToEnum = new HashMap<String, ImMethod>();
 	static {
 		// Initialize map from constant name to enum constant
-		for (HttpUtilMethod blah : values()) {
+		for (ImMethod blah : values()) {
 			stringToEnum.put(blah.toString(), blah);
 		}
 	}
 
 	// Returns Blah for string, or null if string is invalid
-	public static HttpUtilMethod fromString(String symbol) {
+	public static ImMethod fromString(String symbol) {
 		return stringToEnum.get(symbol);
 	}
 }

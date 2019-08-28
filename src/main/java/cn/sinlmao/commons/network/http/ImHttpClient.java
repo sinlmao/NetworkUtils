@@ -18,14 +18,7 @@ package cn.sinlmao.commons.network.http;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -41,49 +34,47 @@ import java.util.Set;
  * @description HTTP Client工具类
  * @author Sinlmao
  * @create 2019-08-01 11:11
- * @deprecated 自v1.2+版本起不再维护
  */
-@Deprecated
-public class HttpUtilClient {
+public class ImHttpClient {
 
     /**
      * 发送请求
      *
-     * @param httpUtilRequest
-     * @return HttpUtilResponse
+     * @param imRequest
+     * @return ImResponse
      * @throws Exception
      */
-    public static HttpUtilResponse send(HttpUtilRequest httpUtilRequest) throws Exception {
+    public static ImResponse send(ImRequest imRequest) throws Exception {
 
         //初始化对象
-        HttpUtilResponse httpUtilResponse = new HttpUtilResponse();
+        ImResponse imResponse = new ImResponse();
 
         //初始化JDK HTTP对象
-        URL restServiceURL = new URL(httpUtilRequest.getUrl());
+        URL restServiceURL = new URL(imRequest.getUrl());
         HttpURLConnection httpConnection = (HttpURLConnection) restServiceURL.openConnection();
-        httpConnection.setRequestMethod(httpUtilRequest.getMethod().toString());
+        httpConnection.setRequestMethod(imRequest.getMethod().toString());
         httpConnection.setRequestProperty("Accept", "*/*");
-        httpConnection.setRequestProperty("Content-Type", getContentType(httpUtilRequest.getContentType()) + ";charset=" + httpUtilRequest.getCharset());
+        httpConnection.setRequestProperty("Content-Type", getContentType(imRequest.getContentType()) + ";charset=" + imRequest.getCharset());
 
         //如果存在ContentType定义，则设置ContentType值
-        if (httpUtilRequest.getContentTypeStr() != null && !"".equals(httpUtilRequest.getContentTypeStr())) {
-            httpConnection.setRequestProperty("Content-Type", httpUtilRequest.getContentTypeStr());
+        if (imRequest.getContentTypeStr() != null && !"".equals(imRequest.getContentTypeStr())) {
+            httpConnection.setRequestProperty("Content-Type", imRequest.getContentTypeStr());
         }
 
         //如果存在Header定义，则设置Header值
-        if (httpUtilRequest.getHeaderSize() > 0) {
-            Set<String> headerNames = httpUtilRequest.getHeaderNames();
+        if (imRequest.getHeaderSize() > 0) {
+            Set<String> headerNames = imRequest.getHeaderNames();
             for (String headerName : headerNames) {
-                httpConnection.setRequestProperty(headerName, httpUtilRequest.getHeaderValue(headerName));
+                httpConnection.setRequestProperty(headerName, imRequest.getHeaderValue(headerName));
             }
         }
 
         //如果存在Cookie定义，则设置Cookie值
-        if (httpUtilRequest.getCookieSize() > 0) {
-            Set<String> cookieNames = httpUtilRequest.getHeaderNames();
+        if (imRequest.getCookieSize() > 0) {
+            Set<String> cookieNames = imRequest.getHeaderNames();
             StringBuilder cookieStrs = new StringBuilder();
             for (String cookieName : cookieNames) {
-                cookieStrs.append(cookieName + "=" + httpUtilRequest.getCookieData(cookieName));
+                cookieStrs.append(cookieName + "=" + imRequest.getCookieData(cookieName));
                 cookieStrs.append(";");
             }
             String cookieStr = cookieStrs.substring(0, cookieStrs.length() - 1);
@@ -91,24 +82,24 @@ public class HttpUtilClient {
         }
 
         //如果存在InputData值，则设置InputData值
-        if (httpUtilRequest.getInputData() != null) {
+        if (imRequest.getInputData() != null) {
 
             String inputData = "";
 
             //当使用POST、PUT Method
-            if ("POST".equals(httpUtilRequest.getMethod().toString())
-                    || "PUT".equals(httpUtilRequest.getMethod().toString())) {
+            if ("POST".equals(imRequest.getMethod().toString())
+                    || "PUT".equals(imRequest.getMethod().toString())) {
 
                 //如果是String类型
-                if (httpUtilRequest.getInputData() instanceof String) {
-                    inputData = httpUtilRequest.getInputData(String.class);
+                if (imRequest.getInputData() instanceof String) {
+                    inputData = imRequest.getInputData(String.class);
                 }
                 //如果是JSON类型
-                if (httpUtilRequest.getInputData() instanceof JSONObject) {
-                    if (httpUtilRequest.getContentType() == HttpUtilContentType.APPLICATION_JSON) {
-                        inputData = httpUtilRequest.getInputData(JSONObject.class).toJSONString();
+                if (imRequest.getInputData() instanceof JSONObject) {
+                    if (imRequest.getContentType() == ImContentType.APPLICATION_JSON) {
+                        inputData = imRequest.getInputData(JSONObject.class).toJSONString();
                     } else {
-                        JSONObject json = httpUtilRequest.getInputData(JSONObject.class);
+                        JSONObject json = imRequest.getInputData(JSONObject.class);
                         for (String key : json.keySet()) {
                             inputData += (key + "=" + json.getString(key) + "&");
                         }
@@ -116,11 +107,11 @@ public class HttpUtilClient {
                     }
                 }
                 //如果是Map类型
-                if (httpUtilRequest.getInputData() instanceof Map) {
-                    if (httpUtilRequest.getContentType() == HttpUtilContentType.APPLICATION_JSON) {
-                        inputData = JSON.toJSONString(httpUtilRequest.getInputData(Map.class));
+                if (imRequest.getInputData() instanceof Map) {
+                    if (imRequest.getContentType() == ImContentType.APPLICATION_JSON) {
+                        inputData = JSON.toJSONString(imRequest.getInputData(Map.class));
                     } else {
-                        Map<String, String> map = httpUtilRequest.getInputData(Map.class);
+                        Map<String, String> map = imRequest.getInputData(Map.class);
                         for (String key : map.keySet()) {
                             inputData += (key + "=" + map.get(key) + "&");
                         }
@@ -130,11 +121,11 @@ public class HttpUtilClient {
 
                 httpConnection.setDoOutput(true);
                 httpConnection.setDoInput(true);
-                httpConnection.setRequestProperty("Accept-Charset", httpUtilRequest.getCharset());
+                httpConnection.setRequestProperty("Accept-Charset", imRequest.getCharset());
 
                 // httpConnection.setRequestProperty("Content-Type", getContentType(httpUtilRequest.getContentType()) + ";charset=" + httpUtilRequest.getCharset());
                 OutputStream outputStream = httpConnection.getOutputStream();
-                outputStream.write(inputData.getBytes(Charset.forName(httpUtilRequest.getCharset())));
+                outputStream.write(inputData.getBytes(Charset.forName(imRequest.getCharset())));
                 outputStream.flush();
                 outputStream.close();
 
@@ -142,20 +133,20 @@ public class HttpUtilClient {
                 //如果使用GET或者其它Method
 
                 //如果是String类型
-                if (httpUtilRequest.getInputData() instanceof String) {
-                    inputData = httpUtilRequest.getInputData(String.class);
+                if (imRequest.getInputData() instanceof String) {
+                    inputData = imRequest.getInputData(String.class);
                 }
                 //如果是JSON类型
-                if (httpUtilRequest.getInputData() instanceof JSONObject) {
-                    JSONObject json = httpUtilRequest.getInputData(JSONObject.class);
+                if (imRequest.getInputData() instanceof JSONObject) {
+                    JSONObject json = imRequest.getInputData(JSONObject.class);
                     for (String key : json.keySet()) {
                         inputData += (key + "=" + json.getString(key) + "&");
                     }
                     inputData = inputData.substring(0, inputData.length() - 1);
                 }
                 //如果是Map类型
-                if (httpUtilRequest.getInputData() instanceof Map) {
-                    Map<String, String> map = httpUtilRequest.getInputData(Map.class);
+                if (imRequest.getInputData() instanceof Map) {
+                    Map<String, String> map = imRequest.getInputData(Map.class);
                     for (String key : map.keySet()) {
                         inputData += (key + "=" + map.get(key) + "&");
                     }
@@ -176,7 +167,7 @@ public class HttpUtilClient {
         }
 
         //返回 Response Code
-        httpUtilResponse.setResponseCode(httpConnection.getResponseCode());
+        imResponse.setResponseCode(httpConnection.getResponseCode());
 
         // if (httpUtilResponse.getResponseCode() != 200) {
         // throw new RuntimeException(
@@ -184,10 +175,10 @@ public class HttpUtilClient {
         // httpConnection.getResponseCode());
         // }
 
-        byte[] bytes = toByteArray(httpConnection.getInputStream(), httpUtilRequest.getBytesLength());
+        byte[] bytes = toByteArray(httpConnection.getInputStream(), imRequest.getBytesLength());
 
         BufferedReader responseBuffer = new BufferedReader(
-                new InputStreamReader(new ByteArrayInputStream(bytes), httpUtilRequest.getCharset()));
+                new InputStreamReader(new ByteArrayInputStream(bytes), imRequest.getCharset()));
 
         StringBuffer output = new StringBuffer();
         String output_line;
@@ -197,9 +188,9 @@ public class HttpUtilClient {
         }
         httpConnection.disconnect();
 
-        httpUtilResponse.setStringContent(output.toString());
-        // httpUtilResponse.setBytesContent(output.toString().getBytes(Charset.forName(httpUtilRequest.getCharset())));
-        httpUtilResponse.setBytesContent(bytes);
+        imResponse.setStringContent(output.toString());
+        // imResponse.setBytesContent(output.toString().getBytes(Charset.forName(httpUtilRequest.getCharset())));
+        imResponse.setBytesContent(bytes);
 
         //获取Cookie
         String cookieStr = "";
@@ -217,7 +208,7 @@ public class HttpUtilClient {
                     String[] strs_arry = data.split("; ");
                     for (String str : strs_arry) {
                         String[] str_arry = str.split("=");
-                        httpUtilResponse.addCookie(str_arry[0], str_arry[1]);
+                        imResponse.addCookie(str_arry[0], str_arry[1]);
                     }
                 }
                 cookieStr = builder.toString();
@@ -225,10 +216,10 @@ public class HttpUtilClient {
         }
 
         //返回Header和Cookie
-        httpUtilResponse.setHeaders(headers);
-        httpUtilResponse.setCookie(cookieStr);
+        imResponse.setHeaders(headers);
+        imResponse.setCookie(cookieStr);
 
-        return httpUtilResponse;
+        return imResponse;
     }
 
     /**
@@ -274,7 +265,7 @@ public class HttpUtilClient {
      * @param contentType
      * @return
      */
-    private static String getContentType(HttpUtilContentType contentType) {
+    private static String getContentType(ImContentType contentType) {
         switch (contentType) {
             case APPLICATION_JSON:
                 return "application/json";

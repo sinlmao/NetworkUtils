@@ -22,8 +22,15 @@ package cn.sinlmao.commons.network.http;
  * @description HTTP ContentType枚举类
  * @author Sinlmao
  * @create 2019-08-01 11:11
+ * @deprecated 自v1.2+版本起不再维护
  */
+@Deprecated
 public enum HttpUtilContentType {
+
+    //JSON数据类型
     APPLICATION_JSON,
+
+    //表单类型
     APPLICATION_X_WWW_FORM_URLENCODED
+    
 }

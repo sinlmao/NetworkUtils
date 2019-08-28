@@ -27,10 +27,8 @@ import java.util.Set;
  * @description HTTP Response类
  * @author Sinlmao
  * @create 2019-08-01 11:11
- * @deprecated 自v1.2+版本起不再维护
  */
-@Deprecated
-public class HttpUtilResponse {
+public class ImResponse {
 
 	private int responseCode;
 	private String stringContent;
@@ -40,28 +38,47 @@ public class HttpUtilResponse {
 	private String cookieStr;
 	private Map<String, String> cookies = new HashMap<String, String>();
 
+	///////////////////////////////////////////////////////////////////////
+
+	public ImResponse setResponseCode(int responseCode) {
+		this.responseCode = responseCode;
+		return this;
+	}
+	public ImResponse setStringContent(String stringContent) {
+		this.stringContent = stringContent;
+		return this;
+	}
+	public ImResponse setBytesContent(byte[] bytesContent) {
+		this.bytesContent = bytesContent;
+		return this;
+	}
+
+
+	public ImResponse setCookie(String data) {
+		cookieStr = data;
+		return this;
+	}
+	public ImResponse addCookie(String name, String data) {
+		cookies.put(name, data);
+		return this;
+	}
+
+
+	public ImResponse setHeaders(Map<String, List<String>> headers) {
+		this.headers = headers;
+		return this;
+	}
+
+	///////////////////////////////////////////////////////////////////////
+
 	public int getResponseCode() {
 		return responseCode;
 	}
-
-	public void setResponseCode(int responseCode) {
-		this.responseCode = responseCode;
-	}
-
 	public String getStringContent() {
 		return stringContent;
 	}
-
-	public void setStringContent(String stringContent) {
-		this.stringContent = stringContent;
-	}
-
 	public byte[] getBytesContent() {
 		return bytesContent;
-	}
-
-	public void setBytesContent(byte[] bytesContent) {
-		this.bytesContent = bytesContent;
 	}
 
 	public void get(byte[] bytesContent) {
@@ -70,50 +87,33 @@ public class HttpUtilResponse {
 
 	///////////////////////////////////////////////////////////////////////
 
-	public void setCookie(String data) {
-		cookieStr = data;
-	}
-
 	public String getCookieStr() {
 		return this.cookieStr;
 	}
-
-	public void addCookie(String name, String data) {
-		cookies.put(name, data);
-	}
-
 	public String getCookieData(String name) {
 		return cookies.get(name);
 	}
-
 	public Set<String> getCookieNames() {
 		return cookies.keySet();
 	}
-
 	public int getCookieSize() {
 		return cookies.size();
 	}
 
 	///////////////////////////////////////////////////////////////////////
 
-	public void setHeaders(Map<String, List<String>> headers) {
-		this.headers = headers;
-	}
-
 	public List<String> getHeaderData(String name) {
 		return headers.get(name);
 	}
-
 	public Set<String> getHeaderNames() {
 		return headers.keySet();
 	}
-
 	public int getHeaderSize() {
 		return headers.size();
 	}
 
 	///////////////////////////////////////////////////////////////////////
 
-	protected HttpUtilResponse() {
+	protected ImResponse() {
 	}
 }

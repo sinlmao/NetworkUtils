@@ -28,23 +28,21 @@ import java.util.Set;
  * @description HTTP Request类
  * @author Sinlmao
  * @create 2019-08-01 11:11
- * @deprecated 自v1.2+版本起不再维护
  */
-@Deprecated
-public class HttpUtilRequest {
+public class ImRequest {
 
     private String url;
-    private HttpUtilMethod method;
+    private ImMethod method;
     private String charset = "utf-8";
     private Object inputData;
     private int bytesLength = 4096;
-    private HttpUtilContentType contentType = HttpUtilContentType.APPLICATION_X_WWW_FORM_URLENCODED;
+    private ImContentType contentType = ImContentType.APPLICATION_X_WWW_FORM_URLENCODED;
     private String contentTypeStr;
 
     private Map<String, String> headers = new HashMap<String, String>();
     private Map<String, String> cookies = new HashMap<String, String>();
 
-    public HttpUtilRequest(String url) {
+    public ImRequest(String url) {
         this.url = url;
     }
 
@@ -52,24 +50,54 @@ public class HttpUtilRequest {
         return url;
     }
 
-    public void setUrl(String url) {
+    ///////////////////////////////////////////////////////////////////////
+
+    public ImRequest setUrl(String url) {
         this.url = url;
+        return this;
+    }
+    public ImRequest setMethod(ImMethod method) {
+        this.method = method;
+        return this;
+    }
+    public ImRequest setCharset(String charset) {
+        this.charset = charset;
+        return this;
     }
 
-    public HttpUtilMethod getMethod() {
+    public ImRequest setInputData(String inputData) {
+        this.inputData = inputData;
+        return this;
+    }
+    public ImRequest setInputData(Map<String, String> inputData) {
+        this.inputData = inputData;
+        return this;
+    }
+    public ImRequest setInputData(JSONObject inputData) {
+        this.inputData = inputData;
+        return this;
+    }
+
+    public ImRequest setBytesLength(int bytesLength) {
+        this.bytesLength = bytesLength;
+        return this;
+    }
+    public ImRequest setContentType(ImContentType contentType) {
+        this.contentType = contentType;
+        return this;
+    }
+    public ImRequest setContentType(String contentType) {
+        this.contentTypeStr = contentType;
+        return this;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+
+    public ImMethod getMethod() {
         return method;
     }
-
-    public void setMethod(HttpUtilMethod method) {
-        this.method = method;
-    }
-
     public String getCharset() {
         return charset;
-    }
-
-    public void setCharset(String charset) {
-        this.charset = charset;
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -77,21 +105,8 @@ public class HttpUtilRequest {
     public Object getInputData() {
         return inputData;
     }
-
     public <T> T getInputData(Class<T> type) {
         return (T) inputData;
-    }
-
-    public void setInputData(String inputData) {
-        this.inputData = inputData;
-    }
-
-    public void setInputData(Map<String, String> inputData) {
-        this.inputData = inputData;
-    }
-
-    public void setInputData(JSONObject inputData) {
-        this.inputData = inputData;
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -99,30 +114,16 @@ public class HttpUtilRequest {
     public int getBytesLength() {
         return bytesLength;
     }
-
-    public void setBytesLength(int bytesLength) {
-        this.bytesLength = bytesLength;
-    }
-
-    public HttpUtilContentType getContentType() {
+    public ImContentType getContentType() {
         return contentType;
     }
-
-    public void setContentType(HttpUtilContentType contentType) {
-        this.contentType = contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentTypeStr = contentType;
-    }
-
     public String getContentTypeStr() {
         return this.contentTypeStr;
     }
 
     ///////////////////////////////////////////////////////////////////////
 
-    public void addHeader(String name, String value) {
+    protected void addHeader(String name, String value) {
         headers.put(name, value);
     }
 
@@ -140,7 +141,7 @@ public class HttpUtilRequest {
 
     ///////////////////////////////////////////////////////////////////////
 
-    public void addCookie(String name, String value) {
+    protected void addCookie(String name, String value) {
         cookies.put(name, value);
     }
 

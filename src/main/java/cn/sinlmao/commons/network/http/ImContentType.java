@@ -15,34 +15,20 @@
  */
 package cn.sinlmao.commons.network.http;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * HTTP 方法枚举类
+ * HTTP ContentType枚举类
  *
  * @program Sinlmao Commons Network Utils
- * @description HTTP 方法枚举类
+ * @description HTTP ContentType枚举类
  * @author Sinlmao
  * @create 2019-08-01 11:11
- * @deprecated 自v1.2+版本起不再维护
  */
-@Deprecated
-public enum HttpUtilMethod {
+public enum ImContentType {
 
-	GET, POST, PUT, DELETE;
+    //JSON数据类型
+    APPLICATION_JSON,
 
-	// Implementing a fromString method on an enum type
-	private static final Map<String, HttpUtilMethod> stringToEnum = new HashMap<String, HttpUtilMethod>();
-	static {
-		// Initialize map from constant name to enum constant
-		for (HttpUtilMethod blah : values()) {
-			stringToEnum.put(blah.toString(), blah);
-		}
-	}
-
-	// Returns Blah for string, or null if string is invalid
-	public static HttpUtilMethod fromString(String symbol) {
-		return stringToEnum.get(symbol);
-	}
+    //表单类型
+    APPLICATION_X_WWW_FORM_URLENCODED
+    
 }
