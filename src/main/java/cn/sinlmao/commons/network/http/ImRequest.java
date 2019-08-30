@@ -24,15 +24,15 @@ import java.util.Set;
 /**
  * HTTP Request类
  *
+ * @author Sinlmao
  * @program Sinlmao Commons Network Utils
  * @description HTTP Request类
- * @author Sinlmao
  * @create 2019-08-01 11:11
  */
 public class ImRequest {
 
     private String url;
-    private ImMethod method;
+    private ImMethod method = ImMethod.GET;
     private String charset = "utf-8";
     private Object inputData;
     private int bytesLength = 4096;
@@ -56,10 +56,12 @@ public class ImRequest {
         this.url = url;
         return this;
     }
+
     public ImRequest setMethod(ImMethod method) {
         this.method = method;
         return this;
     }
+
     public ImRequest setCharset(String charset) {
         this.charset = charset;
         return this;
@@ -69,10 +71,12 @@ public class ImRequest {
         this.inputData = inputData;
         return this;
     }
+
     public ImRequest setInputData(Map<String, String> inputData) {
         this.inputData = inputData;
         return this;
     }
+
     public ImRequest setInputData(JSONObject inputData) {
         this.inputData = inputData;
         return this;
@@ -82,10 +86,12 @@ public class ImRequest {
         this.bytesLength = bytesLength;
         return this;
     }
+
     public ImRequest setContentType(ImContentType contentType) {
         this.contentType = contentType;
         return this;
     }
+
     public ImRequest setContentType(String contentType) {
         this.contentTypeStr = contentType;
         return this;
@@ -96,6 +102,7 @@ public class ImRequest {
     public ImMethod getMethod() {
         return method;
     }
+
     public String getCharset() {
         return charset;
     }
@@ -105,6 +112,7 @@ public class ImRequest {
     public Object getInputData() {
         return inputData;
     }
+
     public <T> T getInputData(Class<T> type) {
         return (T) inputData;
     }
@@ -114,17 +122,86 @@ public class ImRequest {
     public int getBytesLength() {
         return bytesLength;
     }
+
     public ImContentType getContentType() {
         return contentType;
     }
+
     public String getContentTypeStr() {
         return this.contentTypeStr;
     }
 
     ///////////////////////////////////////////////////////////////////////
 
-    protected void addHeader(String name, String value) {
+    /**
+     * 添加Header，当数据已经存在，则不再添加
+     * @param name
+     * @param value
+     */
+    public void addHeader(String name, String value) {
+        if (!headers.containsKey(name)) {
+            headers.put(name, value);
+        }
+    }
+
+    /**
+     * 添加Header，当数据已经存在，则不再添加
+     * @param headers
+     */
+    public void addHeader(Map<String, String> headers) {
+        if (headers != null && headers.size() > 0) {
+            for (String key : headers.keySet()) {
+                addHeader(key, headers.get(key));
+            }
+        }
+    }
+
+    /**
+     * 添加Header，当数据已经存在，则不再添加
+     * @param headers
+     */
+    public void addHeader(JSONObject headers) {
+        if (headers != null && headers.size() > 0) {
+            for (String key : headers.keySet()) {
+                addHeader(key, headers.getString(key));
+            }
+        }
+    }
+
+    /**
+     * 设置Header，当数据已经存在，则以最后设置的为准
+     * @param name
+     * @param value
+     */
+    public void setHeader(String name, String value) {
+        if (!headers.containsKey(name)) {
+            headers.remove(name);
+        }
         headers.put(name, value);
+    }
+
+    /**
+     * 设置Header，当数据已经存在，则以最后设置的为准
+     * @param headers
+     */
+    public void setHeader(JSONObject headers) {
+        if (headers != null && headers.size() > 0) {
+            for (String key : headers.keySet()) {
+                setHeader(key, headers.getString(key));
+            }
+        }
+    }
+
+    /**
+     * 设置Header，当数据已经存在，则以最后设置的为准
+     * @param headers
+     */
+    public void setHeader(Map<String, String> headers) {
+        if (headers != null && headers.size() > 0) {
+            for (String key : headers.keySet()) {
+                setHeader(key, headers.get(key));
+            }
+        }
     }
 
     public String getHeaderValue(String name) {
@@ -141,8 +218,75 @@ public class ImRequest {
 
     ///////////////////////////////////////////////////////////////////////
 
-    protected void addCookie(String name, String value) {
+    /**
+     * 添加Cookie，当数据已经存在，则不再添加
+     * @param name
+     * @param value
+     */
+    public void addCookie(String name, String value) {
+        if (!cookies.containsKey(name)) {
+            cookies.put(name, value);
+        }
+    }
+
+    /**
+     * 添加Cookie，当数据已经存在，则不再添加
+     * @param cookies
+     */
+    public void addCookie(Map<String, String> cookies) {
+        if (cookies != null && cookies.size() > 0) {
+            for (String key : cookies.keySet()) {
+                addCookie(key, cookies.get(key));
+            }
+        }
+    }
+
+    /**
+     * 添加Cookie，当数据已经存在，则不再添加
+     * @param cookies
+     */
+    public void addCookie(JSONObject cookies) {
+        if (cookies != null && cookies.size() > 0) {
+            for (String key : cookies.keySet()) {
+                addCookie(key, cookies.getString(key));
+            }
+        }
+    }
+
+    /**
+     * 添加Cookie，当数据已经存在，则以最后设置的为准
+     * @param name
+     * @param value
+     */
+    public void setCookie(String name, String value) {
+        if (!cookies.containsKey(name)) {
+            cookies.remove(name);
+        }
         cookies.put(name, value);
+    }
+
+    /**
+     * 添加Cookie，当数据已经存在，则以最后设置的为准
+     * @param cookies
+     */
+    public void setCookie(Map<String, String> cookies) {
+        if (cookies != null && cookies.size() > 0) {
+            for (String key : cookies.keySet()) {
+                setCookie(key, cookies.get(key));
+            }
+        }
+    }
+
+    /**
+     * 添加Cookie，当数据已经存在，则以最后设置的为准
+     * @param cookies
+     */
+    public void setCookie(JSONObject cookies) {
+        if (cookies != null && cookies.size() > 0) {
+            for (String key : cookies.keySet()) {
+                setCookie(key, cookies.getString(key));
+            }
+        }
     }
 
     public String getCookieData(String name) {

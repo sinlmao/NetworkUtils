@@ -1,3 +1,16 @@
+2019-08-30 更新说明
+=======================================================
+1.开放支持Request的Cookie和Header设置；
+2.修复一些数据不完整或不规范造成的异常；
+3.默认Method为GET；
+4.修复当Method为POST时，传入 JSONObject（fastjson）类型的
+  InputData可能会出现解析异常的BUG；
+5.ImRequest 新增 setCookie、setHeader 方法，并支持以 Map
+  和 JSONObject（fastjson）的类型传入，setCookie及setHeader
+  与add的方法区别为：使用set当数据已经存在时可以覆盖，而add
+  则会跳过设置；
+6.README.md更新。
+
 2019-08-28 更新说明
 =======================================================
 1.切换新的维护类为ImXXXX，原有http包下的做保留但标记过期并且

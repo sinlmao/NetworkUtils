@@ -30,9 +30,9 @@ import java.util.Set;
 /**
  * HTTP Client工具类
  *
+ * @author Sinlmao
  * @program Sinlmao Commons Network Utils
  * @description HTTP Client工具类
- * @author Sinlmao
  * @create 2019-08-01 11:11
  */
 public class ImHttpClient {
@@ -95,7 +95,8 @@ public class ImHttpClient {
                     inputData = imRequest.getInputData(String.class);
                 }
                 //如果是JSON类型
-                if (imRequest.getInputData() instanceof JSONObject) {
+                //if (imRequest.getInputData() instanceof JSONObject) {
+                if (imRequest.getInputData().getClass() == JSONObject.class) {
                     if (imRequest.getContentType() == ImContentType.APPLICATION_JSON) {
                         inputData = imRequest.getInputData(JSONObject.class).toJSONString();
                     } else {
@@ -105,9 +106,11 @@ public class ImHttpClient {
                         }
                         inputData = inputData.substring(0, inputData.length() - 1);
                     }
+                    System.out.println("JSON:" + inputData);
                 }
                 //如果是Map类型
-                if (imRequest.getInputData() instanceof Map) {
+                //if (imRequest.getInputData() instanceof Map) {
+                if (imRequest.getInputData().getClass() != JSONObject.class && imRequest.getInputData() instanceof Map) {
                     if (imRequest.getContentType() == ImContentType.APPLICATION_JSON) {
                         inputData = JSON.toJSONString(imRequest.getInputData(Map.class));
                     } else {
@@ -117,6 +120,7 @@ public class ImHttpClient {
                         }
                         inputData = inputData.substring(0, inputData.length() - 1);
                     }
+                    System.out.println("Map:" + inputData);
                 }
 
                 httpConnection.setDoOutput(true);
@@ -137,7 +141,8 @@ public class ImHttpClient {
                     inputData = imRequest.getInputData(String.class);
                 }
                 //如果是JSON类型
-                if (imRequest.getInputData() instanceof JSONObject) {
+                //if (imRequest.getInputData() instanceof JSONObject) {
+                if (imRequest.getInputData().getClass() == JSONObject.class) {
                     JSONObject json = imRequest.getInputData(JSONObject.class);
                     for (String key : json.keySet()) {
                         inputData += (key + "=" + json.getString(key) + "&");
@@ -145,7 +150,8 @@ public class ImHttpClient {
                     inputData = inputData.substring(0, inputData.length() - 1);
                 }
                 //如果是Map类型
-                if (imRequest.getInputData() instanceof Map) {
+                //if (imRequest.getInputData() instanceof Map) {
+                if (imRequest.getInputData().getClass() != JSONObject.class && imRequest.getInputData() instanceof Map) {
                     Map<String, String> map = imRequest.getInputData(Map.class);
                     for (String key : map.keySet()) {
                         inputData += (key + "=" + map.get(key) + "&");
@@ -208,7 +214,11 @@ public class ImHttpClient {
                     String[] strs_arry = data.split("; ");
                     for (String str : strs_arry) {
                         String[] str_arry = str.split("=");
-                        imResponse.addCookie(str_arry[0], str_arry[1]);
+                        if (str_arry.length == 2) {
+                            imResponse.addCookie(str_arry[0], str_arry[1]);
+                        } else {
+                            imResponse.addCookie(str_arry[0], null);
+                        }
                     }
                 }
                 cookieStr = builder.toString();
