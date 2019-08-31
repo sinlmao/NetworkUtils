@@ -38,6 +38,7 @@ public class ImRequest {
     private int bytesLength = 4096;
     private ImContentType contentType = ImContentType.APPLICATION_X_WWW_FORM_URLENCODED;
     private String contentTypeStr;
+    private boolean ignoreSSLCertVerify = false;
 
     private Map<String, String> headers = new HashMap<String, String>();
     private Map<String, String> cookies = new HashMap<String, String>();
@@ -95,6 +96,14 @@ public class ImRequest {
     public ImRequest setContentType(String contentType) {
         this.contentTypeStr = contentType;
         return this;
+    }
+
+    public boolean isIgnoreSSLCertVerify() {
+        return ignoreSSLCertVerify;
+    }
+
+    public void setIgnoreSSLCertVerify(boolean ignoreSSLCertVerify) {
+        this.ignoreSSLCertVerify = ignoreSSLCertVerify;
     }
 
     ///////////////////////////////////////////////////////////////////////

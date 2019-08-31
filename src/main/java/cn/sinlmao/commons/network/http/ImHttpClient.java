@@ -15,6 +15,7 @@
  */
 package cn.sinlmao.commons.network.http;
 
+import cn.sinlmao.commons.network.tools.IgnoreSSLTool;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
@@ -48,6 +49,9 @@ public class ImHttpClient {
 
         //初始化对象
         ImResponse imResponse = new ImResponse();
+
+        //配置是否忽略证书可信验证
+        IgnoreSSLTool.setIsIgnore(imRequest.isIgnoreSSLCertVerify());
 
         //初始化JDK HTTP对象
         URL restServiceURL = new URL(imRequest.getUrl());
@@ -106,7 +110,6 @@ public class ImHttpClient {
                         }
                         inputData = inputData.substring(0, inputData.length() - 1);
                     }
-                    System.out.println("JSON:" + inputData);
                 }
                 //如果是Map类型
                 //if (imRequest.getInputData() instanceof Map) {
@@ -120,7 +123,6 @@ public class ImHttpClient {
                         }
                         inputData = inputData.substring(0, inputData.length() - 1);
                     }
-                    System.out.println("Map:" + inputData);
                 }
 
                 httpConnection.setDoOutput(true);
@@ -174,6 +176,8 @@ public class ImHttpClient {
 
         //返回 Response Code
         imResponse.setResponseCode(httpConnection.getResponseCode());
+        //返回 Response Message
+        imResponse.setResponseMessage(httpConnection.getResponseMessage());
 
         // if (httpUtilResponse.getResponseCode() != 200) {
         // throw new RuntimeException(
@@ -191,6 +195,7 @@ public class ImHttpClient {
 
         while ((output_line = responseBuffer.readLine()) != null) {
             output.append(output_line);
+            output.append(System.getProperty("line.separator"));
         }
         httpConnection.disconnect();
 

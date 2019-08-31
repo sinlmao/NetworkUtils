@@ -23,97 +23,114 @@ import java.util.Set;
 /**
  * HTTP Response类
  *
+ * @author Sinlmao
  * @program Sinlmao Commons Network Utils
  * @description HTTP Response类
- * @author Sinlmao
  * @create 2019-08-01 11:11
  */
 public class ImResponse {
 
-	private int responseCode;
-	private String stringContent;
-	private byte[] bytesContent;
+    private int responseCode;
+    private String responseMessage;
+    private String stringContent;
+    private byte[] bytesContent;
 
-	private Map<String, List<String>> headers = new HashMap<String, List<String>>();
-	private String cookieStr;
-	private Map<String, String> cookies = new HashMap<String, String>();
+    private Map<String, List<String>> headers = new HashMap<String, List<String>>();
+    private String cookieStr;
+    private Map<String, String> cookies = new HashMap<String, String>();
 
-	///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
 
-	public ImResponse setResponseCode(int responseCode) {
-		this.responseCode = responseCode;
-		return this;
-	}
-	public ImResponse setStringContent(String stringContent) {
-		this.stringContent = stringContent;
-		return this;
-	}
-	public ImResponse setBytesContent(byte[] bytesContent) {
-		this.bytesContent = bytesContent;
-		return this;
-	}
+    protected ImResponse setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
+        return this;
+    }
 
+    protected void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
+    }
 
-	public ImResponse setCookie(String data) {
-		cookieStr = data;
-		return this;
-	}
-	public ImResponse addCookie(String name, String data) {
-		cookies.put(name, data);
-		return this;
-	}
+    protected ImResponse setStringContent(String stringContent) {
+        this.stringContent = stringContent;
+        return this;
+    }
 
+    protected ImResponse setBytesContent(byte[] bytesContent) {
+        this.bytesContent = bytesContent;
+        return this;
+    }
 
-	public ImResponse setHeaders(Map<String, List<String>> headers) {
-		this.headers = headers;
-		return this;
-	}
+    protected ImResponse setCookie(String data) {
+        cookieStr = data;
+        return this;
+    }
 
-	///////////////////////////////////////////////////////////////////////
+    protected ImResponse addCookie(String name, String data) {
+        cookies.put(name, data);
+        return this;
+    }
 
-	public int getResponseCode() {
-		return responseCode;
-	}
-	public String getStringContent() {
-		return stringContent;
-	}
-	public byte[] getBytesContent() {
-		return bytesContent;
-	}
+    protected ImResponse setHeaders(Map<String, List<String>> headers) {
+        this.headers = headers;
+        return this;
+    }
 
-	public void get(byte[] bytesContent) {
-		this.bytesContent = bytesContent;
-	}
+    ///////////////////////////////////////////////////////////////////////
 
-	///////////////////////////////////////////////////////////////////////
+    public int getResponseCode() {
+        return responseCode;
+    }
 
-	public String getCookieStr() {
-		return this.cookieStr;
-	}
-	public String getCookieData(String name) {
-		return cookies.get(name);
-	}
-	public Set<String> getCookieNames() {
-		return cookies.keySet();
-	}
-	public int getCookieSize() {
-		return cookies.size();
+	public String getResponseMessage() {
+		return responseMessage;
 	}
 
-	///////////////////////////////////////////////////////////////////////
+    public String getStringContent() {
+        return stringContent;
+    }
 
-	public List<String> getHeaderData(String name) {
-		return headers.get(name);
-	}
-	public Set<String> getHeaderNames() {
-		return headers.keySet();
-	}
-	public int getHeaderSize() {
-		return headers.size();
-	}
+    public byte[] getBytesContent() {
+        return bytesContent;
+    }
 
-	///////////////////////////////////////////////////////////////////////
+    public void get(byte[] bytesContent) {
+        this.bytesContent = bytesContent;
+    }
 
-	protected ImResponse() {
-	}
+    ///////////////////////////////////////////////////////////////////////
+
+    public String getCookieStr() {
+        return this.cookieStr;
+    }
+
+    public String getCookieData(String name) {
+        return cookies.get(name);
+    }
+
+    public Set<String> getCookieNames() {
+        return cookies.keySet();
+    }
+
+    public int getCookieSize() {
+        return cookies.size();
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+
+    public List<String> getHeaderData(String name) {
+        return headers.get(name);
+    }
+
+    public Set<String> getHeaderNames() {
+        return headers.keySet();
+    }
+
+    public int getHeaderSize() {
+        return headers.size();
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+
+    protected ImResponse() {
+    }
 }

@@ -2,7 +2,7 @@
 
 > 一个简单地、轻量级的 Java HTTP、FTP Network 集成、封装的操作类库。
 >
-> `update：2019-08-30`  `ver：1.2.2`
+> `update：2019-08-31`  `ver：1.2.4`
 
 ----------
 
@@ -16,6 +16,7 @@
 >  - 支持快捷设置Header数据；
 >  - 支持快捷设置Cookie数据；
 >  - 支持快捷设置InData数据；
+>  - 支持配置忽略SSL证书验证；
 
 **`v1.2.1`** 开始较之前有相对比较大的变更，如果直接升级还请注意使用情况。考虑到向下兼容的问题，`v1.1.x` 版本的相关类保留但标记为过期，并且不再维护（除BUG外）。
 
@@ -28,14 +29,14 @@
     <dependency>
         <groupId>cn.sinlmao.commons</groupId>
         <artifactId>network</artifactId>
-        <version>1.2.2</version>
+        <version>1.2.4</version>
     </dependency>
 
 ## 2. Android（Gradle）
 
 如果在Android中使用（Java 1.8+），在Gradle设置如下：
 
-    implementation 'cn.sinlmao.commons:network:1.2.2'
+    implementation 'cn.sinlmao.commons:network:1.2.4'
 
 # 二、使用说明
 
@@ -43,7 +44,7 @@
 
 自 **`v1.2.1`** 开始，Sinlmao Commons Network Utils 全新切换为**`Im`**开头的类名，更为简洁易用。
 
-Sinlmao Commons Network Utils 的构成非常简洁明了，分别有下面的类构成一个完整的HTTP业务：
+Sinlmao Commons Network Utils 的构成非常简洁明了，分别由下面的类构成一个完整的HTTP业务：
 
 >  - **ImHttpClient** 用于发起HTTP请求的主要类
 >  - **ImRequest** 发起HTTP请求的Request的数据包装类
@@ -98,11 +99,18 @@ Sinlmao Commons Network Utils 的构成非常简洁明了，分别有下面的�
     //设置身份 - Header 方式
     imRequest.addHeader("token", "your token");
 
-### 2.4 发送Cookie
+### 2.4 添加Cookie
 
-除了可以添加Header，当然也可以发送Cookie，也非常地简单：
+除了可以添加Header，当然也可以添加Cookie，也非常地简单：
 
     //设置Cookie
     imRequest.addCookie("key", "value");
+
+### 2.5 忽略SSL证书验证
+
+尽管SSL证书验证可以极大增加会话的可信度，但更多的时候我们并不需要验证SSL的证书，尤其是一些自签名的证书，可以通过以下代码忽略SSL证书验证：
+
+    //配置忽略证书
+    imRequest.setIgnoreSSLCertVerify(true);
 
 文档将在后续尽快完善。
