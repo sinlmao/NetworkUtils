@@ -13,25 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.sinlmao.commons.network.http;
+package cn.sinlmao.commons.network.exception;
 
 /**
- * HTTP ContentType枚举类
- *
- * @program Sinlmao Commons Network Utils
- * @description HTTP ContentType枚举类
- * @author Sinlmao
- * @create 2019-08-01 11:11
+ * @program: Sinlmao Commons Network Utils
+ * @description: 内容类型（ContentType）相关异常类
+ * @author: Sinlmao
+ * @create: 2019-09-01 02:24
  */
-public enum ImContentType {
+public class ContentTypeException extends RuntimeException {
 
-    //JSON数据类型
-    APPLICATION_JSON,
+    /**
+     * 返回一个内容类型不恰当使用异常说明
+     */
+    public final static String ContentTypeInappropriate= "Can't use an inappropriate ContentType.";
 
-    //表单类型
-    APPLICATION_X_WWW_FORM_URLENCODED,
-
-    //二进制类型
-    MULTIPART_FORM_DATA
-    
+    public ContentTypeException(String message) {
+        super(message);
+    }
 }

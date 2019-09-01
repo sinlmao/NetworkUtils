@@ -15,6 +15,13 @@
  */
 package cn.sinlmao.commons.network.http;
 
+import cn.sinlmao.commons.network.bean.ImBytesData;
+import cn.sinlmao.commons.network.bean.ImFileData;
+import cn.sinlmao.commons.network.bean.ImFormData;
+import cn.sinlmao.commons.network.bean.ImMultipartFormData;
+import cn.sinlmao.commons.network.exception.ContentTypeException;
+import cn.sinlmao.commons.network.exception.DataTypeException;
+import cn.sinlmao.commons.network.exception.MethodException;
 import cn.sinlmao.commons.network.tools.IgnoreSSLTool;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -23,10 +30,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * HTTP Client工具类
@@ -38,6 +42,9 @@ import java.util.Set;
  */
 public class ImHttpClient {
 
+    private final static String PREFIX = "--";
+    private final static String WRAP = System.getProperty("line.separator");
+
     /**
      * 发送请求
      *
@@ -47,6 +54,9 @@ public class ImHttpClient {
      */
     public static ImResponse send(ImRequest imRequest) throws Exception {
 
+        //初始化分隔符（如果为文件上传(multipart/form-data)模式的时候）
+        String boundary = "--------------------------" + String.valueOf(System.currentTimeMillis()); // boundary就是request头和上传文件内容的分隔符
+
         //初始化对象
         ImResponse imResponse = new ImResponse();
 
@@ -54,11 +64,33 @@ public class ImHttpClient {
         IgnoreSSLTool.setIsIgnore(imRequest.isIgnoreSSLCertVerify());
 
         //初始化JDK HTTP对象
-        URL restServiceURL = new URL(imRequest.getUrl());
-        HttpURLConnection httpConnection = (HttpURLConnection) restServiceURL.openConnection();
+        URL url = new URL(imRequest.getUrl());
+        //获得HttpURLConnection
+        HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
+        //设置Method
         httpConnection.setRequestMethod(imRequest.getMethod().toString());
+        //设置是否使用缓存
+        httpConnection.setUseCaches(imRequest.isUseCache());
+        //设置接收编码
+        httpConnection.setRequestProperty("Accept-Charset", imRequest.getCharset());
+        //设置接收内容类型
         httpConnection.setRequestProperty("Accept", "*/*");
-        httpConnection.setRequestProperty("Content-Type", getContentType(imRequest.getContentType()) + ";charset=" + imRequest.getCharset());
+        //设置内容类型及编码
+        httpConnection.setRequestProperty("Content-Type", getContentType(imRequest.getContentType()) + "; charset=" + imRequest.getCharset());
+
+        //如果需要长连接
+        if (imRequest.isKeepAlive() || imRequest.getContentType() == ImContentType.MULTIPART_FORM_DATA) {
+            //开启长连接可以持续传输
+            httpConnection.setRequestProperty("Connection", "keep-alive");
+        }
+
+        //如果ContentType是multipart/form-data，则需要分段标记，并且需要设置块大小
+        if (imRequest.getContentType() == ImContentType.MULTIPART_FORM_DATA) {
+            httpConnection.setRequestProperty("Content-Type", getContentType(imRequest.getContentType())
+                    + "; charset=" + imRequest.getCharset()
+                    + "; boundary=" + boundary);
+            httpConnection.setChunkedStreamingMode(0);
+        }
 
         //如果存在ContentType定义，则设置ContentType值
         if (imRequest.getContentTypeStr() != null && !"".equals(imRequest.getContentTypeStr())) {
@@ -88,87 +120,250 @@ public class ImHttpClient {
         //如果存在InputData值，则设置InputData值
         if (imRequest.getInputData() != null) {
 
-            String inputData = "";
+            //如果不是文件上传内容类型
+            if (imRequest.getContentType() != ImContentType.MULTIPART_FORM_DATA) {
 
-            //当使用POST、PUT Method
-            if ("POST".equals(imRequest.getMethod().toString())
-                    || "PUT".equals(imRequest.getMethod().toString())) {
-
-                //如果是String类型
-                if (imRequest.getInputData() instanceof String) {
-                    inputData = imRequest.getInputData(String.class);
+                //如果没有配置为允许非标准使用，进行标准检查
+                if (!imRequest.isAllowNonStandard()) {
+                    //非multipart/form-data内容类型不支持直接设置byte数据，如果使用byte数据，则抛出异常告知开发者
+                    if (imRequest.getInputData().getClass() == ImBytesData.class
+                            || imRequest.getInputData().getClass() == ImFileData.class
+                            || imRequest.getInputData().getClass() == ImMultipartFormData.class) {
+                        throw new MethodException(MethodException.MethodInappropriate);
+                    }
+                    //非multipart/form-data内容类型不支持的ImFormData数据类型，如果使用该数据类型，则抛出异常告知开发者
+                    if (imRequest.getInputData().getClass() == ImFormData.class) {
+                        throw new DataTypeException(DataTypeException.DataTypeUnSupport);
+                    }
                 }
-                //如果是JSON类型
-                //if (imRequest.getInputData() instanceof JSONObject) {
-                if (imRequest.getInputData().getClass() == JSONObject.class) {
-                    if (imRequest.getContentType() == ImContentType.APPLICATION_JSON) {
-                        inputData = imRequest.getInputData(JSONObject.class).toJSONString();
-                    } else {
+
+                //初始化inputData
+                String inputData = "";
+
+                //当使用POST、PUT Method
+                if (imRequest.getMethod() == ImMethod.POST
+                        || imRequest.getMethod() == ImMethod.PUT) {
+
+                    //如果是String类型
+                    if (imRequest.getInputData() instanceof String) {
+                        inputData = imRequest.getInputData(String.class);
+                    }
+                    //如果是JSON类型
+                    //if (imRequest.getInputData() instanceof JSONObject) {
+                    if (imRequest.getInputData().getClass() == JSONObject.class) {
+                        if (imRequest.getContentType() == ImContentType.APPLICATION_JSON) {
+                            inputData = imRequest.getInputData(JSONObject.class).toJSONString();
+                        } else {
+                            JSONObject json = imRequest.getInputData(JSONObject.class);
+                            for (String key : json.keySet()) {
+                                inputData += (key + "=" + json.getString(key) + "&");
+                            }
+                            inputData = inputData.substring(0, inputData.length() - 1);
+                        }
+                    }
+                    //如果是Map类型
+                    //if (imRequest.getInputData() instanceof Map) {
+                    if (imRequest.getInputData().getClass() != JSONObject.class && imRequest.getInputData() instanceof Map) {
+                        if (imRequest.getContentType() == ImContentType.APPLICATION_JSON) {
+                            inputData = JSON.toJSONString(imRequest.getInputData(Map.class));
+                        } else {
+                            Map<String, String> map = imRequest.getInputData(Map.class);
+                            for (String key : map.keySet()) {
+                                inputData += (key + "=" + map.get(key) + "&");
+                            }
+                            inputData = inputData.substring(0, inputData.length() - 1);
+                        }
+                    }
+
+                    httpConnection.setDoOutput(true);
+                    httpConnection.setDoInput(true);
+
+                    //获取写入流
+                    OutputStream outputStream = httpConnection.getOutputStream();
+                    outputStream.write(inputData.getBytes(Charset.forName(imRequest.getCharset())));
+                    //关闭写入流
+                    outputStream.flush();
+                    outputStream.close();
+
+                } else {    //如果使用GET或者其它Method
+
+                    //如果没有配置为允许非标准使用，进行标准检查
+                    if (!imRequest.isAllowNonStandard()) {
+                        //如果不在POST、PUT方法下使用非application/x-www-form-urlencoded内容类型，则抛出异常告知开发者
+                        if (imRequest.getContentType() != ImContentType.APPLICATION_X_WWW_FORM_URLENCODED) {
+                            throw new ContentTypeException(ContentTypeException.ContentTypeInappropriate);
+                        }
+                    }
+
+                    //如果是String类型
+                    if (imRequest.getInputData() instanceof String) {
+                        inputData = imRequest.getInputData(String.class);
+                    }
+                    //如果是JSON类型
+                    //if (imRequest.getInputData() instanceof JSONObject) {
+                    if (imRequest.getInputData().getClass() == JSONObject.class) {
                         JSONObject json = imRequest.getInputData(JSONObject.class);
                         for (String key : json.keySet()) {
                             inputData += (key + "=" + json.getString(key) + "&");
                         }
                         inputData = inputData.substring(0, inputData.length() - 1);
                     }
-                }
-                //如果是Map类型
-                //if (imRequest.getInputData() instanceof Map) {
-                if (imRequest.getInputData().getClass() != JSONObject.class && imRequest.getInputData() instanceof Map) {
-                    if (imRequest.getContentType() == ImContentType.APPLICATION_JSON) {
-                        inputData = JSON.toJSONString(imRequest.getInputData(Map.class));
-                    } else {
+                    //如果是Map类型
+                    //if (imRequest.getInputData() instanceof Map) {
+                    if (imRequest.getInputData().getClass() != JSONObject.class && imRequest.getInputData() instanceof Map) {
                         Map<String, String> map = imRequest.getInputData(Map.class);
                         for (String key : map.keySet()) {
                             inputData += (key + "=" + map.get(key) + "&");
                         }
                         inputData = inputData.substring(0, inputData.length() - 1);
                     }
+
+                    httpConnection.setDoOutput(true);
+
+                    //获取写入流
+                    OutputStream outputStream = httpConnection.getOutputStream();
+
+                    // 正文，正文内容其实跟get的URL中 '? '后的参数字符串一致
+                    // String content = "字段名=" + URLEncoder.encode("字符串值", "编码");
+                    // DataOutputStream.writeBytes将字符串中的16位的unicode字符以8位的字符形式写到流里面
+                    outputStream.write(inputData.getBytes(Charset.forName(imRequest.getCharset())));
+
+                    //关闭写入流
+                    outputStream.flush();
+                    outputStream.close();
+                }
+            } else {    //如果为文件上传(multipart/form-data)模式
+
+                //如果没有配置为允许非标准使用，进行标准检查
+                if (!imRequest.isAllowNonStandard()) {
+                    //非POST、PUT方法不支持直接设置byte数据，则抛出异常告知开发者
+                    if (imRequest.getMethod() != ImMethod.POST
+                            && imRequest.getMethod() != ImMethod.PUT) {
+                        throw new MethodException(MethodException.MethodInappropriate);
+                    }
                 }
 
                 httpConnection.setDoOutput(true);
                 httpConnection.setDoInput(true);
-                httpConnection.setRequestProperty("Accept-Charset", imRequest.getCharset());
 
-                // httpConnection.setRequestProperty("Content-Type", getContentType(httpUtilRequest.getContentType()) + ";charset=" + httpUtilRequest.getCharset());
-                OutputStream outputStream = httpConnection.getOutputStream();
-                outputStream.write(inputData.getBytes(Charset.forName(imRequest.getCharset())));
-                outputStream.flush();
-                outputStream.close();
-
-            } else {
-                //如果使用GET或者其它Method
-
-                //如果是String类型
-                if (imRequest.getInputData() instanceof String) {
-                    inputData = imRequest.getInputData(String.class);
-                }
-                //如果是JSON类型
-                //if (imRequest.getInputData() instanceof JSONObject) {
-                if (imRequest.getInputData().getClass() == JSONObject.class) {
-                    JSONObject json = imRequest.getInputData(JSONObject.class);
-                    for (String key : json.keySet()) {
-                        inputData += (key + "=" + json.getString(key) + "&");
-                    }
-                    inputData = inputData.substring(0, inputData.length() - 1);
-                }
-                //如果是Map类型
-                //if (imRequest.getInputData() instanceof Map) {
-                if (imRequest.getInputData().getClass() != JSONObject.class && imRequest.getInputData() instanceof Map) {
-                    Map<String, String> map = imRequest.getInputData(Map.class);
-                    for (String key : map.keySet()) {
-                        inputData += (key + "=" + map.get(key) + "&");
-                    }
-                    inputData = inputData.substring(0, inputData.length() - 1);
-                }
-
-                httpConnection.setDoOutput(true);
-
+                //获取数据写入流
+                //DataOutputStream.writeBytes将字符串中的16位的unicode字符以8位的字符形式写到流里面
                 DataOutputStream dataOutputStream = new DataOutputStream(httpConnection.getOutputStream());
-                // 正文，正文内容其实跟get的URL中 '? '后的参数字符串一致
-                // String content = "字段名=" + URLEncoder.encode("字符串值", "编码");
-                // DataOutputStream.writeBytes将字符串中的16位的unicode字符以8位的字符形式写到流里面
-                dataOutputStream.writeBytes(inputData);
-                //关闭流
+
+                //分隔符头部
+                String file_header = PREFIX + boundary + WRAP;
+                //分隔符分隔
+                String file_separate = WRAP + PREFIX + boundary + WRAP;
+                //分隔符尾部
+                String file_footer = WRAP + PREFIX + boundary + "--";
+
+                //如果是单文件数据
+                if (imRequest.getInputData().getClass() == ImFileData.class) {
+
+                    //获得文件数据
+                    ImFileData imFileData = imRequest.getInputData(ImFileData.class);
+
+                    //文件头部信息
+                    String file_disposition = "Content-Disposition: form-data;"
+                            + " name=\"" + imFileData.getName() + "\";"
+                            + " filename=\"" + imFileData.getFileName() + "\""
+                            + WRAP;
+                    //文件类型信息
+                    String file_content_type = "Content-Type: "
+                            + imFileData.getFileType()
+                            + WRAP + WRAP;
+
+                    //写入分隔符头部
+                    dataOutputStream.writeBytes(file_header);
+                    //写入文件流信息
+                    dataOutputStream.writeBytes(file_disposition);
+                    dataOutputStream.writeBytes(file_content_type);
+                    //写入文件流数据
+                    dataOutputStream.write(imFileData.getBytes());
+                    //写入分隔符尾部
+                    dataOutputStream.writeBytes(file_footer);
+                }
+
+                //如果是多部分构成的表单数据
+                if (imRequest.getInputData().getClass() == ImMultipartFormData.class) {
+
+                    //获得文件数据
+                    ImMultipartFormData imMultipartFormData = imRequest.getInputData(ImMultipartFormData.class);
+
+                    //写入分隔符头部
+                    dataOutputStream.writeBytes(file_header);
+
+                    //循环读取数据
+                    while (imMultipartFormData.hasNext()) {
+
+                        //读取数据
+                        Object data = imMultipartFormData.nextData();
+
+                        //如果为ImFileData数据
+                        if (data.getClass() == ImFileData.class) {
+
+                            //获得数据
+                            ImFileData imFileData = (ImFileData) data;
+
+                            //文件头部信息
+                            String file_disposition = "Content-Disposition: form-data;"
+                                    + " name=\"" + imFileData.getName() + "\";"
+                                    + " filename=\"" + imFileData.getFileName() + "\""
+                                    + WRAP;
+                            //文件类型信息
+                            String file_content_type = "Content-Type: "
+                                    + imFileData.getFileType()
+                                    + WRAP + WRAP;
+
+                            //写入文件流信息
+                            dataOutputStream.writeBytes(file_disposition);
+                            dataOutputStream.writeBytes(file_content_type);
+                            //写入文件流数据
+                            dataOutputStream.write(imFileData.getBytes());
+                        }
+
+                        //如果为ImFormData数据
+                        if (data.getClass() == ImFormData.class) {
+
+                            ImFormData imFormData = (ImFormData) data;
+
+                            //文件头部信息
+                            String file_disposition = "Content-Disposition: form-data;"
+                                    + " name=\"" + imFormData.getName() + "\""
+                                    + WRAP;
+                            //文件类型信息
+                            String file_content_type = "Content-Type: "
+                                    + imFormData.getContentType()
+                                    + WRAP + WRAP;
+
+                            //写入文件流信息
+                            dataOutputStream.writeBytes(file_disposition);
+                            dataOutputStream.writeBytes(file_content_type);
+                            //写入文件流数据
+                            dataOutputStream.writeBytes(imFormData.getData());
+                        }
+
+                        if (imMultipartFormData.hasNext()) {
+                            //写入分隔符号分隔
+                            dataOutputStream.writeBytes(file_separate);
+                        }
+                    }
+
+                    //写入分隔符尾部
+                    dataOutputStream.writeBytes(file_footer);
+                }
+
+                //如果是纯字节数据
+                if (imRequest.getInputData().getClass() == ImBytesData.class) {
+
+                    //获得字节数据
+                    ImBytesData imBytesData = imRequest.getInputData(ImBytesData.class);
+
+                    //写入字节数据
+                    dataOutputStream.write(imBytesData.getBytes());
+                }
+
+                //关闭数据写入流
                 dataOutputStream.flush();
                 dataOutputStream.close();
             }
@@ -185,23 +380,33 @@ public class ImHttpClient {
         // httpConnection.getResponseCode());
         // }
 
-        byte[] bytes = toByteArray(httpConnection.getInputStream(), imRequest.getBytesLength());
+        //获得返回的bytes
+        byte[] out_bytes = toByteArray(httpConnection.getInputStream(), imRequest.getBytesLength());
 
+        //创建输入流
         BufferedReader responseBuffer = new BufferedReader(
-                new InputStreamReader(new ByteArrayInputStream(bytes), imRequest.getCharset()));
+                new InputStreamReader(new ByteArrayInputStream(out_bytes), imRequest.getCharset()));
 
+        //初始化StringBuffer
         StringBuffer output = new StringBuffer();
+        //初始化String
         String output_line;
 
+        //从输入流获得数据
         while ((output_line = responseBuffer.readLine()) != null) {
             output.append(output_line);
             output.append(System.getProperty("line.separator"));
         }
+
+        //关闭HttpConnection
         httpConnection.disconnect();
 
+        //设置返回Response的StringContent
         imResponse.setStringContent(output.toString());
         // imResponse.setBytesContent(output.toString().getBytes(Charset.forName(httpUtilRequest.getCharset())));
-        imResponse.setBytesContent(bytes);
+
+        //设置返回Response的BytesContent
+        imResponse.setBytesContent(out_bytes);
 
         //获取Cookie
         String cookieStr = "";
@@ -286,6 +491,8 @@ public class ImHttpClient {
                 return "application/json";
             case APPLICATION_X_WWW_FORM_URLENCODED:
                 return "application/x-www-form-urlencoded";
+            case MULTIPART_FORM_DATA:
+                return "multipart/form-data";
         }
         return "";
     }

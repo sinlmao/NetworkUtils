@@ -13,25 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.sinlmao.commons.network.http;
+package cn.sinlmao.commons.network.bean;
 
 /**
- * HTTP ContentType枚举类
- *
- * @program Sinlmao Commons Network Utils
- * @description HTTP ContentType枚举类
- * @author Sinlmao
- * @create 2019-08-01 11:11
+ * @program: Sinlmao Commons Network Utils
+ * @description: 字节数据Bean
+ * @author: Sinlmao
+ * @create: 2019-09-01 01:57
  */
-public enum ImContentType {
+public class ImBytesData {
 
-    //JSON数据类型
-    APPLICATION_JSON,
+    private byte[] bytes;
 
-    //表单类型
-    APPLICATION_X_WWW_FORM_URLENCODED,
+    public ImBytesData() {
+    }
 
-    //二进制类型
-    MULTIPART_FORM_DATA
-    
+    public ImBytesData(byte[] bytes) {
+        this.bytes = bytes;
+    }
+
+    public byte[] getBytes() {
+        return bytes;
+    }
+
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
+    }
 }

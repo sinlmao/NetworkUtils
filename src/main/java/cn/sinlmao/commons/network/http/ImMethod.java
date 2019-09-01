@@ -21,26 +21,31 @@ import java.util.Map;
 /**
  * HTTP 方法枚举类
  *
+ * @author Sinlmao
  * @program Sinlmao Commons Network Utils
  * @description HTTP 方法枚举类
- * @author Sinlmao
  * @create 2019-08-01 11:11
  */
 public enum ImMethod {
 
-	GET, POST, PUT, DELETE;
+    GET,    //向特定的资源发出请求，得到资源
+    POST,    //向指定资源提交数据进行处理的请求，用于添加新的内容
+    PUT,    //向指定资源位置上传其最新的内容，用于修改某个内容
+    DELETE,    //请求服务器删除请求的URI所标识的资源，用于删除
+    OPTIONS,    //获取服务器支持的HTTP请求方法
+    HEAD,    //跟GET很像，但是不返回响应体信息，用于检查对象是否存在，并获取包含在响应消息头中的信息
+    PATCH;  //是对 PUT 方法的补充，用来对已知资源进行局部更新
 
-	// Implementing a fromString method on an enum type
-	private static final Map<String, ImMethod> stringToEnum = new HashMap<String, ImMethod>();
-	static {
-		// Initialize map from constant name to enum constant
-		for (ImMethod blah : values()) {
-			stringToEnum.put(blah.toString(), blah);
-		}
-	}
 
-	// Returns Blah for string, or null if string is invalid
-	public static ImMethod fromString(String symbol) {
-		return stringToEnum.get(symbol);
-	}
+    private static final Map<String, ImMethod> stringToEnum = new HashMap<String, ImMethod>();
+
+    static {
+        for (ImMethod blah : values()) {
+            stringToEnum.put(blah.toString(), blah);
+        }
+    }
+
+    public static ImMethod fromString(String symbol) {
+        return stringToEnum.get(symbol);
+    }
 }

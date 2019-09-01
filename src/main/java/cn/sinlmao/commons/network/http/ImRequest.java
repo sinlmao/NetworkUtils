@@ -15,6 +15,9 @@
  */
 package cn.sinlmao.commons.network.http;
 
+import cn.sinlmao.commons.network.bean.ImBytesData;
+import cn.sinlmao.commons.network.bean.ImFileData;
+import cn.sinlmao.commons.network.bean.ImMultipartFormData;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.HashMap;
@@ -39,6 +42,10 @@ public class ImRequest {
     private ImContentType contentType = ImContentType.APPLICATION_X_WWW_FORM_URLENCODED;
     private String contentTypeStr;
     private boolean ignoreSSLCertVerify = false;
+    private boolean keepAlive = false;
+    private boolean useCache = false;
+    private boolean allowNonStandard = false;
+    private boolean restfulMode = false;
 
     private Map<String, String> headers = new HashMap<String, String>();
     private Map<String, String> cookies = new HashMap<String, String>();
@@ -83,6 +90,21 @@ public class ImRequest {
         return this;
     }
 
+    public ImRequest setInputData(ImBytesData inputData) {
+        this.inputData = inputData;
+        return this;
+    }
+
+    public ImRequest setInputData(ImFileData inputData) {
+        this.inputData = inputData;
+        return this;
+    }
+
+    public ImRequest setInputData(ImMultipartFormData inputData) {
+        this.inputData = inputData;
+        return this;
+    }
+
     public ImRequest setBytesLength(int bytesLength) {
         this.bytesLength = bytesLength;
         return this;
@@ -104,6 +126,39 @@ public class ImRequest {
 
     public void setIgnoreSSLCertVerify(boolean ignoreSSLCertVerify) {
         this.ignoreSSLCertVerify = ignoreSSLCertVerify;
+    }
+
+    public boolean isKeepAlive() {
+        return keepAlive;
+    }
+
+    public void setKeepAlive(boolean keepAlive) {
+        this.keepAlive = keepAlive;
+    }
+
+    public boolean isUseCache() {
+        return useCache;
+    }
+
+    public void setUseCache(boolean useCache) {
+        this.useCache = useCache;
+    }
+
+    public boolean isAllowNonStandard() {
+        return allowNonStandard;
+    }
+
+    public void setAllowNonStandard(boolean allowNonStandard) {
+        this.allowNonStandard = allowNonStandard;
+    }
+
+    public boolean isRestfulMode() {
+        return restfulMode;
+    }
+
+    public void setRestfulMode(boolean restfulMode) {
+        this.restfulMode = restfulMode;
+        this.allowNonStandard = restfulMode;
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -144,6 +199,7 @@ public class ImRequest {
 
     /**
      * 添加Header，当数据已经存在，则不再添加
+     *
      * @param name
      * @param value
      */
@@ -155,6 +211,7 @@ public class ImRequest {
 
     /**
      * 添加Header，当数据已经存在，则不再添加
+     *
      * @param headers
      */
     public void addHeader(Map<String, String> headers) {
@@ -167,6 +224,7 @@ public class ImRequest {
 
     /**
      * 添加Header，当数据已经存在，则不再添加
+     *
      * @param headers
      */
     public void addHeader(JSONObject headers) {
@@ -179,6 +237,7 @@ public class ImRequest {
 
     /**
      * 设置Header，当数据已经存在，则以最后设置的为准
+     *
      * @param name
      * @param value
      */
@@ -191,6 +250,7 @@ public class ImRequest {
 
     /**
      * 设置Header，当数据已经存在，则以最后设置的为准
+     *
      * @param headers
      */
     public void setHeader(JSONObject headers) {
@@ -203,6 +263,7 @@ public class ImRequest {
 
     /**
      * 设置Header，当数据已经存在，则以最后设置的为准
+     *
      * @param headers
      */
     public void setHeader(Map<String, String> headers) {
@@ -229,6 +290,7 @@ public class ImRequest {
 
     /**
      * 添加Cookie，当数据已经存在，则不再添加
+     *
      * @param name
      * @param value
      */
@@ -240,6 +302,7 @@ public class ImRequest {
 
     /**
      * 添加Cookie，当数据已经存在，则不再添加
+     *
      * @param cookies
      */
     public void addCookie(Map<String, String> cookies) {
@@ -252,6 +315,7 @@ public class ImRequest {
 
     /**
      * 添加Cookie，当数据已经存在，则不再添加
+     *
      * @param cookies
      */
     public void addCookie(JSONObject cookies) {
@@ -264,6 +328,7 @@ public class ImRequest {
 
     /**
      * 添加Cookie，当数据已经存在，则以最后设置的为准
+     *
      * @param name
      * @param value
      */
@@ -276,6 +341,7 @@ public class ImRequest {
 
     /**
      * 添加Cookie，当数据已经存在，则以最后设置的为准
+     *
      * @param cookies
      */
     public void setCookie(Map<String, String> cookies) {
@@ -288,6 +354,7 @@ public class ImRequest {
 
     /**
      * 添加Cookie，当数据已经存在，则以最后设置的为准
+     *
      * @param cookies
      */
     public void setCookie(JSONObject cookies) {
