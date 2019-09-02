@@ -31,7 +31,7 @@ public enum ImContentType {
     //表单类型
     APPLICATION_X_WWW_FORM_URLENCODED,
 
-    //二进制类型
+    //二进制类型（多行表单）
     MULTIPART_FORM_DATA
     
 }

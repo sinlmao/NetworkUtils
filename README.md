@@ -2,7 +2,11 @@
 
 > 一个简单地、轻量级的 Java HTTP、FTP Network 集成、封装的操作类库。
 >
-> `update：2019-09-01`  `ver：1.3.0`
+> `update：2019-09-02`  `ver：1.3.1`
+
+----------
+
+中文文档 | **[English][1]**
 
 ----------
 
@@ -39,9 +43,9 @@
 
     implementation 'cn.sinlmao.commons:network:1.3.0'
 
-# 二、使用说明
+# 三、使用说明
 
-## 1. 相关类介绍
+## 3.1 相关类介绍
 
 自 **`v1.2.1`** 开始，Sinlmao Commons Network Utils 全新切换为`Im`开头的类名，更为简洁易用。
 
@@ -52,9 +56,9 @@ Sinlmao Commons Network Utils 的构成非常简洁明了，分别由下面的�
 >  - **ImMethod** 用于指定 HTTP Request（ImRequest）的Method枚举类
 >  - **ImResponse** 完成HTTP请求的数据包装类
 
-## 2. 简单示例
+## 3.2 简单示例
 
-### 2.1 发起简单请求
+### 3.2.1 发起简单请求
 
 例如，我们要从一个URL获得数据（假设从百度获取其首页 HTML 数据），抛弃Java原生复杂和难以理解的方法，只需要几行代码即可实现：
 
@@ -67,7 +71,7 @@ Sinlmao Commons Network Utils 的构成非常简洁明了，分别由下面的�
     //打印返回数据
     System.out.println(rs);
 
-### 2.2 发起带参数请求
+### 3.2.2 发起带参数请求
 
 如果需要向一个地址发送带参数的HTTP请求，也非常简单：
 
@@ -86,35 +90,35 @@ Sinlmao Commons Network Utils 的构成非常简洁明了，分别由下面的�
     //打印返回数据
     System.out.println(rs);
 
-### 2.3 使用POST或其它方法（Method）的请求
+### 3.2.3 使用POST或其它方法（Method）的请求
 
 改变Method只需要一行代码的设置：
 
     //设置Method
     imRequest.setMethod(ImMethod.POST);
 
-### 2.4 添加Header
+### 3.2.4 添加Header
 
 很多时候我们需要在Header中表明身份（即在Header中传值），此时只需要写如下代码：
 
     //设置身份 - Header 方式
     imRequest.addHeader("token", "your token");
 
-### 2.4 添加Cookie
+### 3.2.4 添加Cookie
 
 除了可以添加Header，当然也可以添加Cookie，同样非常地简单：
 
     //设置Cookie
     imRequest.addCookie("key", "value");
 
-### 2.5 忽略SSL证书验证（v1.2.5+）
+### 3.2.5 忽略SSL证书验证（v1.2.5+）
 
 尽管SSL证书验证可以极大增加会话的可信度，但更多的时候我们并不需要验证SSL的证书，尤其是一些自签名的证书，可以通过以下代码忽略SSL证书验证：
 
     //配置忽略证书
     imRequest.setIgnoreSSLCertVerify(true);
 
-### 2.6 设置多种类型的InputData（v1.2.3+）
+### 3.2.6 设置多种类型的InputData（v1.2.3+）
 
 我们都经历过需要向服务端接口（或某个其它URL）提交一系列参数，参数可能数量多且数据类型复杂。如果都转成String显得非常的啰嗦和麻烦，所以在 Sinlmao Commons Network Utils 中，可以接收String、Map<String, String>、JSONObject（fastjson），ImHttpClient 会自动转换合适的格式。用法模拟代码如下：
 
@@ -127,7 +131,7 @@ Sinlmao Commons Network Utils 的构成非常简洁明了，分别由下面的�
     //传入JSONObject类型的数据（模拟）
     imRequest.setInputData(JSONObject);
 
-### 2.7 文件上传（v1.3.0+）
+### 3.2.7 文件上传（v1.3.0+）
 
 HTTP文件上传是 Sinlmao Commons Network Utils `v1.3.0` 开始支持的新特性，将复杂甚至非常抽象的文件上传代码逻辑封装并将其简化成一个简单地数据类型，通过一致的调用方法，只需要设置特定的内容类型和方法，你可以很简单的实现文件上传需求。代码如下：
 
@@ -152,3 +156,6 @@ HTTP文件上传是 Sinlmao Commons Network Utils `v1.3.0` 开始支持的新特
     String rs = imResponse.getStringContent();
     //打印返回数据
     System.out.println(rs);
+
+
+  [1]: README.en.md

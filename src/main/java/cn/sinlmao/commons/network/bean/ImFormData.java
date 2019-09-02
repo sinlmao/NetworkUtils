@@ -15,8 +15,6 @@
  */
 package cn.sinlmao.commons.network.bean;
 
-import cn.sinlmao.commons.network.exception.DataTypeException;
-
 /**
  * @program: Sinlmao Commons Network Utils
  * @description: 普通表单数据Bean
@@ -27,16 +25,16 @@ public class ImFormData {
 
     private String name;
     private String contentType;
-    private String data;
+    private String value;
 
     public ImFormData() {
 
     }
 
-    public ImFormData(String name, String contentType, String data) {
+    public ImFormData(String name, String contentType, String value) {
         this.name = name;
         this.contentType = contentType;
-        this.data = data;
+        this.value = value;
     }
 
     public String getName() {
@@ -55,11 +53,20 @@ public class ImFormData {
         this.contentType = contentType;
     }
 
-    public String getData() {
-        return data;
+    public String getValue() {
+        return value;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    /**
+     * 已过期，请更改为getValue
+     * @return
+     */
+    @Deprecated
+    public String getData() {
+        return value;
     }
 }

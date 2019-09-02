@@ -46,6 +46,7 @@ public class ImRequest {
     private boolean useCache = false;
     private boolean allowNonStandard = false;
     private boolean restfulMode = false;
+    private boolean forceInUrlSendData = false;
 
     private Map<String, String> headers = new HashMap<String, String>();
     private Map<String, String> cookies = new HashMap<String, String>();
@@ -159,6 +160,14 @@ public class ImRequest {
     public void setRestfulMode(boolean restfulMode) {
         this.restfulMode = restfulMode;
         this.allowNonStandard = restfulMode;
+    }
+
+    public boolean isForceInUrlSendData() {
+        return forceInUrlSendData;
+    }
+
+    public void setForceInUrlSendData(boolean forceInUrlSendData) {
+        this.forceInUrlSendData = forceInUrlSendData;
     }
 
     ///////////////////////////////////////////////////////////////////////

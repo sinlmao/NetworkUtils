@@ -15,8 +15,6 @@
  */
 package cn.sinlmao.commons.network.bean;
 
-import cn.sinlmao.commons.network.exception.DataTypeException;
-
 import java.util.ArrayList;
 import java.util.List;
 

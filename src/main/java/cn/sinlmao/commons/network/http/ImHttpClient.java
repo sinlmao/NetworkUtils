@@ -57,6 +57,102 @@ public class ImHttpClient {
         //初始化分隔符（如果为文件上传(multipart/form-data)模式的时候）
         String boundary = "--------------------------" + String.valueOf(System.currentTimeMillis()); // boundary就是request头和上传文件内容的分隔符
 
+        //如果没有配置为允许非标准使用，进行标准检查
+        if (!imRequest.isAllowNonStandard()) {
+            //如果内容类型没有使用表单（x-www-form-urlencoded）
+            if (imRequest.getContentType() != ImContentType.APPLICATION_X_WWW_FORM_URLENCODED) {
+                //如果在GET、HEAD方法下没有使用application/x-www-form-urlencoded内容类型，则抛出异常告知开发者
+                if (imRequest.getMethod() == ImMethod.GET
+                        || imRequest.getMethod() == ImMethod.HEAD) {
+                    throw new ContentTypeException(ContentTypeException.ContentTypeInappropriate);
+                }
+            }
+            //如果内容类型没有使用多行表单（multipart/form-data）
+            if (imRequest.getContentType() != ImContentType.MULTIPART_FORM_DATA) {
+                if (imRequest.getInputData() != null) {
+                    //非multipart/form-data内容类型不支持直接设置byte数据，如果使用byte数据，则抛出异常告知开发者
+                    if (imRequest.getInputData().getClass() == ImBytesData.class
+                            || imRequest.getInputData().getClass() == ImFileData.class
+                            || imRequest.getInputData().getClass() == ImMultipartFormData.class) {
+                        throw new MethodException(MethodException.MethodInappropriate);
+                    }
+                    //非multipart/form-data内容类型不支持的ImFormData数据类型，如果使用该数据类型，则抛出异常告知开发者
+                    if (imRequest.getInputData().getClass() == ImFormData.class) {
+                        throw new DataTypeException(DataTypeException.DataTypeUnSupport);
+                    }
+                }
+            }
+            //如果内容类型已经使用多行表单（multipart/form-data）
+            if (imRequest.getContentType() == ImContentType.MULTIPART_FORM_DATA) {
+                //非POST、PUT方法不支持直接设置byte数据，则抛出异常告知开发者
+                if (imRequest.getMethod() != ImMethod.POST
+                        && imRequest.getMethod() != ImMethod.PUT) {
+                    throw new MethodException(MethodException.MethodInappropriate);
+                }
+            }
+        }
+
+        //当时设置为强制在URL中传值时，进行一些必要的强制校验（不可忽略和关闭）
+        if (imRequest.isForceInUrlSendData()) {
+            //对输入数据（InputData）类型的一些强制校验
+            if (imRequest.getInputData() != null) {
+                if (imRequest.getInputData().getClass() == ImFileData.class
+                        || imRequest.getInputData().getClass() == ImMultipartFormData.class
+                        || imRequest.getInputData().getClass() == ImBytesData.class) {
+                    throw new DataTypeException(DataTypeException.DataTypeUnSupport);
+                }
+            }
+            //对内容类型的一些强制校验
+            if (imRequest.getContentType() != ImContentType.APPLICATION_X_WWW_FORM_URLENCODED) {
+                throw new ContentTypeException(ContentTypeException.ContentTypeInappropriate);
+            }
+        }
+
+        //获得URL字符
+        String urlStr = imRequest.getUrl();
+
+        //确认在URL中传值
+        if (imRequest.isForceInUrlSendData()) {
+            if (imRequest.getInputData() != null) {
+                //初始化URL值字符串
+                String urlPars = "";
+                //如果是String类型
+                if (imRequest.getInputData() instanceof String) {
+                    urlPars = imRequest.getInputData(String.class);
+                }
+                //如果是JSON类型
+                //if (imRequest.getInputData() instanceof JSONObject) {
+                if (imRequest.getInputData().getClass() == JSONObject.class) {
+                    JSONObject json = imRequest.getInputData(JSONObject.class);
+                    for (String key : json.keySet()) {
+                        urlPars += (key + "=" + json.getString(key) + "&");
+                    }
+                    urlPars = urlPars.substring(0, urlPars.length() - 1);
+                }
+                //如果是Map类型
+                //if (imRequest.getInputData() instanceof Map) {
+                if (imRequest.getInputData().getClass() != JSONObject.class && imRequest.getInputData() instanceof Map) {
+                    Map<String, String> map = imRequest.getInputData(Map.class);
+                    for (String key : map.keySet()) {
+                        urlPars += (key + "=" + map.get(key) + "&");
+                    }
+                    urlPars = urlPars.substring(0, urlPars.length() - 1);
+                }
+                //如果是ImFormData类型
+                if (imRequest.getInputData().getClass() == ImFormData.class) {
+                    ImFormData imFormData = imRequest.getInputData(ImFormData.class);
+                    urlPars = (imFormData.getName() + "=" + imFormData.getValue());
+                }
+
+                //组装URL和URL需要传的值数据
+                if (urlStr.contains("?")) {
+                    urlStr += ("&" + urlPars);
+                } else {
+                    urlStr += ("?" + urlPars);
+                }
+            }
+        }
+
         //初始化对象
         ImResponse imResponse = new ImResponse();
 
@@ -64,7 +160,7 @@ public class ImHttpClient {
         IgnoreSSLTool.setIsIgnore(imRequest.isIgnoreSSLCertVerify());
 
         //初始化JDK HTTP对象
-        URL url = new URL(imRequest.getUrl());
+        URL url = new URL(urlStr);
         //获得HttpURLConnection
         HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
         //设置Method
@@ -123,26 +219,11 @@ public class ImHttpClient {
             //如果不是文件上传内容类型
             if (imRequest.getContentType() != ImContentType.MULTIPART_FORM_DATA) {
 
-                //如果没有配置为允许非标准使用，进行标准检查
-                if (!imRequest.isAllowNonStandard()) {
-                    //非multipart/form-data内容类型不支持直接设置byte数据，如果使用byte数据，则抛出异常告知开发者
-                    if (imRequest.getInputData().getClass() == ImBytesData.class
-                            || imRequest.getInputData().getClass() == ImFileData.class
-                            || imRequest.getInputData().getClass() == ImMultipartFormData.class) {
-                        throw new MethodException(MethodException.MethodInappropriate);
-                    }
-                    //非multipart/form-data内容类型不支持的ImFormData数据类型，如果使用该数据类型，则抛出异常告知开发者
-                    if (imRequest.getInputData().getClass() == ImFormData.class) {
-                        throw new DataTypeException(DataTypeException.DataTypeUnSupport);
-                    }
-                }
-
                 //初始化inputData
                 String inputData = "";
 
-                //当使用POST、PUT Method
-                if (imRequest.getMethod() == ImMethod.POST
-                        || imRequest.getMethod() == ImMethod.PUT) {
+                //如果内容类型不为表单（x-www-form-urlencoded）
+                if (imRequest.getContentType() != ImContentType.APPLICATION_X_WWW_FORM_URLENCODED) {
 
                     //如果是String类型
                     if (imRequest.getInputData() instanceof String) {
@@ -174,26 +255,31 @@ public class ImHttpClient {
                             inputData = inputData.substring(0, inputData.length() - 1);
                         }
                     }
+                    //如果是ImFormData类型
+                    if (imRequest.getInputData().getClass() == ImFormData.class) {
+                        ImFormData imFormData = imRequest.getInputData(ImFormData.class);
+                        if (imRequest.getContentType() == ImContentType.APPLICATION_JSON) {
+                            JSONObject json = new JSONObject();
+                            json.put(imFormData.getName(), imFormData.getValue());
+                            inputData = json.toJSONString();
+                        } else {
+                            inputData = (imFormData.getName() + "=" + imFormData.getValue());
+                        }
+                    }
 
                     httpConnection.setDoOutput(true);
                     httpConnection.setDoInput(true);
 
-                    //获取写入流
-                    OutputStream outputStream = httpConnection.getOutputStream();
-                    outputStream.write(inputData.getBytes(Charset.forName(imRequest.getCharset())));
-                    //关闭写入流
-                    outputStream.flush();
-                    outputStream.close();
-
-                } else {    //如果使用GET或者其它Method
-
-                    //如果没有配置为允许非标准使用，进行标准检查
-                    if (!imRequest.isAllowNonStandard()) {
-                        //如果不在POST、PUT方法下使用非application/x-www-form-urlencoded内容类型，则抛出异常告知开发者
-                        if (imRequest.getContentType() != ImContentType.APPLICATION_X_WWW_FORM_URLENCODED) {
-                            throw new ContentTypeException(ContentTypeException.ContentTypeInappropriate);
-                        }
+                    //确认不在URL中传值
+                    if (!imRequest.isForceInUrlSendData()) {
+                        //获取写入流
+                        OutputStream outputStream = httpConnection.getOutputStream();
+                        outputStream.write(inputData.getBytes(Charset.forName(imRequest.getCharset())));
+                        //关闭写入流
+                        outputStream.flush();
+                        outputStream.close();
                     }
+                } else {    //如果内容类型为表单（x-www-form-urlencoded）
 
                     //如果是String类型
                     if (imRequest.getInputData() instanceof String) {
@@ -217,31 +303,30 @@ public class ImHttpClient {
                         }
                         inputData = inputData.substring(0, inputData.length() - 1);
                     }
+                    //如果是ImFormData类型
+                    if (imRequest.getInputData().getClass() == ImFormData.class) {
+                        ImFormData imFormData = imRequest.getInputData(ImFormData.class);
+                        inputData = (imFormData.getName() + "=" + imFormData.getValue());
+                    }
 
                     httpConnection.setDoOutput(true);
 
-                    //获取写入流
-                    OutputStream outputStream = httpConnection.getOutputStream();
+                    //确认不在URL中传值
+                    if (!imRequest.isForceInUrlSendData()) {
+                        //获取写入流
+                        OutputStream outputStream = httpConnection.getOutputStream();
 
-                    // 正文，正文内容其实跟get的URL中 '? '后的参数字符串一致
-                    // String content = "字段名=" + URLEncoder.encode("字符串值", "编码");
-                    // DataOutputStream.writeBytes将字符串中的16位的unicode字符以8位的字符形式写到流里面
-                    outputStream.write(inputData.getBytes(Charset.forName(imRequest.getCharset())));
+                        // 正文，正文内容其实跟get的URL中 '? '后的参数字符串一致
+                        // String content = "字段名=" + URLEncoder.encode("字符串值", "编码");
+                        // DataOutputStream.writeBytes将字符串中的16位的unicode字符以8位的字符形式写到流里面
+                        outputStream.write(inputData.getBytes(Charset.forName(imRequest.getCharset())));
 
-                    //关闭写入流
-                    outputStream.flush();
-                    outputStream.close();
-                }
-            } else {    //如果为文件上传(multipart/form-data)模式
-
-                //如果没有配置为允许非标准使用，进行标准检查
-                if (!imRequest.isAllowNonStandard()) {
-                    //非POST、PUT方法不支持直接设置byte数据，则抛出异常告知开发者
-                    if (imRequest.getMethod() != ImMethod.POST
-                            && imRequest.getMethod() != ImMethod.PUT) {
-                        throw new MethodException(MethodException.MethodInappropriate);
+                        //关闭写入流
+                        outputStream.flush();
+                        outputStream.close();
                     }
                 }
+            } else {    //如果为文件上传(multipart/form-data)模式
 
                 httpConnection.setDoOutput(true);
                 httpConnection.setDoInput(true);
@@ -340,7 +425,7 @@ public class ImHttpClient {
                             dataOutputStream.writeBytes(file_disposition);
                             dataOutputStream.writeBytes(file_content_type);
                             //写入文件流数据
-                            dataOutputStream.writeBytes(imFormData.getData());
+                            dataOutputStream.writeBytes(imFormData.getValue());
                         }
 
                         if (imMultipartFormData.hasNext()) {
