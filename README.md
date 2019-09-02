@@ -2,7 +2,7 @@
 
 > 一个简单地、轻量级的 Java HTTP、FTP Network 集成、封装的操作类库。
 >
-> `update：2019-09-02`  `ver：1.3.1`
+> `update：2019-09-02`  `ver：1.3.2`  `license：Apache 2.0`
 
 ----------
 
@@ -12,7 +12,11 @@
 
 # 一、简介
 
-这是**一个简单地并且轻量级的Java用于HTTP、FTP等对Network的操作类库**。最初是因为需要符合个人使用习惯而集成并封装的小型类库，后来在公司项目和内部有一些使用。当时通过IDE打包成jar的方式供项目使用，但是由于基本所有项目都使用Maven构建，使用本地引用jar包的方式方便也不符合Maven的推荐，所以提交至Maven仓库，并且将其开源至GitHub。只是一些简单便利地封装，***不算什么技术***。
+这是**一个简单地并且轻量级的Java用于HTTP、FTP等对Network的操作类库**。
+
+最初是因为需要符合个人使用习惯而集成并封装的小型类库，后来在公司项目和内部有一些使用。当时通过IDE打包成jar的方式供项目使用，但是由于基本所有项目都使用Maven构建，使用本地引用jar包的方式方便也不符合Maven的推荐，所以提交至Maven仓库，并且将其开源至GitHub。只是一些简单便利地封装，***不算什么技术***。
+
+现在我们计划持续维护 Sinlmao Commons Network Utils，目标是希望简化Java对HTTP、FTP操作的代码和逻辑概念。**同时我们也希望有更多的人可以帮助 Sinlmao Commons Network 变得更好用**。
 
 目前发布的功能（或提供的操作功能）如下：
 
@@ -34,14 +38,14 @@
     <dependency>
         <groupId>cn.sinlmao.commons</groupId>
         <artifactId>network</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.2</version>
     </dependency>
 
 ## 2. Android（Gradle）
 
 如果在Android中使用（Java 1.8+），在Gradle设置如下：
 
-    implementation 'cn.sinlmao.commons:network:1.3.0'
+    implementation 'cn.sinlmao.commons:network:1.3.2'
 
 # 三、使用说明
 
@@ -156,6 +160,5 @@ HTTP文件上传是 Sinlmao Commons Network Utils `v1.3.0` 开始支持的新特
     String rs = imResponse.getStringContent();
     //打印返回数据
     System.out.println(rs);
-
 
   [1]: README.en.md

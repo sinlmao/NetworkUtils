@@ -115,35 +115,7 @@ public class ImHttpClient {
         if (imRequest.isForceInUrlSendData()) {
             if (imRequest.getInputData() != null) {
                 //初始化URL值字符串
-                String urlPars = "";
-                //如果是String类型
-                if (imRequest.getInputData() instanceof String) {
-                    urlPars = imRequest.getInputData(String.class);
-                }
-                //如果是JSON类型
-                //if (imRequest.getInputData() instanceof JSONObject) {
-                if (imRequest.getInputData().getClass() == JSONObject.class) {
-                    JSONObject json = imRequest.getInputData(JSONObject.class);
-                    for (String key : json.keySet()) {
-                        urlPars += (key + "=" + json.getString(key) + "&");
-                    }
-                    urlPars = urlPars.substring(0, urlPars.length() - 1);
-                }
-                //如果是Map类型
-                //if (imRequest.getInputData() instanceof Map) {
-                if (imRequest.getInputData().getClass() != JSONObject.class && imRequest.getInputData() instanceof Map) {
-                    Map<String, String> map = imRequest.getInputData(Map.class);
-                    for (String key : map.keySet()) {
-                        urlPars += (key + "=" + map.get(key) + "&");
-                    }
-                    urlPars = urlPars.substring(0, urlPars.length() - 1);
-                }
-                //如果是ImFormData类型
-                if (imRequest.getInputData().getClass() == ImFormData.class) {
-                    ImFormData imFormData = imRequest.getInputData(ImFormData.class);
-                    urlPars = (imFormData.getName() + "=" + imFormData.getValue());
-                }
-
+                String urlPars = getInputDataStringForm(imRequest, true);
                 //组装URL和URL需要传的值数据
                 if (urlStr.contains("?")) {
                     urlStr += ("&" + urlPars);
@@ -225,47 +197,8 @@ public class ImHttpClient {
                 //如果内容类型不为表单（x-www-form-urlencoded）
                 if (imRequest.getContentType() != ImContentType.APPLICATION_X_WWW_FORM_URLENCODED) {
 
-                    //如果是String类型
-                    if (imRequest.getInputData() instanceof String) {
-                        inputData = imRequest.getInputData(String.class);
-                    }
-                    //如果是JSON类型
-                    //if (imRequest.getInputData() instanceof JSONObject) {
-                    if (imRequest.getInputData().getClass() == JSONObject.class) {
-                        if (imRequest.getContentType() == ImContentType.APPLICATION_JSON) {
-                            inputData = imRequest.getInputData(JSONObject.class).toJSONString();
-                        } else {
-                            JSONObject json = imRequest.getInputData(JSONObject.class);
-                            for (String key : json.keySet()) {
-                                inputData += (key + "=" + json.getString(key) + "&");
-                            }
-                            inputData = inputData.substring(0, inputData.length() - 1);
-                        }
-                    }
-                    //如果是Map类型
-                    //if (imRequest.getInputData() instanceof Map) {
-                    if (imRequest.getInputData().getClass() != JSONObject.class && imRequest.getInputData() instanceof Map) {
-                        if (imRequest.getContentType() == ImContentType.APPLICATION_JSON) {
-                            inputData = JSON.toJSONString(imRequest.getInputData(Map.class));
-                        } else {
-                            Map<String, String> map = imRequest.getInputData(Map.class);
-                            for (String key : map.keySet()) {
-                                inputData += (key + "=" + map.get(key) + "&");
-                            }
-                            inputData = inputData.substring(0, inputData.length() - 1);
-                        }
-                    }
-                    //如果是ImFormData类型
-                    if (imRequest.getInputData().getClass() == ImFormData.class) {
-                        ImFormData imFormData = imRequest.getInputData(ImFormData.class);
-                        if (imRequest.getContentType() == ImContentType.APPLICATION_JSON) {
-                            JSONObject json = new JSONObject();
-                            json.put(imFormData.getName(), imFormData.getValue());
-                            inputData = json.toJSONString();
-                        } else {
-                            inputData = (imFormData.getName() + "=" + imFormData.getValue());
-                        }
-                    }
+                    //获取InputData的String形式
+                    inputData = getInputDataStringForm(imRequest);
 
                     httpConnection.setDoOutput(true);
                     httpConnection.setDoInput(true);
@@ -281,35 +214,10 @@ public class ImHttpClient {
                     }
                 } else {    //如果内容类型为表单（x-www-form-urlencoded）
 
-                    //如果是String类型
-                    if (imRequest.getInputData() instanceof String) {
-                        inputData = imRequest.getInputData(String.class);
-                    }
-                    //如果是JSON类型
-                    //if (imRequest.getInputData() instanceof JSONObject) {
-                    if (imRequest.getInputData().getClass() == JSONObject.class) {
-                        JSONObject json = imRequest.getInputData(JSONObject.class);
-                        for (String key : json.keySet()) {
-                            inputData += (key + "=" + json.getString(key) + "&");
-                        }
-                        inputData = inputData.substring(0, inputData.length() - 1);
-                    }
-                    //如果是Map类型
-                    //if (imRequest.getInputData() instanceof Map) {
-                    if (imRequest.getInputData().getClass() != JSONObject.class && imRequest.getInputData() instanceof Map) {
-                        Map<String, String> map = imRequest.getInputData(Map.class);
-                        for (String key : map.keySet()) {
-                            inputData += (key + "=" + map.get(key) + "&");
-                        }
-                        inputData = inputData.substring(0, inputData.length() - 1);
-                    }
-                    //如果是ImFormData类型
-                    if (imRequest.getInputData().getClass() == ImFormData.class) {
-                        ImFormData imFormData = imRequest.getInputData(ImFormData.class);
-                        inputData = (imFormData.getName() + "=" + imFormData.getValue());
-                    }
+                    inputData = getInputDataStringForm(imRequest, true);
 
                     httpConnection.setDoOutput(true);
+                    httpConnection.setDoInput(true);
 
                     //确认不在URL中传值
                     if (!imRequest.isForceInUrlSendData()) {
@@ -440,10 +348,8 @@ public class ImHttpClient {
 
                 //如果是纯字节数据
                 if (imRequest.getInputData().getClass() == ImBytesData.class) {
-
                     //获得字节数据
                     ImBytesData imBytesData = imRequest.getInputData(ImBytesData.class);
-
                     //写入字节数据
                     dataOutputStream.write(imBytesData.getBytes());
                 }
@@ -458,12 +364,6 @@ public class ImHttpClient {
         imResponse.setResponseCode(httpConnection.getResponseCode());
         //返回 Response Message
         imResponse.setResponseMessage(httpConnection.getResponseMessage());
-
-        // if (httpUtilResponse.getResponseCode() != 200) {
-        // throw new RuntimeException(
-        // "HTTP GET Request Failed with Error code : " +
-        // httpConnection.getResponseCode());
-        // }
 
         //获得返回的bytes
         byte[] out_bytes = toByteArray(httpConnection.getInputStream(), imRequest.getBytesLength());
@@ -528,12 +428,83 @@ public class ImHttpClient {
     }
 
     /**
+     * 获取InputData的String形式（含JSON字符、KeyValue字符）
+     *
+     * @param imRequest
+     * @return
+     */
+    private static String getInputDataStringForm(ImRequest imRequest) {
+        return getInputDataStringForm(imRequest, false);
+    }
+
+    /**
+     * 获取InputData的String形式（含JSON字符、KeyValue字符）
+     *
+     * @param imRequest
+     * @param forceKeyValueModel
+     * @return
+     */
+    private static String getInputDataStringForm(ImRequest imRequest, boolean forceKeyValueModel) {
+        //当InputData不为空时
+        if (imRequest.getInputData() != null) {
+
+            //初始化返回对象
+            String inputData = "";
+
+            //如果是String类型
+            if (imRequest.getInputData() instanceof String) {
+                inputData = imRequest.getInputData(String.class);
+            }
+            //如果是JSON类型
+            //if (imRequest.getInputData() instanceof JSONObject) {
+            if (imRequest.getInputData().getClass() == JSONObject.class) {
+                if (imRequest.getContentType() == ImContentType.APPLICATION_JSON && !forceKeyValueModel) {
+                    inputData = imRequest.getInputData(JSONObject.class).toJSONString();
+                } else {
+                    JSONObject json = imRequest.getInputData(JSONObject.class);
+                    for (String key : json.keySet()) {
+                        inputData += (key + "=" + json.getString(key) + "&");
+                    }
+                    inputData = inputData.substring(0, inputData.length() - 1);
+                }
+            }
+            //如果是Map类型
+            //if (imRequest.getInputData() instanceof Map) {
+            if (imRequest.getInputData().getClass() != JSONObject.class && imRequest.getInputData() instanceof Map) {
+                if (imRequest.getContentType() == ImContentType.APPLICATION_JSON && !forceKeyValueModel) {
+                    inputData = JSON.toJSONString(imRequest.getInputData(Map.class));
+                } else {
+                    Map<String, String> map = imRequest.getInputData(Map.class);
+                    for (String key : map.keySet()) {
+                        inputData += (key + "=" + map.get(key) + "&");
+                    }
+                    inputData = inputData.substring(0, inputData.length() - 1);
+                }
+            }
+            //如果是ImFormData类型
+            if (imRequest.getInputData().getClass() == ImFormData.class) {
+                ImFormData imFormData = imRequest.getInputData(ImFormData.class);
+                if (imRequest.getContentType() == ImContentType.APPLICATION_JSON && !forceKeyValueModel) {
+                    JSONObject json = new JSONObject();
+                    json.put(imFormData.getName(), imFormData.getValue());
+                    inputData = json.toJSONString();
+                } else {
+                    inputData = (imFormData.getName() + "=" + imFormData.getValue());
+                }
+            }
+
+            return inputData;
+        }
+        return null;
+    }
+
+    /**
      * @param input
      * @param bytesLength
      * @return
      * @throws IOException
      */
-    public static ByteArrayOutputStream toByteArrayOutputStream(InputStream input, int bytesLength) throws IOException {
+    private static ByteArrayOutputStream toByteArrayOutputStream(InputStream input, int bytesLength) throws IOException {
         if (bytesLength == 0) {
             bytesLength = 4096;
         }
@@ -552,7 +523,7 @@ public class ImHttpClient {
      * @return
      * @throws IOException
      */
-    public static byte[] toByteArray(InputStream input, int bytesLength) throws IOException {
+    private static byte[] toByteArray(InputStream input, int bytesLength) throws IOException {
         if (bytesLength == 0) {
             bytesLength = 4096;
         }

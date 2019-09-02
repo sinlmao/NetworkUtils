@@ -2,7 +2,7 @@
 
 > A Simple, Lightly Java whit HTTP / FTP network integration operational class library.
 >
-> `update：2019-09-02`  `ver：1.3.1`
+> `update：2019-09-02`  `ver：1.3.2`  `license：Apache 2.0`
 
 *This document is partially translated using a translation tool. If there is something wrong, please forgive me.*
 
@@ -15,6 +15,8 @@
 # I. Introduction
 
 **This is a simple and lightweight Java library for operating networks such as HTTP and FTP**. Originally because of the need to integrate and package small libraries that fit personal habits, they were later used in corporate projects and internally. At that time, the IDE was packaged into a jar for use by the project, but since all the basic projects were built using Maven, the way to use the local reference jar package is not convenient for Maven's recommendation, so it is submitted to the Maven repository and open sourced to GitHub. Just some simple and convenient packaging, ***not a technology***.
+
+Now we plan to maintain Sinlmao Commons Network Utils continuously, with the goal of simplifying Java's code and logic concepts for HTTP and FTP operations. **At the same time, we hope that more people can help Sinlmao Commons Network become better**.
 
 The features currently released (or the operational features provided) are as follows:
 
@@ -36,14 +38,14 @@ Introduced by Maven, set directly in the POM:
     <dependency>
         <groupId>cn.sinlmao.commons</groupId>
         <artifactId>network</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.2</version>
     </dependency>
 
 ## 2.2 Android（Gradle）
 
 If used in Android (Java 1.8+), the settings in Gradle:
 
-    implementation 'cn.sinlmao.commons:network:1.3.0'
+    implementation 'cn.sinlmao.commons:network:1.3.2'
 
 # III. Instruction Manual
 

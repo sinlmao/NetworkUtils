@@ -42,7 +42,7 @@ public class FileToBytes {
     }
 
     /**
-     *
+     * 将文件（File）转换成byte数组
      * @param file
      * @return
      * @throws IOException

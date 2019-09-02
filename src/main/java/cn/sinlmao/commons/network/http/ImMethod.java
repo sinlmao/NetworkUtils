@@ -33,9 +33,8 @@ public enum ImMethod {
     PUT,    //向指定资源位置上传其最新的内容，用于修改某个内容
     DELETE,    //请求服务器删除请求的URI所标识的资源，用于删除
     OPTIONS,    //获取服务器支持的HTTP请求方法
-    HEAD,    //跟GET很像，但是不返回响应体信息，用于检查对象是否存在，并获取包含在响应消息头中的信息
+    HEAD,    //与GET很像，但是不返回响应体信息，用于检查对象是否存在，并获取包含在响应消息头中的信息
     PATCH;  //是对 PUT 方法的补充，用来对已知资源进行局部更新
-
 
     private static final Map<String, ImMethod> stringToEnum = new HashMap<String, ImMethod>();
 
