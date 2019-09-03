@@ -18,20 +18,46 @@ package cn.sinlmao.commons.network.http;
 /**
  * HTTP ContentType枚举类
  *
+ * @author Sinlmao
  * @program Sinlmao Commons Network Utils
  * @description HTTP ContentType枚举类
- * @author Sinlmao
  * @create 2019-08-01 11:11
  */
 public enum ImContentType {
-
-    //JSON数据类型
-    APPLICATION_JSON,
 
     //表单类型
     APPLICATION_X_WWW_FORM_URLENCODED,
 
     //二进制类型（多行表单）
-    MULTIPART_FORM_DATA
-    
+    MULTIPART_FORM_DATA,
+
+    //JSON数据类型
+    APPLICATION_JSON,
+
+    //XML数据类型
+    APPLICATION_XML,
+
+    //二进制流（未知文件类型）
+    APPLICATION_OCTET_STREAM;
+
+
+    /**
+     *
+     * @return
+     */
+    public String toString() {
+        switch (this) {
+            case APPLICATION_X_WWW_FORM_URLENCODED:
+                return "application/x-www-form-urlencoded";
+            case MULTIPART_FORM_DATA:
+                return "multipart/form-data";
+            case APPLICATION_JSON:
+                return "application/json";
+            case APPLICATION_XML:
+                return "application/xml";
+            case APPLICATION_OCTET_STREAM:
+                return "application/octet-stream";
+        }
+        return "";
+    }
 }

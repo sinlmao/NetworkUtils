@@ -144,7 +144,7 @@ public class ImHttpClient {
         //设置接收内容类型
         httpConnection.setRequestProperty("Accept", "*/*");
         //设置内容类型及编码
-        httpConnection.setRequestProperty("Content-Type", getContentType(imRequest.getContentType()) + "; charset=" + imRequest.getCharset());
+        httpConnection.setRequestProperty("Content-Type", imRequest.getContentType().toString() + "; charset=" + imRequest.getCharset());
 
         //如果需要长连接
         if (imRequest.isKeepAlive() || imRequest.getContentType() == ImContentType.MULTIPART_FORM_DATA) {
@@ -154,7 +154,7 @@ public class ImHttpClient {
 
         //如果ContentType是multipart/form-data，则需要分段标记，并且需要设置块大小
         if (imRequest.getContentType() == ImContentType.MULTIPART_FORM_DATA) {
-            httpConnection.setRequestProperty("Content-Type", getContentType(imRequest.getContentType())
+            httpConnection.setRequestProperty("Content-Type", imRequest.getContentType().toString()
                     + "; charset=" + imRequest.getCharset()
                     + "; boundary=" + boundary);
             httpConnection.setChunkedStreamingMode(0);
@@ -535,21 +535,5 @@ public class ImHttpClient {
         }
         input.close();
         return output.toByteArray();
-    }
-
-    /**
-     * @param contentType
-     * @return
-     */
-    private static String getContentType(ImContentType contentType) {
-        switch (contentType) {
-            case APPLICATION_JSON:
-                return "application/json";
-            case APPLICATION_X_WWW_FORM_URLENCODED:
-                return "application/x-www-form-urlencoded";
-            case MULTIPART_FORM_DATA:
-                return "multipart/form-data";
-        }
-        return "";
     }
 }
