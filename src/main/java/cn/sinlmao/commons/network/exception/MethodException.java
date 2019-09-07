@@ -29,7 +29,7 @@ package cn.sinlmao.commons.network.exception;
  * @author: Sinlmao
  * @create: 2019-09-01 02:24
  */
-public class MethodException extends RuntimeException {
+public final class MethodException extends RuntimeException {
 
     /**
      * 返回一个方法不恰当使用异常说明

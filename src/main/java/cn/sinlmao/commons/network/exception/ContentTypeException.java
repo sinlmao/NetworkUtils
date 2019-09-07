@@ -34,12 +34,9 @@ public final class ContentTypeException extends RuntimeException {
     /**
      * 返回一个内容类型不恰当使用异常说明
      */
-    protected final static String ContentTypeInappropriate = "Can't use an inappropriate ContentType.";
+    public final static String ContentTypeInappropriate = "Can't use an inappropriate ContentType.";
 
-    protected ContentTypeException(String message) {
+    public ContentTypeException(String message) {
         super(message);
-    }
-
-    protected ContentTypeException() {
     }
 }
