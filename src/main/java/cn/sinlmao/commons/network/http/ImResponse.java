@@ -21,14 +21,20 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * HTTP Response类
+ * <b>HTTP Response类</b>
+ * <p>
+ * 该类为HTTP请求响应（Response）数据封装，所有与Response相关的数据均在该类封装提供。
+ * <br/><br/>
+ * <b>HTTP Response class</b>
+ * <p>
+ * This class is HTTP response (Response) data encapsulation, and all data related to Response is provided in this class package.
  *
  * @author Sinlmao
  * @program Sinlmao Commons Network Utils
  * @description HTTP Response类
  * @create 2019-08-01 11:11
  */
-public class ImResponse {
+public final class ImResponse {
 
     private int responseCode;
     private String responseMessage;
@@ -77,13 +83,18 @@ public class ImResponse {
 
     ///////////////////////////////////////////////////////////////////////
 
+    /**
+     * 获得ResponseCode
+     *
+     * @return
+     */
     public int getResponseCode() {
         return responseCode;
     }
 
-	public String getResponseMessage() {
-		return responseMessage;
-	}
+    public String getResponseMessage() {
+        return responseMessage;
+    }
 
     public String getStringContent() {
         return stringContent;

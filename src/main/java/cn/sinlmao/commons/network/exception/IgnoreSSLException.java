@@ -16,30 +16,31 @@
 package cn.sinlmao.commons.network.exception;
 
 /**
- * <b>内容类型（ContentType）相关异常/警告类</b>
+ * <b>忽略SSL相关异常/警告类</b>
  * <p>
- * 有关内容类型（ContentType）的使用、调用、解析异常和警告的异常抛出
+ * 有关忽略SSL操作相关的使用、调用、解析异常和警告的异常抛出
  * <br/><br/>
- * <b>Content type (ContentType) related exception/warning class</b>
+ * <b>Ignore SSL related exceptions/warnings class</b>
  * <p>
- * Exception throws about usage, invocation, parsing exceptions, and warnings for content types (ContentType)
+ * Exception thrown about ignoring usage, invocation, parsing exceptions, and warnings related to SSL operations
  *
  * @program: Sinlmao Commons Network Utils
- * @description: 内容类型（ContentType）相关异常/警告类
+ * @description: 忽略SSL相关异常/警告类
  * @author: Sinlmao
  * @create: 2019-09-01 02:24
  */
-public final class ContentTypeException extends RuntimeException {
+public class IgnoreSSLException extends Exception {
 
     /**
-     * 返回一个内容类型不恰当使用异常说明
+     * 返回一个方法不恰当使用异常说明
      */
-    protected final static String ContentTypeInappropriate = "Can't use an inappropriate ContentType.";
+    public final static String MethodInappropriate = "Can't set ignore SSL certificates.";
 
-    protected ContentTypeException(String message) {
+    public IgnoreSSLException(String message) {
         super(message);
     }
 
-    protected ContentTypeException() {
+    public IgnoreSSLException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

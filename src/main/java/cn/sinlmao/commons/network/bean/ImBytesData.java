@@ -16,6 +16,14 @@
 package cn.sinlmao.commons.network.bean;
 
 /**
+ * <b>字节数据封装类</b>
+ * <p>
+ * 该类用于封装二进制（Byte）的数据
+ * <br /><br />
+ * <b>Byte data Bean class</b>
+ * <p>
+ * This class is used to encapsulate binary (Byte) data.
+ *
  * @program: Sinlmao Commons Network Utils
  * @description: 字节数据Bean
  * @author: Sinlmao
@@ -28,14 +36,35 @@ public class ImBytesData {
     public ImBytesData() {
     }
 
+    /**
+     * 封装一个字节数据
+     * <p>
+     * Build a bytes data
+     *
+     * @param bytes 字节数据 <br /> Bytes data
+     */
     public ImBytesData(byte[] bytes) {
         this.bytes = bytes;
     }
 
+    /**
+     * 获得字节数据
+     * <p>
+     * Get byte data
+     *
+     * @return 字节数据 <br /> Byte data
+     */
     public byte[] getBytes() {
         return bytes;
     }
 
+    /**
+     * 设置字节数据
+     * <p>
+     * Set byte data
+     *
+     * @param bytes 字节数据 <br /> Byte data
+     */
     public void setBytes(byte[] bytes) {
         this.bytes = bytes;
     }

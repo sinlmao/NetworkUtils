@@ -18,21 +18,28 @@ package cn.sinlmao.commons.network.tools;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 从HttpServletRequest获得IP地址类
+ * <b>从HttpServletRequest获得IP地址工具类</b>
+ * <p>
+ * 该类可以帮组从HttpServletRequest取得访问者的IP地址
+ * <br /><br />
+ * <b>Obtain IP address tool class from HttpServletRequest</b>
+ * <p>
+ * This class can help the group get the IP address of the visitor from the HttpServletRequest.
  *
+ * @author Sinlmao
  * @program Sinlmao Commons Network Utils
  * @description 从HttpServletRequest获得IP地址类
- * @author Sinlmao
  * @create 2019-08-01 11:11
  */
 public class IPTool {
 
     /**
      * 通过HttpServletRequest返回客户端IP地址
+     * <p>
+     * Return the client IP address via HttpServletRequest
      *
      * @param request HttpServletRequest
-     * @return IP String
-     * @throws Exception
+     * @return IP地址 <br /> IP address
      */
     public static String getRealIP(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
@@ -49,10 +56,12 @@ public class IPTool {
     }
 
     /**
-     * 通过HttpServletRequest返回客户端IP地址
+     * 通过HttpServletRequest返回客户端IP地址（V2）
+     * <p>
+     * Return the client IP address via HttpServletRequest (v2)
      *
      * @param request HttpServletRequest
-     * @return IP String
+     * @return IP地址 <br /> IP address
      */
     public static String getRealIP_V2(HttpServletRequest request) {
         String accessIP = request.getHeader("x-forwarded-for");

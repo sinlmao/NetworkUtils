@@ -16,34 +16,63 @@
 package cn.sinlmao.commons.network.http;
 
 /**
- * HTTP ContentType枚举类
+ * <b>HTTP 内容类型（ContentType）枚举类</b>
+ * <p>
+ * 该类限定并明确目前所支持的内容类型（ContentType），并提供枚举选择
+ * <br/><br/>
+ * <b>HTTP content type (ContentType) enumeration class</b>
+ * <p>
+ * This class defines and clarifies the currently supported content types (ContentType) and provides enumeration options.
  *
  * @author Sinlmao
  * @program Sinlmao Commons Network Utils
- * @description HTTP ContentType枚举类
+ * @description HTTP ContentType 枚举类
  * @create 2019-08-01 11:11
  */
 public enum ImContentType {
 
-    //表单类型
+    /**
+     * 表单类型
+     * <p>
+     * Form type
+     */
     APPLICATION_X_WWW_FORM_URLENCODED,
 
-    //二进制类型（多行表单）
+    /**
+     * 二进制类型（多行表单）
+     * <p>
+     * Binary type (multi-line form)
+     */
     MULTIPART_FORM_DATA,
 
-    //JSON数据类型
+    /**
+     * JSON内容数据类型
+     * <p>
+     * JSON content data type
+     */
     APPLICATION_JSON,
 
-    //XML数据类型
+    /**
+     * XML内容数据类型
+     * <p>
+     * XML content data type
+     */
     APPLICATION_XML,
 
-    //二进制流（未知文件类型）
+    /**
+     * 二进制流（未知内容类型）
+     * <p>
+     * Binary stream (unknown content type)
+     */
     APPLICATION_OCTET_STREAM;
 
 
     /**
+     * 转换内容类型完整描述字符
+     * <p>
+     * Convert content type full description character
      *
-     * @return
+     * @return 内容类型完整描述字符 <br/> Content type full description character
      */
     public String toString() {
         switch (this) {

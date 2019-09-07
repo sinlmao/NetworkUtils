@@ -19,7 +19,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * HTTP 方法枚举类
+ * <b>HTTP 方法枚举类</b>
+ * <p>
+ * 该类限定并明确目前所支持的HTTP方法，并提供枚举选择
+ * <br/><br/>
+ * <b>HTTP method enumeration class</b>
+ * <p>
+ * This class defines and clarifies the currently supported HTTP methods and provides enumeration options.
  *
  * @author Sinlmao
  * @program Sinlmao Commons Network Utils
@@ -28,13 +34,49 @@ import java.util.Map;
  */
 public enum ImMethod {
 
-    GET,    //向特定的资源发出请求，得到资源
-    POST,    //向指定资源提交数据进行处理的请求，用于添加新的内容
-    PUT,    //向指定资源位置上传其最新的内容，用于修改某个内容
-    DELETE,    //请求服务器删除请求的URI所标识的资源，用于删除
-    OPTIONS,    //获取服务器支持的HTTP请求方法
-    HEAD,    //与GET很像，但是不返回响应体信息，用于检查对象是否存在，并获取包含在响应消息头中的信息
-    PATCH;  //是对 PUT 方法的补充，用来对已知资源进行局部更新
+    /**
+     * [GET] 向特定的资源发出请求，得到资源
+     * <p>
+     * [GET] Make a request to a specific resource to get a resource
+     */
+    GET,
+    /**
+     * [POST] 向指定资源提交数据进行处理的请求，用于添加新的内容
+     * <p>
+     * [POST] A request to submit data for processing to a specified resource for adding new content
+     */
+    POST,
+    /**
+     * [PUT] 向指定资源位置上传其最新的内容，用于修改某个内容
+     * <p>
+     * [PUT] Uploads its latest content to a specified resource location to modify a content
+     */
+    PUT,
+    /**
+     * [DELETE] 请求服务器删除请求的URI所标识的资源，用于删除
+     * <p>
+     * [DELETE] Requests the server to delete the resource identified by the requested URI for deletion
+     */
+    DELETE,
+    /**
+     * [OPTIONS] 获取服务器支持的HTTP请求方法
+     * <p>
+     * [OPTIONS] Get the HTTP request method supported by the server
+     */
+    OPTIONS,
+    /**
+     * [HEAD] 与GET很像，但是不返回响应体信息，用于检查对象是否存在，并获取包含在响应消息头中的信息
+     * <p>
+     * [HEAD] is similar to GET, but does not return response body information, is used to check whether the object exists,
+     * and obtain the information contained in the response message header.
+     */
+    HEAD,
+    /**
+     * [PATCH] 是对 PUT 方法的补充，用来对已知资源进行局部更新
+     * <p>
+     * [PATCH] is a supplement to the PUT method for local updates to known resources
+     */
+    PATCH;
 
     private static final Map<String, ImMethod> stringToEnum = new HashMap<String, ImMethod>();
 

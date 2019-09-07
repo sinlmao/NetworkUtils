@@ -21,6 +21,7 @@ import cn.sinlmao.commons.network.bean.ImFormData;
 import cn.sinlmao.commons.network.bean.ImMultipartFormData;
 import cn.sinlmao.commons.network.exception.ContentTypeException;
 import cn.sinlmao.commons.network.exception.DataTypeException;
+import cn.sinlmao.commons.network.exception.IgnoreSSLException;
 import cn.sinlmao.commons.network.exception.MethodException;
 import cn.sinlmao.commons.network.tools.IgnoreSSLTool;
 import com.alibaba.fastjson.JSON;
@@ -33,26 +34,40 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 /**
- * HTTP Client工具类
+ * <b>HTTP Client实现类</b>
+ * <p>
+ * 该类用于发送HTTP请求，而所有请求的数据都需要封装在ImRequest中，使用send方法发起请求
+ * <br/><br/>
+ * <b>HTTP Client implementation class</b>
+ * <p>
+ * This class is used to send HTTP requests, and all requested data needs to be encapsulated in the ImRequest,
+ * using the send method to initiate the request.
  *
  * @author Sinlmao
  * @program Sinlmao Commons Network Utils
- * @description HTTP Client工具类
+ * @description HTTP Client实现类
  * @create 2019-08-01 11:11
  */
-public class ImHttpClient {
+public final class ImHttpClient {
 
     private final static String PREFIX = "--";
     private final static String WRAP = System.getProperty("line.separator");
 
     /**
      * 发送请求
+     * <p>
+     * Send Request
      *
-     * @param imRequest
-     * @return ImResponse
-     * @throws Exception
+     * @param imRequest ImRequest会话请求数据 <br/> ImRequest Request data
+     * @return ImResponse会话响应对象 <br/> ImResponse Response object
+     * @throws ContentTypeException 内容类型（ContentType）使用相关异常/警告 <br/> Content Type (ContentType) uses related exceptions/warnings
+     * @throws DataTypeException    数据类型使用相关异常/警告 <br/> Data type usage related exceptions/warnings
+     * @throws MethodException      方法（Method）使用相关异常/警告 <br/> Method uses related exceptions/warnings
+     * @throws IgnoreSSLException   忽略SSL相关异常/警告 <br/> Ignore SSL related exceptions/warnings
+     * @throws IOException          IO异常 <br/> IO exception
      */
-    public static ImResponse send(ImRequest imRequest) throws Exception {
+    public static ImResponse send(ImRequest imRequest)
+            throws ContentTypeException, DataTypeException, MethodException, IgnoreSSLException, IOException {
 
         //初始化分隔符（如果为文件上传(multipart/form-data)模式的时候）
         String boundary = "--------------------------" + String.valueOf(System.currentTimeMillis()); // boundary就是request头和上传文件内容的分隔符
@@ -535,5 +550,11 @@ public class ImHttpClient {
         }
         input.close();
         return output.toByteArray();
+    }
+
+    /**
+     * 禁止被实例化
+     */
+    private ImHttpClient() {
     }
 }

@@ -16,6 +16,14 @@
 package cn.sinlmao.commons.network.bean;
 
 /**
+ * <b>普通表单数据封装类</b>
+ * <p>
+ * 该类用于封装普通表单数据
+ * <br /><br />
+ * <b>Normal form data Bean class</b>
+ * <p>
+ * This class is used to wrap ordinary form data
+ *
  * @program: Sinlmao Commons Network Utils
  * @description: 普通表单数据Bean
  * @author: Sinlmao
@@ -31,6 +39,15 @@ public class ImFormData {
 
     }
 
+    /**
+     * 封装一个普通表单数据
+     * <p>
+     * Build a normal form data
+     *
+     * @param name        数据名 <br /> Data name
+     * @param contentType 数据类型（内容类型） <br /> Data type (content type)
+     * @param value       数据值 <br /> Data value
+     */
     public ImFormData(String name, String contentType, String value) {
         this.name = name;
         this.contentType = contentType;
@@ -63,6 +80,9 @@ public class ImFormData {
 
     /**
      * 已过期，请更改为getValue
+     * <p>
+     * Expired, please change to getValue
+     *
      * @return
      */
     @Deprecated

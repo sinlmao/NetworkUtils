@@ -18,6 +18,14 @@ package cn.sinlmao.commons.network.tools;
 import java.io.*;
 
 /**
+ * <b>文件转二进制的工具类</b>
+ * <p>
+ * 将文件转换成一个二进制数据（byte）
+ * <br /><br />
+ * <b>File to binary tool class</b>
+ * <p>
+ * Convert file to a binary data (byte)
+ *
  * @program: Sinlmao Commons Network Utils
  * @description: 文件转换为Bytes数据
  * @author: Sinlmao
@@ -26,11 +34,13 @@ import java.io.*;
 public class FileToBytes {
 
     /**
-     * 将文件（File）转换成byte数组
+     * 将文件（File）转换成二进制数据（byte）
+     * <p>
+     * Convert a file to binary data
      *
-     * @param filePath
-     * @return
-     * @throws IOException
+     * @param filePath 文件路径 <br /> file path
+     * @return 文件的二进制数据（byte） <br /> Binary data of the file (byte)
+     * @throws IOException IO异常 <br /> IO exception
      */
     public static byte[] File2ByteArray(String filePath) throws IOException {
 
@@ -42,10 +52,13 @@ public class FileToBytes {
     }
 
     /**
-     * 将文件（File）转换成byte数组
-     * @param file
-     * @return
-     * @throws IOException
+     * 将文件（File）转换成二进制数据（byte）
+     * <p>
+     * Convert a file to binary data
+     *
+     * @param file 文件实体对象 <br /> File object
+     * @return 文件的二进制数据（byte） <br /> Binary data of the file (byte)
+     * @throws IOException IO异常 <br /> IO exception
      */
     public static byte[] File2ByteArray(File file) throws IOException {
 
@@ -58,10 +71,12 @@ public class FileToBytes {
 
     /**
      * 将InputStream（输入流）转换成byte数组
+     * <p>
+     * Convert an InputStream to a byte array
      *
-     * @param in
-     * @return
-     * @throws IOException
+     * @param in 输入流 <br /> InputStream
+     * @return 文件的二进制数据（byte） <br /> Binary data of the file (byte)
+     * @throws IOException IO异常 <br /> IO exception
      */
     public static byte[] InputStream2ByteArray(InputStream in) throws IOException {
 

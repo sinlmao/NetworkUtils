@@ -15,6 +15,10 @@
  */
 package cn.sinlmao.commons.network.tools;
 
+import cn.sinlmao.commons.network.exception.IgnoreSSLException;
+
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
@@ -65,7 +69,7 @@ public class IgnoreSSLTool {
     /**
      * @throws Exception
      */
-    private static void trustAllHttpsCertificates() throws Exception {
+    private static void trustAllHttpsCertificates() throws KeyManagementException, NoSuchAlgorithmException {
         if (isIgnore) {
             TrustManager[] trustAllCerts = new TrustManager[1];
             TrustManager tm = new miTM();
@@ -86,7 +90,7 @@ public class IgnoreSSLTool {
      *
      * @throws Exception
      */
-    private static void ignoreSSL() throws Exception {
+    private static void ignoreSSL() throws NoSuchAlgorithmException, KeyManagementException {
         if (isIgnore) {
             HostnameVerifier hv = new HostnameVerifier() {
                 public boolean verify(String urlHostName, SSLSession session) {
@@ -108,8 +112,14 @@ public class IgnoreSSLTool {
      *
      * @throws Exception
      */
-    public static void setIsIgnore(boolean isIgnore) throws Exception {
+    public static void setIsIgnore(boolean isIgnore) throws IgnoreSSLException {
         IgnoreSSLTool.isIgnore = isIgnore;
-        ignoreSSL();
+        try {
+            ignoreSSL();
+        } catch (NoSuchAlgorithmException e) {
+            throw new IgnoreSSLException(IgnoreSSLException.MethodInappropriate, e.getCause());
+        } catch (KeyManagementException e) {
+            throw new IgnoreSSLException(IgnoreSSLException.MethodInappropriate, e.getCause());
+        }
     }
 }

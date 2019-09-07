@@ -16,8 +16,16 @@
 package cn.sinlmao.commons.network.exception;
 
 /**
+ * <b>方法（Method）相关异常/警告类</b>
+ * <p>
+ * 有关方法（Method）的使用、调用、解析异常和警告的异常抛出
+ * <br/><br/>
+ * <b>Method related exception/warning class</b>
+ * <p>
+ * Exception throws about the use, invocation, parsing exceptions, and warnings of methods
+ *
  * @program: Sinlmao Commons Network Utils
- * @description: 方法（Method）相关异常类
+ * @description: 方法（Method）相关异常/警告类
  * @author: Sinlmao
  * @create: 2019-09-01 02:24
  */

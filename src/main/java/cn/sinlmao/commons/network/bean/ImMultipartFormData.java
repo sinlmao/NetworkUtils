@@ -19,6 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <b>多部分构成的表单数据封装类</b>
+ * <p>
+ * 该类用于封装多部分构成的表单的数据，一般用于文件上传或二进制流数据的发送
+ * <br /><br />
+ * <b>Multi-part form data Bean class</b>
+ * <p>
+ * This class is used to encapsulate the data of a multi-part form, generally used for file upload or binary stream data transmission.
+ *
  * @program: Sinlmao Commons Network Utils
  * @description: 多部分构成的表单数据Bean
  * @author: Sinlmao

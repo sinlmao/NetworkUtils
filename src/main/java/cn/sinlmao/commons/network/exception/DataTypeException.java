@@ -16,12 +16,20 @@
 package cn.sinlmao.commons.network.exception;
 
 /**
+ * <b>数据类型相关异常/警告类</b>
+ * <p>
+ * 有关数据类型的使用、调用、解析异常和警告的异常抛出
+ * <br/><br/>
+ * <b>Data type related exception/warning class</b>
+ * <p>
+ * Exception throws about usage, invocation, parsing exceptions, and warnings for data types
+ *
  * @program: Sinlmao Commons Network Utils
- * @description: 数据类型相关异常类
+ * @description: 数据类型相关异常/警告类
  * @author: Sinlmao
  * @create: 2019-09-01 02:24
  */
-public class DataTypeException extends RuntimeException {
+public final class DataTypeException extends RuntimeException {
 
     /**
      * 返回一个方法不恰当使用异常说明
