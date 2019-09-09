@@ -27,10 +27,10 @@ import java.util.List;
  * <p>
  * This class is used to encapsulate the data of a multi-part form, generally used for file upload or binary stream data transmission.
  *
- * @program: Sinlmao Commons Network Utils
- * @description: 多部分构成的表单数据Bean
- * @author: Sinlmao
- * @create: 2019-09-01 19:24
+ * @author Sinlmao
+ * @program Sinlmao Commons Network Utils
+ * @description 多部分构成的表单数据Bean
+ * @create 2019-09-01 19:24
  */
 public class ImMultipartFormData {
 
@@ -38,10 +38,24 @@ public class ImMultipartFormData {
 
     private List<Object> datas = new ArrayList<>();
 
+    /**
+     * 是否存在下一个数据
+     * <p>
+     * <font color="#666666">Whether there is next data</font>
+     *
+     * @return 是否存在下一个数据 <br/> <font color="#666666">Whether there is next data</font>
+     */
     public boolean hasNext() {
         return datas.size() > 0 && index < datas.size() - 1;
     }
 
+    /**
+     * 获得下一个数据
+     * <p>
+     * <font color="#666666">Get the next data</font>
+     *
+     * @return 下一个数据 <br/> <font color="#666666">Next data</font>
+     */
     public Object nextData() {
         if (datas.size() > 0 && index < datas.size() - 1) {
             index++;
@@ -51,21 +65,49 @@ public class ImMultipartFormData {
         }
     }
 
+    /**
+     * 添加ImFormData类型数据
+     * <p>
+     * <font color="#666666">Add ImFormData type data</font>
+     *
+     * @param data ImFormData类型数据 <br/> <font color="#666666">ImFormData type data</font>
+     */
     public void addData(ImFormData data) {
         datas.add(data);
     }
 
+    /**
+     * 添加ImFileData类型数据
+     * <p>
+     * <font color="#666666">Add ImFileData type data</font>
+     *
+     * @param data ImFileData类型数据 <br/> <font color="#666666">ImFileData type data</font>
+     */
     public void addData(ImFileData data) {
         datas.add(data);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * 获得所有数据
+     * <p>
+     * <font color="#666666">Get all the data</font>
+     *
+     * @return 所有数据<br /> <font color="#666666">All data</font>
+     */
     public List<Object> getDatas() {
         return datas;
     }
 
-    protected void setDatas(List<Object> datas) {
+    /**
+     * 设置所有数据
+     * <p>
+     * <font color="#666666">Set all the data</font>
+     *
+     * @param datas 所有数据<br/> <font color="#666666">All data</font>
+     */
+    public void setDatas(List<Object> datas) {
         this.datas = datas;
     }
 }

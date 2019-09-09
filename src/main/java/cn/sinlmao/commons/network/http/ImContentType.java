@@ -20,9 +20,9 @@ package cn.sinlmao.commons.network.http;
  * <p>
  * 该类限定并明确目前所支持的内容类型（ContentType），并提供枚举选择
  * <br/><br/>
- * <b>HTTP content type (ContentType) enumeration class</b>
+ * <i><b>HTTP content type (ContentType) enumeration class</b></i>
  * <p>
- * This class defines and clarifies the currently supported content types (ContentType) and provides enumeration options.
+ * <i>This class defines and clarifies the currently supported content types (ContentType) and provides enumeration options.</i>
  *
  * @author Sinlmao
  * @program Sinlmao Commons Network Utils
@@ -34,35 +34,35 @@ public enum ImContentType {
     /**
      * 表单类型
      * <p>
-     * Form type
+     * <font color="#666666">Form type</font>
      */
     APPLICATION_X_WWW_FORM_URLENCODED,
 
     /**
      * 二进制类型（多行表单）
      * <p>
-     * Binary type (multi-line form)
+     * <font color="#666666">Binary type (multi-line form)</font>
      */
     MULTIPART_FORM_DATA,
 
     /**
      * JSON内容数据类型
      * <p>
-     * JSON content data type
+     * <font color="#666666">JSON content data type</font>
      */
     APPLICATION_JSON,
 
     /**
      * XML内容数据类型
      * <p>
-     * XML content data type
+     * <font color="#666666">XML content data type</font>
      */
     APPLICATION_XML,
 
     /**
      * 二进制流（未知内容类型）
      * <p>
-     * Binary stream (unknown content type)
+     * <font color="#666666">Binary stream (unknown content type)</font>
      */
     APPLICATION_OCTET_STREAM;
 
@@ -70,9 +70,9 @@ public enum ImContentType {
     /**
      * 转换内容类型完整描述字符
      * <p>
-     * Convert content type full description character
+     * <font color="#666666">Convert content type full description character</font>
      *
-     * @return 内容类型完整描述字符 <br/> Content type full description character
+     * @return 内容类型完整描述字符 <br/> <font color="#666666">Content type full description character</font>
      */
     public String toString() {
         switch (this) {

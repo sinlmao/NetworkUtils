@@ -56,15 +56,15 @@ public final class ImHttpClient {
     /**
      * 发送请求
      * <p>
-     * Send Request
+     * <font color="#666666">Send Request</font>
      *
-     * @param imRequest ImRequest会话请求数据 <br/> ImRequest Request data
-     * @return ImResponse会话响应对象 <br/> ImResponse Response object
-     * @throws ContentTypeException 内容类型（ContentType）使用相关异常/警告 <br/> Content Type (ContentType) uses related exceptions/warnings
-     * @throws DataTypeException    数据类型使用相关异常/警告 <br/> Data type usage related exceptions/warnings
-     * @throws MethodException      方法（Method）使用相关异常/警告 <br/> Method uses related exceptions/warnings
-     * @throws IgnoreSSLException   忽略SSL相关异常/警告 <br/> Ignore SSL related exceptions/warnings
-     * @throws IOException          IO异常 <br/> IO exception
+     * @param imRequest ImRequest会话请求数据 <br/> <font color="#666666">ImRequest Request data</font>
+     * @return ImResponse会话响应对象 <br/> <font color="#666666">ImResponse Response object</font>
+     * @throws ContentTypeException 内容类型（ContentType）使用相关异常/警告 <br/> <font color="#666666">Content Type (ContentType) uses related exceptions/warnings</font>
+     * @throws DataTypeException    数据类型使用相关异常/警告 <br/> <font color="#666666">Data type usage related exceptions/warnings</font>
+     * @throws MethodException      方法（Method）使用相关异常/警告 <br/> <font color="#666666">Method uses related exceptions/warnings</font>
+     * @throws IgnoreSSLException   忽略SSL相关异常/警告 <br/> <font color="#666666">Ignore SSL related exceptions/warnings</font>
+     * @throws IOException          IO异常 <br/> <font color="#666666">IO exception</font>
      */
     public static ImResponse send(ImRequest imRequest)
             throws ContentTypeException, DataTypeException, MethodException, IgnoreSSLException, IOException {
@@ -436,8 +436,8 @@ public final class ImHttpClient {
         }
 
         //返回Header和Cookie
-        imResponse.setHeaders(headers);
-        imResponse.setCookie(cookieStr);
+        imResponse.setFullHeaders(headers);
+        imResponse.setFullCookie(cookieStr);
 
         return imResponse;
     }

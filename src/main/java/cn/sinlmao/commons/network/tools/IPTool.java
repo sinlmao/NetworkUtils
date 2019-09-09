@@ -36,10 +36,10 @@ public class IPTool {
     /**
      * 通过HttpServletRequest返回客户端IP地址
      * <p>
-     * Return the client IP address via HttpServletRequest
+     * <font color="#777777">Return the client IP address via HttpServletRequest</font>
      *
-     * @param request HttpServletRequest
-     * @return IP地址 <br /> IP address
+     * @param request <font color="#777777">HttpServletRequest</font>
+     * @return IP地址 <br /> <font color="#777777">IP address</font>
      */
     public static String getRealIP(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
@@ -58,10 +58,10 @@ public class IPTool {
     /**
      * 通过HttpServletRequest返回客户端IP地址（V2）
      * <p>
-     * Return the client IP address via HttpServletRequest (v2)
+     * <font color="#777777">Return the client IP address via HttpServletRequest (v2)</font>
      *
      * @param request HttpServletRequest
-     * @return IP地址 <br /> IP address
+     * @return IP地址 <br /> <font color="#777777">IP address</font>
      */
     public static String getRealIP_V2(HttpServletRequest request) {
         String accessIP = request.getHeader("x-forwarded-for");

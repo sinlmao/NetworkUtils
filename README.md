@@ -2,7 +2,7 @@
 
 > 一个简单地、轻量级的 Java HTTP、FTP Network 集成、封装的操作类库。
 >
-> `update：2019-09-07`  `ver：1.3.4`  `license：Apache 2.0`
+> `update：2019-09-09`  `ver：1.3.6`  `license：Apache 2.0`
 
 ----------
 
@@ -38,14 +38,14 @@
     <dependency>
         <groupId>cn.sinlmao.commons</groupId>
         <artifactId>network</artifactId>
-        <version>1.3.4</version>
+        <version>1.3.6</version>
     </dependency>
 
 ## 2. Android（Gradle）
 
 如果在Android中使用（Java 1.8+），在Gradle设置如下：
 
-    implementation 'cn.sinlmao.commons:network:1.3.4'
+    implementation 'cn.sinlmao.commons:network:1.3.6'
 
 # 三、使用说明
 

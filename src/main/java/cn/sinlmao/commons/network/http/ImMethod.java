@@ -37,44 +37,44 @@ public enum ImMethod {
     /**
      * [GET] 向特定的资源发出请求，得到资源
      * <p>
-     * [GET] Make a request to a specific resource to get a resource
+     * <font color="#666666">[GET] Make a request to a specific resource to get a resource</font>
      */
     GET,
     /**
      * [POST] 向指定资源提交数据进行处理的请求，用于添加新的内容
      * <p>
-     * [POST] A request to submit data for processing to a specified resource for adding new content
+     * <font color="#666666">[POST] A request to submit data for processing to a specified resource for adding new content</font>
      */
     POST,
     /**
      * [PUT] 向指定资源位置上传其最新的内容，用于修改某个内容
      * <p>
-     * [PUT] Uploads its latest content to a specified resource location to modify a content
+     * <font color="#666666">[PUT] Uploads its latest content to a specified resource location to modify a content</font>
      */
     PUT,
     /**
      * [DELETE] 请求服务器删除请求的URI所标识的资源，用于删除
      * <p>
-     * [DELETE] Requests the server to delete the resource identified by the requested URI for deletion
+     * <font color="#666666">[DELETE] Requests the server to delete the resource identified by the requested URI for deletion</font>
      */
     DELETE,
     /**
      * [OPTIONS] 获取服务器支持的HTTP请求方法
      * <p>
-     * [OPTIONS] Get the HTTP request method supported by the server
+     * <font color="#666666">[OPTIONS] Get the HTTP request method supported by the server</font>
      */
     OPTIONS,
     /**
      * [HEAD] 与GET很像，但是不返回响应体信息，用于检查对象是否存在，并获取包含在响应消息头中的信息
      * <p>
-     * [HEAD] is similar to GET, but does not return response body information, is used to check whether the object exists,
-     * and obtain the information contained in the response message header.
+     * <font color="#666666">[HEAD] is similar to GET, but does not return response body information, is used to check whether the object exists,
+     * and obtain the information contained in the response message header.</font>
      */
     HEAD,
     /**
      * [PATCH] 是对 PUT 方法的补充，用来对已知资源进行局部更新
      * <p>
-     * [PATCH] is a supplement to the PUT method for local updates to known resources
+     * <font color="#666666">[PATCH] is a supplement to the PUT method for local updates to known resources</font>
      */
     PATCH;
 

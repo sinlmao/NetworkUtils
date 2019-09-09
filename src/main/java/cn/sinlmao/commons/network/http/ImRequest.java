@@ -61,7 +61,7 @@ public class ImRequest {
     /**
      * 传入URL构造一个ImRequest
      * <p>
-     * Construct an ImRequest with the incoming URL
+     * <font color="#666666">Construct an ImRequest with the incoming URL</font>
      *
      * @param url URL
      */
@@ -74,10 +74,10 @@ public class ImRequest {
     /**
      * 设置URL
      * <p>
-     * Set the URL
+     * <font color="#666666">Set the URL</font>
      *
      * @param url URL
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setUrl(String url) {
         this.url = url;
@@ -87,10 +87,14 @@ public class ImRequest {
     /**
      * 设置Method方法
      * <p>
-     * Set the Method
+     * 默认为GET
+     * <p>
+     * <font color="#666666">Set the Method</font>
+     * <p>
+     * <font color="#666666">Default is GET</font>
      *
-     * @param method ImMethod方法 <br/> ImMethod method
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param method ImMethod方法 <br/> <font color="#666666">ImMethod method</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setMethod(ImMethod method) {
         this.method = method;
@@ -100,10 +104,14 @@ public class ImRequest {
     /**
      * 设置Charset编码
      * <p>
-     * Set the Charset
+     * 默认为UTF-8
+     * <p>
+     * <font color="#666666">Set the Charset</font>
+     * <p>
+     * <font color="#666666">Default is UTF-8</font>
      *
-     * @param charset 编码 <br/> Charset
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param charset 编码 <br/> <font color="#666666">Charset</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setCharset(String charset) {
         this.charset = charset;
@@ -113,10 +121,10 @@ public class ImRequest {
     /**
      * 设置String类型输入数据
      * <p>
-     * Set String type input data
+     * <font color="#666666">Set String type input data</font>
      *
-     * @param inputData String类型输入数据 <br/> String type input data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param inputData String类型输入数据 <br/> <font color="#666666">String type input data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setInputData(String inputData) {
         this.inputData = inputData;
@@ -126,10 +134,10 @@ public class ImRequest {
     /**
      * 设置Map类型输入数据
      * <p>
-     * Set Map type input data
+     * <font color="#666666">Set Map type input data</font>
      *
-     * @param inputData Map类型输入数据 <br/> Map type input data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param inputData Map类型输入数据 <br/> <font color="#666666">Map type input data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setInputData(Map<String, String> inputData) {
         this.inputData = inputData;
@@ -139,10 +147,10 @@ public class ImRequest {
     /**
      * 设置JSONObject类型输入数据
      * <p>
-     * Set JSONObject type input data
+     * <font color="#666666">Set JSONObject type input data</font>
      *
-     * @param inputData JSONObject类型输入数据 <br/> JSONObject type input data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param inputData JSONObject类型输入数据 <br/> <font color="#666666">JSONObject type input data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setInputData(JSONObject inputData) {
         this.inputData = inputData;
@@ -152,10 +160,10 @@ public class ImRequest {
     /**
      * 设置ImBytesData类型输入数据
      * <p>
-     * Set ImBytesData/bytes type input data
+     * <font color="#666666">Set ImBytesData/bytes type input data</font>
      *
-     * @param inputData ImBytesData类型输入数据 <br/> ImBytesData/bytes type input data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param inputData ImBytesData类型输入数据 <br/> <font color="#666666">ImBytesData/bytes type input data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setInputData(ImBytesData inputData) {
         this.inputData = inputData;
@@ -165,10 +173,10 @@ public class ImRequest {
     /**
      * 设置ImFileData类型输入数据
      * <p>
-     * Set ImFileData type input data
+     * <font color="#666666">Set ImFileData type input data</font>
      *
-     * @param inputData ImFileData类型输入数据 <br/> ImFileData type input data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param inputData ImFileData类型输入数据 <br/> <font color="#666666">ImFileData type input data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setInputData(ImFileData inputData) {
         this.inputData = inputData;
@@ -178,10 +186,10 @@ public class ImRequest {
     /**
      * 设置ImMultipartFormData类型输入数据
      * <p>
-     * Set ImMultipartFormData type input data
+     * <font color="#666666">Set ImMultipartFormData type input data</font>
      *
-     * @param inputData ImMultipartFormData类型输入数据 <br/> ImMultipartFormData type input data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param inputData ImMultipartFormData类型输入数据 <br/> <font color="#666666">ImMultipartFormData type input data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setInputData(ImMultipartFormData inputData) {
         this.inputData = inputData;
@@ -191,10 +199,14 @@ public class ImRequest {
     /**
      * 设置BytesLength长度
      * <p>
-     * Set Request bytes length
+     * 默认为4096
+     * <p>
+     * <font color="#666666">Set Request bytes length</font>
+     * <p>
+     * <font color="#666666">Default is 4096</font>
      *
-     * @param bytesLength BytesLength长度 <br/> Request bytes Length
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param bytesLength BytesLength长度 <br/> <font color="#666666">Request bytes Length</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setBytesLength(int bytesLength) {
         this.bytesLength = bytesLength;
@@ -204,10 +216,14 @@ public class ImRequest {
     /**
      * 设置内容类型（ContentType）
      * <p>
-     * Set Request content-type
+     * 默认为application/x-www-form-urlencoded
+     * <p>
+     * <font color="#666666">Set Request content-type</font>
+     * <p>
+     * <font color="#666666">Default is application/x-www-form-urlencoded</font>
      *
-     * @param contentType ContentType内容类型 <br/> ImContentType/content-type
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param contentType ContentType内容类型 <br/> <font color="#666666">ImContentType/content-type</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setContentType(ImContentType contentType) {
         this.contentType = contentType;
@@ -217,10 +233,10 @@ public class ImRequest {
     /**
      * 设置内容类型（ContentType）
      * <p>
-     * Set Request some String content-type
+     * <font color="#666666">Set Request some String content-type</font>
      *
-     * @param contentType String内容类型 <br/> String content-type name
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param contentType String内容类型 <br/> <font color="#666666">String content-type name</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setContentType(String contentType) {
         this.contentTypeStr = contentType;
@@ -230,10 +246,10 @@ public class ImRequest {
     /**
      * 设置是否忽略SSLCertVerify
      * <p>
-     * Set whether to ignore
+     * <font color="#666666">Set whether to ignore</font>
      *
-     * @param ignoreSSLCertVerify 是否忽略 <br/> Whether to ignore
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param ignoreSSLCertVerify 是否忽略 <br/> <font color="#666666">Whether to ignore</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setIgnoreSSLCertVerify(boolean ignoreSSLCertVerify) {
         this.ignoreSSLCertVerify = ignoreSSLCertVerify;
@@ -243,10 +259,10 @@ public class ImRequest {
     /**
      * 设置是否为长连接
      * <p>
-     * Set whether to Keep-Alive
+     * <font color="#666666">Set whether to Keep-Alive</font>
      *
-     * @param keepAlive 是否为长连接 <br /> Whether to Keep-Alive
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param keepAlive 是否为长连接 <br /> <font color="#666666">Whether to Keep-Alive</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setKeepAlive(boolean keepAlive) {
         this.keepAlive = keepAlive;
@@ -256,10 +272,10 @@ public class ImRequest {
     /**
      * 设置是否使用缓存
      * <p>
-     * Set whether to use cache
+     * <font color="#666666">Set whether to use cache</font>
      *
-     * @param useCache 是否使用缓存 <br /> Whether to use cache
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param useCache 是否使用缓存 <br /> <font color="#666666">Whether to use cache</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setUseCache(boolean useCache) {
         this.useCache = useCache;
@@ -269,10 +285,10 @@ public class ImRequest {
     /**
      * 设置是否允许非标准使用
      * <p>
-     * Set whether to allow no standard
+     * <font color="#666666">Set whether to allow no standard</font>
      *
-     * @param allowNonStandard 是否允许非标准使用 <br /> Whether to allow no standard
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param allowNonStandard 是否允许非标准使用 <br /> <font color="#666666">Whether to allow no standard</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setAllowNonStandard(boolean allowNonStandard) {
         this.allowNonStandard = allowNonStandard;
@@ -282,10 +298,10 @@ public class ImRequest {
     /**
      * 设置是否为Restful模式
      * <p>
-     * Set whether to restful mode
+     * <font color="#666666">Set whether to restful mode</font>
      *
-     * @param restfulMode 是否为Restful模式 <br /> Whether to restful mode
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param restfulMode 是否为Restful模式 <br /> <font color="#666666">Whether to restful mode</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setRestfulMode(boolean restfulMode) {
         this.restfulMode = restfulMode;
@@ -298,12 +314,12 @@ public class ImRequest {
      * <p>
      * 请注意，强制使用URL发送数据后将不能使用部分数据类型
      * <p>
-     * Set whether to force in url send data
+     * <font color="#666666">Set whether to force in url send data</font>
      * <p>
-     * Please note that some data types will not be available after the data is forced to be sent using the URL.
+     * <font color="#666666">Please note that some data types will not be available after the data is forced to be sent using the URL.</font>
      *
-     * @param forceInUrlSendData 是否强制使用URL发送数据 <br /> Whether to force in url send data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param forceInUrlSendData 是否强制使用URL发送数据 <br /> <font color="#666666">Whether to force in url send data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setForceInUrlSendData(boolean forceInUrlSendData) {
         this.forceInUrlSendData = forceInUrlSendData;
@@ -315,11 +331,11 @@ public class ImRequest {
     /**
      * 添加Header，当数据已经存在，则不再添加
      * <p>
-     * Add a Header, when the data already exists, it will not be added
+     * <font color="#666666">Add a Header, when the data already exists, it will not be added</font>
      *
-     * @param name  Header键 <br/> Header Key
-     * @param value Header值 <br/> Header Value
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param name  Header键 <br/> <font color="#666666">Header Key</font>
+     * @param value Header值 <br/> <font color="#666666">Header Value</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest addHeader(String name, String value) {
         if (!headers.containsKey(name)) {
@@ -331,10 +347,10 @@ public class ImRequest {
     /**
      * 添加Header，当数据已经存在，则不再添加
      * <p>
-     * Add a Header, when the data already exists, it will not be added
+     * <font color="#666666">Add a Header, when the data already exists, it will not be added</font>
      *
-     * @param headers Map类型的Header数据 <br/> Map type Header data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param headers Map类型的Header数据 <br/> <font color="#666666">Map type Header data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest addHeader(Map<String, String> headers) {
         if (headers != null && headers.size() > 0) {
@@ -348,10 +364,10 @@ public class ImRequest {
     /**
      * 添加Header，当数据已经存在，则不再添加
      * <p>
-     * Add a Header, when the data already exists, it will not be added
+     * <font color="#666666">Add a Header, when the data already exists, it will not be added</font>
      *
-     * @param headers JSONObject类型的Header数据 <br/> JSONObject type Header data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param headers JSONObject类型的Header数据 <br/> <font color="#666666">JSONObject type Header data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest addHeader(JSONObject headers) {
         if (headers != null && headers.size() > 0) {
@@ -365,11 +381,11 @@ public class ImRequest {
     /**
      * 设置Header，当数据已经存在，则以最后设置的为准
      * <p>
-     * Set the Header. When the data already exists, the last setting is subject to
+     * <font color="#666666">Set the Header. When the data already exists, the last setting is subject to</font>
      *
-     * @param name  Header键 <br/> Header Key
-     * @param value Header值 <br/> Header Value
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param name  Header键 <br/> <font color="#666666">Header Key</font>
+     * @param value Header值 <br/> <font color="#666666">Header Value</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setHeader(String name, String value) {
         if (!headers.containsKey(name)) {
@@ -382,10 +398,10 @@ public class ImRequest {
     /**
      * 设置Header，当数据已经存在，则以最后设置的为准
      * <p>
-     * Set the Header. When the data already exists, the last setting is subject to
+     * <font color="#666666">Set the Header. When the data already exists, the last setting is subject to</font>
      *
-     * @param headers JSONObject类型的Header数据 <br/> JSONObject type Header data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param headers JSONObject类型的Header数据 <br/> <font color="#666666">JSONObject type Header data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setHeader(JSONObject headers) {
         if (headers != null && headers.size() > 0) {
@@ -399,10 +415,10 @@ public class ImRequest {
     /**
      * 设置Header，当数据已经存在，则以最后设置的为准
      * <p>
-     * Set the Header. When the data already exists, the last setting is subject to
+     * <font color="#666666">Set the Header. When the data already exists, the last setting is subject to</font>
      *
-     * @param headers Map类型的Header数据 <br/> Map type Header data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param headers Map类型的Header数据 <br/> <font color="#666666">Map type Header data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setHeader(Map<String, String> headers) {
         if (headers != null && headers.size() > 0) {
@@ -418,11 +434,11 @@ public class ImRequest {
     /**
      * 添加Cookie，当数据已经存在，则不再添加
      * <p>
-     * Add a Cookie, when the data already exists, it will not be added
+     * <font color="#666666">Add a Cookie, when the data already exists, it will not be added</font>
      *
-     * @param name  Cookie键 <br/> Cookie Key
-     * @param value Cookie值 <br/> Cookie Value
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param name  Cookie键 <br/> <font color="#666666">Cookie Key</font>
+     * @param value Cookie值 <br/> <font color="#666666">Cookie Value</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest addCookie(String name, String value) {
         if (!cookies.containsKey(name)) {
@@ -434,10 +450,10 @@ public class ImRequest {
     /**
      * 添加Cookie，当数据已经存在，则不再添加
      * <p>
-     * Add a Cookie, when the data already exists, it will not be added
+     * <font color="#666666">Add a Cookie, when the data already exists, it will not be added</font>
      *
-     * @param cookies Map类型的Cookie数据 <br/> Map type Cookie data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param cookies Map类型的Cookie数据 <br/> <font color="#666666">Map type Cookie data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest addCookie(Map<String, String> cookies) {
         if (cookies != null && cookies.size() > 0) {
@@ -451,10 +467,10 @@ public class ImRequest {
     /**
      * 添加Cookie，当数据已经存在，则不再添加
      * <p>
-     * Add a Cookie, when the data already exists, it will not be added
+     * <font color="#666666">Add a Cookie, when the data already exists, it will not be added</font>
      *
-     * @param cookies JSONObject类型的Cookie数据 <br/> JSONObject type Cookie data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param cookies JSONObject类型的Cookie数据 <br/> <font color="#666666">JSONObject type Cookie data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest addCookie(JSONObject cookies) {
         if (cookies != null && cookies.size() > 0) {
@@ -468,11 +484,11 @@ public class ImRequest {
     /**
      * 添加Cookie，当数据已经存在，则以最后设置的为准
      * <p>
-     * Set the Cookie. When the data already exists, the last setting is subject to
+     * <font color="#666666">Set the Cookie. When the data already exists, the last setting is subject to</font>
      *
-     * @param name  Cookie键 <br/> Cookie Key
-     * @param value Cookie值 <br/> Cookie Value
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param name  Cookie键 <br/> <font color="#666666">Cookie Key</font>
+     * @param value Cookie值 <br/> <font color="#666666">Cookie Value</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setCookie(String name, String value) {
         if (!cookies.containsKey(name)) {
@@ -485,10 +501,10 @@ public class ImRequest {
     /**
      * 添加Cookie，当数据已经存在，则以最后设置的为准
      * <p>
-     * Set the Cookie. When the data already exists, the last setting is subject to
+     * <font color="#666666">Set the Cookie. When the data already exists, the last setting is subject to</font>
      *
-     * @param cookies Map类型的Cookie数据 <br/> Map type Cookie data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param cookies Map类型的Cookie数据 <br/> <font color="#666666">Map type Cookie data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setCookie(Map<String, String> cookies) {
         if (cookies != null && cookies.size() > 0) {
@@ -502,10 +518,10 @@ public class ImRequest {
     /**
      * 添加Cookie，当数据已经存在，则以最后设置的为准
      * <p>
-     * Set the Cookie. When the data already exists, the last setting is subject to
+     * <font color="#666666">Set the Cookie. When the data already exists, the last setting is subject to</font>
      *
-     * @param cookies JSONObject类型的Cookie数据 <br/> JSONObject type Cookie data
-     * @return ImRequest对象实体 <br/> ImRequest object entity
+     * @param cookies JSONObject类型的Cookie数据 <br/> <font color="#666666">JSONObject type Cookie data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setCookie(JSONObject cookies) {
         if (cookies != null && cookies.size() > 0) {
@@ -521,9 +537,9 @@ public class ImRequest {
     /**
      * 获取是否忽略SSLCertVerify
      * <p>
-     * Get whether to SSL certVerify
+     * <font color="#666666">Get whether to SSL certVerify</font>
      *
-     * @return 是否忽略SSLCertVerify <br /> Whether to SSL certVerify
+     * @return 是否忽略SSLCertVerify <br /> <font color="#666666">Whether to SSL certVerify</font>
      */
     public boolean isIgnoreSSLCertVerify() {
         return ignoreSSLCertVerify;
@@ -532,9 +548,9 @@ public class ImRequest {
     /**
      * 获取是否需要长连接
      * <p>
-     * Get whether to Keep-Alive
+     * <font color="#666666">Get whether to Keep-Alive</font>
      *
-     * @return 是否需要长连接 <br /> Whether to Keep-Alive
+     * @return 是否需要长连接 <br /> <font color="#666666">Whether to Keep-Alive</font>
      */
     public boolean isKeepAlive() {
         return keepAlive;
@@ -543,9 +559,9 @@ public class ImRequest {
     /**
      * 获取是否使用缓存
      * <p>
-     * Get whether to use cache
+     * <font color="#666666">Get whether to use cache</font>
      *
-     * @return 是否使用缓存 <br /> Whether to use cache
+     * @return 是否使用缓存 <br /> <font color="#666666">Whether to use cache</font>
      */
     public boolean isUseCache() {
         return useCache;
@@ -554,9 +570,9 @@ public class ImRequest {
     /**
      * 获取是否允许非标准使用
      * <p>
-     * Get whether to allow no standard
+     * <font color="#666666">Get whether to allow no standard</font>
      *
-     * @return 是否允许非标准使用 <br /> Whether to allow no standard
+     * @return 是否允许非标准使用 <br /> <font color="#666666">Whether to allow no standard</font>
      */
     public boolean isAllowNonStandard() {
         return allowNonStandard;
@@ -565,9 +581,9 @@ public class ImRequest {
     /**
      * 获取是否为Restful模式
      * <p>
-     * Get whether to restful mode
+     * <font color="#666666">Get whether to restful mode</font>
      *
-     * @return 是否为Restful模式 <br /> Whether to restful mode
+     * @return 是否为Restful模式 <br /> <font color="#666666">Whether to restful mode</font>
      */
     public boolean isRestfulMode() {
         return restfulMode;
@@ -576,9 +592,9 @@ public class ImRequest {
     /**
      * 获取是否强制使用URL发送数据
      * <p>
-     * Get whether to force in url send data
+     * <font color="#666666">Get whether to force in url send data</font>
      *
-     * @return 是否强制使用URL发送数据 <br /> Whether to force in url send data
+     * @return 是否强制使用URL发送数据 <br /> <font color="#666666">Whether to force in url send data</font>
      */
     public boolean isForceInUrlSendData() {
         return forceInUrlSendData;
@@ -590,9 +606,9 @@ public class ImRequest {
     /**
      * 获取Request会话的URL属性
      * <p>
-     * Get the Request URL attribute
+     * <font color="#666666">Get the Request URL attribute</font>
      *
-     * @return Request会话的URL属性 <br /> Request URL attribute
+     * @return Request会话的URL属性 <br /> <font color="#666666">Request URL attribute</font>
      */
     public String getUrl() {
         return url;
@@ -601,9 +617,9 @@ public class ImRequest {
     /**
      * 获取Request会话的方法（ImMethod）属性
      * <p>
-     * Get the Request Method(ImMethod) attribute
+     * <font color="#666666">Get the Request Method(ImMethod) attribute</font>
      *
-     * @return ImMethod Request会话的方法（ImMethod）属性 <br /> Request Method(ImMethod) attribute
+     * @return ImMethod Request会话的方法（ImMethod）属性 <br /> <font color="#666666">Request Method(ImMethod) attribute</font>
      */
     public ImMethod getMethod() {
         return method;
@@ -612,9 +628,9 @@ public class ImRequest {
     /**
      * 获取Request会话的编码属性
      * <p>
-     * Get the Request Charset attribute
+     * <font color="#666666">Get the Request Charset attribute</font>
      *
-     * @return Request会话的编码属性 <br /> Request Charset attribute
+     * @return Request会话的编码属性 <br /> <font color="#666666">Request Charset attribute</font>
      */
     public String getCharset() {
         return charset;
@@ -625,9 +641,9 @@ public class ImRequest {
     /**
      * 获取Request会话的输入数据
      * <p>
-     * Get the Request input data
+     * <font color="#666666">Get the Request input data</font>
      *
-     * @return Request会话的输入数据 <br /> Request input data
+     * @return Request会话的输入数据 <br /> <font color="#666666">Request input data</font>
      */
     public Object getInputData() {
         return inputData;
@@ -638,12 +654,12 @@ public class ImRequest {
      * <p>
      * 比如需要获得一个String类型的属性，则代码为：getInputData(String.class)
      * <p>
-     * According to the specified type get the Request input data
+     * <font color="#666666">According to the specified type get the Request input data</font>
      * <p>
-     * For example, if you need to get a property of type String, the code is: getInputData(String.class)
+     * <font color="#666666">For example, if you need to get a property of type String, the code is: getInputData(String.class)</font>
      *
-     * @param type 指定的类型 <br /> Specified type
-     * @return Request会话的输入数据 <br /> Request input data
+     * @param type 指定的类型 <br /> <font color="#666666">Specified type</font>
+     * @return Request会话的输入数据 <br /> <font color="#666666">Request input data</font>
      */
     public <T> T getInputData(Class<T> type) {
         return (T) inputData;
@@ -654,9 +670,9 @@ public class ImRequest {
     /**
      * 获取Request会话的内容bytes长度属性
      * <p>
-     * Get the Request bytes length attribute
+     * <font color="#666666">Get the Request bytes length attribute</font>
      *
-     * @return Request会话的内容bytes长度属性 <br /> Request bytes length attribute
+     * @return Request会话的内容bytes长度属性 <br /> <font color="#666666">Request bytes length attribute</font>
      */
     public int getBytesLength() {
         return bytesLength;
@@ -665,9 +681,9 @@ public class ImRequest {
     /**
      * 获取Request会话的内容类型（ImContentType）
      * <p>
-     * Get the Request content type (ImContentType)
+     * <font color="#666666">Get the Request content type (ImContentType)</font>
      *
-     * @return Request会话的内容类型 <br /> Request content type
+     * @return Request会话的内容类型 <br /> <font color="#666666">Request content type</font>
      */
     public ImContentType getContentType() {
         return contentType;
@@ -678,11 +694,11 @@ public class ImRequest {
      * <p>
      * 如果存在ContentTypeStr属性则返回ContentTypeStr属性
      * <p>
-     * Get the Request string content type (String)
+     * <font color="#666666">Get the Request string content type (String)</font>
      * <p>
-     * Returns the ContentTypeStr property if there is a ContentTypeStr property
+     * <font color="#666666">Returns the ContentTypeStr property if there is a ContentTypeStr property</font>
      *
-     * @return Request会话的内容类型字符表示（String） <br /> Request string content type (String)
+     * @return Request会话的内容类型字符表示（String） <br /> <font color="#666666">Request string content type (String)</font>
      */
     public String getContentTypeStr() {
         if (this.contentTypeStr != null && this.contentTypeStr.length() > 1) {
@@ -696,10 +712,10 @@ public class ImRequest {
     /**
      * 根据Header键获得对应值
      * <p>
-     * Get the corresponding value according to the Header key
+     * <font color="#666666">Get the corresponding value according to the Header key</font>
      *
-     * @param name Header键 <br /> Header Key
-     * @return Header值 <br /> Header Value
+     * @param name Header键 <br /> <font color="#666666">Header Key</font>
+     * @return Header值 <br /> <font color="#666666">Header Value</font>
      */
     public String getHeaderValue(String name) {
         return headers.get(name);
@@ -708,9 +724,9 @@ public class ImRequest {
     /**
      * 获得所有Header键
      * <p>
-     * Get all Header keys
+     * <font color="#666666">Get all Header keys</font>
      *
-     * @return 所有Header键 <br /> All Header keys
+     * @return 所有Header键 <br /> <font color="#666666">All Header keys</font>
      */
     public Set<String> getHeaderNames() {
         return headers.keySet();
@@ -719,9 +735,9 @@ public class ImRequest {
     /**
      * 获得Header数量
      * <p>
-     * Get the count of Headers
+     * <font color="#666666">Get the count of Headers</font>
      *
-     * @return Header数量 <br /> Headers count
+     * @return Header数量 <br /> <font color="#666666">Headers count</font>
      */
     public int getHeaderSize() {
         return headers.size();
@@ -730,10 +746,10 @@ public class ImRequest {
     /**
      * 根据Cookie键获得对应值
      * <p>
-     * Get the corresponding value according to the Cookie key
+     * <font color="#666666">Get the corresponding value according to the Cookie key</font>
      *
-     * @param name Cookie键 <br /> Cookie Key
-     * @return Cookie值 <br /> Cookie Value
+     * @param name Cookie键 <br /> <font color="#666666">Cookie Key</font>
+     * @return Cookie值 <br /> <font color="#666666">Cookie Value</font>
      */
     public String getCookieData(String name) {
         return cookies.get(name);
@@ -742,9 +758,9 @@ public class ImRequest {
     /**
      * 获得所有Cookie键
      * <p>
-     * Get all Cookie keys
+     * <font color="#666666">Get all Cookie keys</font>
      *
-     * @return 所有Cookie键 <br /> All Cookie keys
+     * @return 所有Cookie键 <br /> <font color="#666666">All Cookie keys</font>
      */
     public Set<String> getCookieNames() {
         return cookies.keySet();
@@ -753,9 +769,9 @@ public class ImRequest {
     /**
      * 获得Cookie数量
      * <p>
-     * Get the count of Cookies
+     * <font color="#666666">Get the count of Cookies</font>
      *
-     * @return Cookie数量 <br /> Cookies count
+     * @return Cookie数量 <br /> <font color="#666666">Cookies count</font>
      */
     public int getCookieSize() {
         return cookies.size();

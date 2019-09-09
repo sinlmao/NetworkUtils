@@ -2,7 +2,7 @@
 
 > A Simple, Lightly Java whit HTTP / FTP network integration operational class library.
 >
-> `update：2019-09-07`  `ver：1.3.4`  `license：Apache 2.0`
+> `update：2019-09-09`  `ver：1.3.6`  `license：Apache 2.0`
 
 *This document is partially translated using a translation tool. If there is something wrong, please forgive me.*
 
@@ -38,14 +38,14 @@ Introduced by Maven, set directly in the POM:
     <dependency>
         <groupId>cn.sinlmao.commons</groupId>
         <artifactId>network</artifactId>
-        <version>1.3.4</version>
+        <version>1.3.6</version>
     </dependency>
 
 ## 2.2 Android（Gradle）
 
 If used in Android (Java 1.8+), the settings in Gradle:
 
-    implementation 'cn.sinlmao.commons:network:1.3.4'
+    implementation 'cn.sinlmao.commons:network:1.3.6'
 
 # III. Instruction Manual
 

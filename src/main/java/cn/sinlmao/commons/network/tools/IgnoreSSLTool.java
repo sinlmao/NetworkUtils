@@ -25,7 +25,13 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.*;
 
 /**
- * HttpsURLConnection SSL 证书忽略类
+ * <b>HttpsURLConnection SSL 证书忽略类</b>
+ * <p>
+ * 该类主要实现HttpsURLConnection SSL 证书忽略
+ * <br /><br />
+ * <b>HttpsURLConnection SSL certificate ignore class</b>
+ * <p>
+ * This class mainly implements HttpsURLConnection SSL certificate ignoring
  *
  * @author Sinlmao
  * @program Sinlmao Commons Network Utils
@@ -109,17 +115,19 @@ public class IgnoreSSLTool {
 
     /**
      * 设置是否忽略HTTPS请求的SSL证书，必须在openConnection之前调用
+     * <p>
+     * <font color="#777777">Set whether to ignore the SSL certificate of the HTTPS request, it must be called before openConnection</font>
      *
-     * @throws Exception
+     * @throws IgnoreSSLException 忽略SSL相关异常/警告类 <br/> <font color="#777777">Ignore SSL related exceptions/warnings class</font>
      */
     public static void setIsIgnore(boolean isIgnore) throws IgnoreSSLException {
         IgnoreSSLTool.isIgnore = isIgnore;
         try {
             ignoreSSL();
         } catch (NoSuchAlgorithmException e) {
-            throw new IgnoreSSLException(IgnoreSSLException.MethodInappropriate, e.getCause());
+            throw new IgnoreSSLException(IgnoreSSLException.IgnoreSSLCanNot, e.getCause());
         } catch (KeyManagementException e) {
-            throw new IgnoreSSLException(IgnoreSSLException.MethodInappropriate, e.getCause());
+            throw new IgnoreSSLException(IgnoreSSLException.IgnoreSSLCanNot, e.getCause());
         }
     }
 }

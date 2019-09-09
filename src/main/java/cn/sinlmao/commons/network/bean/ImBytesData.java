@@ -24,10 +24,10 @@ package cn.sinlmao.commons.network.bean;
  * <p>
  * This class is used to encapsulate binary (Byte) data.
  *
- * @program: Sinlmao Commons Network Utils
- * @description: 字节数据Bean
- * @author: Sinlmao
- * @create: 2019-09-01 01:57
+ * @author Sinlmao
+ * @program Sinlmao Commons Network Utils
+ * @description 字节数据Bean
+ * @create 2019-09-01 01:57
  */
 public class ImBytesData {
 
@@ -39,9 +39,9 @@ public class ImBytesData {
     /**
      * 封装一个字节数据
      * <p>
-     * Build a bytes data
+     * <font color="#666666">Build a bytes data</font>
      *
-     * @param bytes 字节数据 <br /> Bytes data
+     * @param bytes 字节数据 <br /> <font color="#666666">Bytes data</font>
      */
     public ImBytesData(byte[] bytes) {
         this.bytes = bytes;
@@ -50,9 +50,9 @@ public class ImBytesData {
     /**
      * 获得字节数据
      * <p>
-     * Get byte data
+     * <font color="#666666">Get byte data</font>
      *
-     * @return 字节数据 <br /> Byte data
+     * @return 字节数据 <br /> <font color="#666666">Byte data</font>
      */
     public byte[] getBytes() {
         return bytes;
@@ -61,9 +61,9 @@ public class ImBytesData {
     /**
      * 设置字节数据
      * <p>
-     * Set byte data
+     * <font color="#666666">Set byte data</font>
      *
-     * @param bytes 字节数据 <br /> Byte data
+     * @param bytes 字节数据 <br /> <font color="#666666">Byte data</font>
      */
     public void setBytes(byte[] bytes) {
         this.bytes = bytes;

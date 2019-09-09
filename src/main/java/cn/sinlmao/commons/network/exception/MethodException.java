@@ -24,18 +24,27 @@ package cn.sinlmao.commons.network.exception;
  * <p>
  * Exception throws about the use, invocation, parsing exceptions, and warnings of methods
  *
- * @program: Sinlmao Commons Network Utils
- * @description: 方法（Method）相关异常/警告类
- * @author: Sinlmao
- * @create: 2019-09-01 02:24
+ * @author Sinlmao
+ * @program Sinlmao Commons Network Utils
+ * @description 方法（Method）相关异常/警告类
+ * @create 2019-09-01 02:24
  */
 public final class MethodException extends RuntimeException {
 
     /**
      * 返回一个方法不恰当使用异常说明
+     * <p>
+     * <font color="#666666">Return a method improper use exception description</font>
      */
     public final static String MethodInappropriate = "Can't use an inappropriate Method.";
 
+    /**
+     * 构建一个方法（Method）相关异常/警告
+     * <p>
+     * <font color="#666666">Build a Method related exception/warning</font>
+     *
+     * @param message 异常/警告信息 <br/> <font color="#666666">Exception/warning information</font>
+     */
     public MethodException(String message) {
         super(message);
     }

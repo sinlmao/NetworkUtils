@@ -47,36 +47,94 @@ public final class ImResponse {
 
     ///////////////////////////////////////////////////////////////////////
 
+    /**
+     * [内部] 设置Response状态码
+     * <p>
+     * <font color="#666666">[Internal] Set the Response status code</font>
+     *
+     * @param responseCode Response状态码 <br/> <font color="#666666">Response status code</font>
+     * @return ImResponse ImResponse响应实体对象 <br/> <font color="#666666">ImResponse response entity object</font>
+     */
     protected ImResponse setResponseCode(int responseCode) {
         this.responseCode = responseCode;
         return this;
     }
 
-    protected void setResponseMessage(String responseMessage) {
+    /**
+     * [内部] 设置Response状态消息
+     * <p>
+     * <font color="#666666">[Internal] Set the Response status message</font>
+     *
+     * @param responseMessage Response状态消息 <br/> <font color="#666666">Response status message</font>
+     * @return ImResponse ImResponse响应实体对象 <br/> <font color="#666666">ImResponse response entity object</font>
+     */
+    protected ImResponse setResponseMessage(String responseMessage) {
         this.responseMessage = responseMessage;
+        return this;
     }
 
+    /**
+     * [内部] 设置Response应答String消息
+     * <p>
+     * <font color="#666666">[Internal] Set Response Reply String Message</font>
+     *
+     * @param stringContent Response应答String消息 <br/> <font color="#666666">Response response String message</font>
+     * @return ImResponse ImResponse响应实体对象 <br/> <font color="#666666">ImResponse response entity object</font>
+     */
     protected ImResponse setStringContent(String stringContent) {
         this.stringContent = stringContent;
         return this;
     }
 
+    /**
+     * [内部] 设置Response应答bytes消息
+     * <p>
+     * <font color="#666666">[Internal] Set Response Reply bytes message</font>
+     *
+     * @param bytesContent Response应答bytes消息 <br/> <font color="#666666">Response response bytes message</font>
+     * @return ImResponse ImResponse响应实体对象 <br/> <font color="#666666">ImResponse response entity object</font>
+     */
     protected ImResponse setBytesContent(byte[] bytesContent) {
         this.bytesContent = bytesContent;
         return this;
     }
 
-    protected ImResponse setCookie(String data) {
+    /**
+     * [内部] 添加Cookie完整数据
+     * <p>
+     * <font color="#666666">[Internal] Add full data for cookies</font>
+     *
+     * @param data Cookie完整数据 <br/> <font color="#666666">Cookie full data</font>
+     * @return ImResponse ImResponse响应实体对象 <br/> <font color="#666666">ImResponse response entity object</font>
+     */
+    protected ImResponse setFullCookie(String data) {
         cookieStr = data;
         return this;
     }
 
+    /**
+     * [内部] 添加Cookie数据
+     * <p>
+     * <font color="#666666">[Internal] Add cookie data</font>
+     *
+     * @param name Cookie键 <br/> <font color="#666666">Cookie key</font>
+     * @param data Cookie值 <br/> <font color="#666666">Cookie value</font>
+     * @return ImResponse ImResponse响应实体对象 <br/> ImResponse response entity object</font>
+     */
     protected ImResponse addCookie(String name, String data) {
         cookies.put(name, data);
         return this;
     }
 
-    protected ImResponse setHeaders(Map<String, List<String>> headers) {
+    /**
+     * [内部] 添加Header完整数据
+     * <p>
+     * <font color="#666666">[Internal] Add Header full data</font>
+     *
+     * @param headers Header完整数据 <br/> <font color="#666666">Header full data</font>
+     * @return ImResponse ImResponse响应实体对象 <br/> <font color="#666666">ImResponse response entity object</font>
+     */
+    protected ImResponse setFullHeaders(Map<String, List<String>> headers) {
         this.headers = headers;
         return this;
     }
@@ -84,64 +142,154 @@ public final class ImResponse {
     ///////////////////////////////////////////////////////////////////////
 
     /**
-     * 获得ResponseCode
+     * 获得Response状态码
+     * <p>
+     * <font color="#666666">Get the Response status code</font>
      *
-     * @return
+     * @return Response状态码 <br/> <font color="#666666">Response status code</font>
      */
     public int getResponseCode() {
         return responseCode;
     }
 
+    /**
+     * 获得Response状态消息
+     * <p>
+     * <font color="#666666">Get the Response status message</font>
+     *
+     * @return Response状态消息 <br/> <font color="#666666">Response status message</font>
+     */
     public String getResponseMessage() {
         return responseMessage;
     }
 
+    /**
+     * 获得Response应答String消息
+     * <p>
+     * <font color="#666666">Get the Response response String message</font>
+     *
+     * @return Response应答String消息 <br/> <font color="#666666">Response response String message</font>
+     */
     public String getStringContent() {
         return stringContent;
     }
 
+    /**
+     * 获得Response应答Bytes消息
+     * <p>
+     * <font color="#666666">Get the Response response bytes message</font>
+     *
+     * @return Response应答bytes消息 <br/> <font color="#666666">Response response bytes message</font>
+     */
     public byte[] getBytesContent() {
         return bytesContent;
     }
 
+
+    /**
+     * 使用传入参数Response应答Bytes消息
+     * <p>
+     * 必须确定传入的bytes数组参数是空的，否则会被覆盖
+     * <p>
+     * <font color="#666666">Reply to Bytes message with incoming parameter Response</font>
+     * <p>
+     * <font color="#666666">Must determine that the incoming bytes array parameter is empty, otherwise it will be overwritten</font>
+     *
+     * @param bytesContent 空的Response应答Bytes接收对象 <br/> <font color="#666666">Empty Response Answers Bytes Receive Object</font>
+     */
     public void get(byte[] bytesContent) {
-        this.bytesContent = bytesContent;
+        // this.bytesContent = bytesContent;
+        bytesContent = this.bytesContent;
     }
 
     ///////////////////////////////////////////////////////////////////////
 
+    /**
+     * 获得Cookie数据完整字符
+     * <p>
+     * <font color="#666666">Get the full character of the cookie data</font>
+     *
+     * @return Cookie数据完整字符 <br/> <font color="#666666">Full character of the cookie data</font>
+     */
     public String getCookieStr() {
         return this.cookieStr;
     }
 
+    /**
+     * 根据Cookie键获取对象值
+     * <p>
+     * <font color="#666666">Get the object value according to the Cookie key</font>
+     *
+     * @param name Cookie键 <br/> <font color="#666666">Cookie key</font>
+     * @return Cookie值 <br/> <font color="#666666">Cookie value</font>
+     */
     public String getCookieData(String name) {
         return cookies.get(name);
     }
 
+    /**
+     * 获取Cookie的所有键
+     * <p>
+     * <font color="#666666">Get all the keys of the cookie</font>
+     *
+     * @return Cookie的所有键 <br/> <font color="#666666">All the keys of the cookie</font>
+     */
     public Set<String> getCookieNames() {
         return cookies.keySet();
     }
 
+    /**
+     * 获取Cookie长度
+     * <p>
+     * <font color="#666666">Get the size of the cookie</font>
+     *
+     * @return Cookie长度 <br/> <font color="#666666">Cookie size</font>
+     */
     public int getCookieSize() {
         return cookies.size();
     }
 
     ///////////////////////////////////////////////////////////////////////
 
+    /**
+     * 根据Header键获取对象值
+     * <p>
+     * <font color="#666666">Get the object value according to the Header key</font>
+     *
+     * @param name Header键 <br/> <font color="#666666">Header key</font>
+     * @return Header值 <br/> <font color="#666666">Header value</font>
+     */
     public List<String> getHeaderData(String name) {
         return headers.get(name);
     }
 
+    /**
+     * 获取Header的所有键
+     * <p>
+     * <font color="#666666">Get all the keys of the header</font>
+     *
+     * @return Header的所有键 <br/> <font color="#666666">All the keys of the header</font>
+     */
     public Set<String> getHeaderNames() {
         return headers.keySet();
     }
 
+    /**
+     * 获取Header长度
+     * <p>
+     * <font color="#666666">Get the size of the header</font>
+     *
+     * @return Header长度 <br/> <font color="#666666">Header size</font>
+     */
     public int getHeaderSize() {
         return headers.size();
     }
 
     ///////////////////////////////////////////////////////////////////////
 
+    /**
+     * 禁止外部实例化
+     */
     protected ImResponse() {
     }
 }

@@ -41,12 +41,12 @@ public class ImFileData extends ImBytesData {
     /**
      * 封装一个文件数据（文件上传）
      * <p>
-     * Build a file data (file upload)
+     * <font color="#666666">Build a file data (file upload)</font>
      *
-     * @param name     Parameter/行数据名称 <br /> Parameter / row data name
-     * @param fileName 文件名称 <br /> File name
-     * @param fileType 文件类型（ContentType） <br /> File type (ContentType)
-     * @param bytes    文件二进制数据 <br /> File binary data
+     * @param name     Parameter/行数据名称 <br /> <font color="#666666">Parameter / row data name</font>
+     * @param fileName 文件名称 <br /> <font color="#666666">File name</font>
+     * @param fileType 文件类型（ContentType） <br /> <font color="#666666">File type (ContentType)</font>
+     * @param bytes    文件二进制数据 <br /> <font color="#666666">File binary data</font>
      */
     public ImFileData(String name, String fileName, String fileType, byte[] bytes) {
         super(bytes);
@@ -58,9 +58,9 @@ public class ImFileData extends ImBytesData {
     /**
      * 获取Parameter/行数据名称
      * <p>
-     * Get the Parameter/row data name
+     * <font color="#666666">Get the Parameter/row data name</font>
      *
-     * @return Parameter/行数据名称 <br /> Parameter / row data name
+     * @return Parameter/行数据名称 <br /> <font color="#666666">Parameter / row data name</font>
      */
     public String getName() {
         return name;
@@ -69,9 +69,9 @@ public class ImFileData extends ImBytesData {
     /**
      * 设置Parameter/行数据名称
      * <p>
-     * Set the Parameter/row data name
+     * <font color="#666666">Set the Parameter/row data name</font>
      *
-     * @param name Parameter/行数据名称 <br /> Parameter / row data name
+     * @param name Parameter/行数据名称 <br /> <font color="#666666">Parameter / row data name</font>
      */
     public void setName(String name) {
         this.name = name;
@@ -80,9 +80,9 @@ public class ImFileData extends ImBytesData {
     /**
      * 获取文件名称
      * <p>
-     * Get the File name
+     * <font color="#666666">Get the File name</font>
      *
-     * @return 文件名称 <br /> File name
+     * @return 文件名称 <br /> <font color="#666666">File name</font>
      */
     public String getFileName() {
         return fileName;
@@ -91,9 +91,9 @@ public class ImFileData extends ImBytesData {
     /**
      * 设置文件名称
      * <p>
-     * Set the File name
+     * <font color="#666666">Set the File name</font>
      *
-     * @param fileName 文件名称 <br /> File name
+     * @param fileName 文件名称 <br /> <font color="#666666">File name</font>
      */
     public void setFileName(String fileName) {
         this.fileName = fileName;
@@ -102,9 +102,9 @@ public class ImFileData extends ImBytesData {
     /**
      * 获取文件类型（ContentType）
      * <p>
-     * Get File type (ContentType)
+     * <font color="#666666">Get File type (ContentType)</font>
      *
-     * @return 文件类型（ContentType） <br /> File type (ContentType)
+     * @return 文件类型（ContentType） <br /> <font color="#666666">File type (ContentType)</font>
      */
     public String getFileType() {
         return fileType;
@@ -113,9 +113,9 @@ public class ImFileData extends ImBytesData {
     /**
      * 设置文件类型（ContentType）
      * <p>
-     * Set File type (ContentType)
+     * <font color="#666666">Set File type (ContentType)</font>
      *
-     * @param fileType 文件类型（ContentType） <br /> File type (ContentType)
+     * @param fileType 文件类型（ContentType） <br /> <font color="#666666">File type (ContentType)</font>
      */
     public void setFileType(String fileType) {
         this.fileType = fileType;

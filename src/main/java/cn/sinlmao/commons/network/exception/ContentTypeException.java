@@ -24,18 +24,27 @@ package cn.sinlmao.commons.network.exception;
  * <p>
  * Exception throws about usage, invocation, parsing exceptions, and warnings for content types (ContentType)
  *
- * @program: Sinlmao Commons Network Utils
- * @description: 内容类型（ContentType）相关异常/警告类
- * @author: Sinlmao
- * @create: 2019-09-01 02:24
+ * @author Sinlmao
+ * @program Sinlmao Commons Network Utils
+ * @description 内容类型（ContentType）相关异常/警告类
+ * @create 2019-09-01 02:24
  */
 public final class ContentTypeException extends RuntimeException {
 
     /**
      * 返回一个内容类型不恰当使用异常说明
+     * <p>
+     * <font color="#666666">Return a content type inappropriate use exception description</font>
      */
     public final static String ContentTypeInappropriate = "Can't use an inappropriate ContentType.";
 
+    /**
+     * 构建一个内容类型（ContentType）相关异常/警告
+     * <p>
+     * <font color="#666666">Build a content type (ContentType) related exception/warning</font>
+     *
+     * @param message 异常/警告信息 <br/> <font color="#666666">Exception/warning information</font>
+     */
     public ContentTypeException(String message) {
         super(message);
     }

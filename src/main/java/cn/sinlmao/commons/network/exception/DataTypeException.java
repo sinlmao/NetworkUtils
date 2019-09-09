@@ -24,18 +24,27 @@ package cn.sinlmao.commons.network.exception;
  * <p>
  * Exception throws about usage, invocation, parsing exceptions, and warnings for data types
  *
- * @program: Sinlmao Commons Network Utils
- * @description: 数据类型相关异常/警告类
- * @author: Sinlmao
- * @create: 2019-09-01 02:24
+ * @author Sinlmao
+ * @program Sinlmao Commons Network Utils
+ * @description 数据类型相关异常/警告类
+ * @create 2019-09-01 02:24
  */
 public final class DataTypeException extends RuntimeException {
 
     /**
-     * 返回一个方法不恰当使用异常说明
+     * 返回一个数据类型不恰当使用异常说明
+     * <p>
+     * <font color="#666666">Return a data type inappropriate use exception description</font>
      */
     public final static String DataTypeUnSupport = "This data type is not supported.";
 
+    /**
+     * 构建一个数据类型相关异常/警告
+     * <p>
+     * <font color="#666666">Build a data type related exception/warning</font>
+     *
+     * @param message 异常/警告信息 <br/> <font color="#666666">Exception/warning information</font>
+     */
     public DataTypeException(String message) {
         super(message);
     }
