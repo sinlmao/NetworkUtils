@@ -54,6 +54,7 @@ public class ImRequest {
     private boolean allowNonStandard = false;
     private boolean restfulMode = false;
     private boolean forceInUrlSendData = false;
+    private boolean urlEncode = false;
 
     private Map<String, String> headers = new HashMap<String, String>();
     private Map<String, String> cookies = new HashMap<String, String>();
@@ -115,6 +116,23 @@ public class ImRequest {
      */
     public ImRequest setCharset(String charset) {
         this.charset = charset;
+        return this;
+    }
+
+    /**
+     * 设置Charset编码
+     * <p>
+     * 默认为UTF-8
+     * <p>
+     * <font color="#666666">Set the Charset</font>
+     * <p>
+     * <font color="#666666">Default is UTF-8</font>
+     *
+     * @param imCharset 常见编码枚举 <br/> <font color="#666666">HTTP common encoding enumeration class</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
+     */
+    public ImRequest setCharset(ImCharset imCharset) {
+        this.charset = imCharset.toString();
         return this;
     }
 
@@ -323,6 +341,23 @@ public class ImRequest {
      */
     public ImRequest setForceInUrlSendData(boolean forceInUrlSendData) {
         this.forceInUrlSendData = forceInUrlSendData;
+        return this;
+    }
+
+    /**
+     * 设置是否需要对参数进行URL编码
+     * <p>
+     * 请注意，如果不在GET方法时或者在配置强制使用URL发送数据后使用将可能导致数据传输异常
+     * <p>
+     * <font color="#666666">Set whether URL encoding of parameters is required</font>
+     * <p>
+     * <font color="#666666">Please note that data transfer exceptions may occur if not used in the GET method or after configuring a mandatory URL to send data.</font>
+     *
+     * @param urlEncode 是否强制使用URL发送数据 <br /> <font color="#666666">Whether you need to URL encode the parameters</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
+     */
+    public ImRequest setUrlEncode(boolean urlEncode) {
+        this.urlEncode = urlEncode;
         return this;
     }
 
@@ -600,6 +635,16 @@ public class ImRequest {
         return forceInUrlSendData;
     }
 
+    /**
+     * 获取是否需要对参数进行URL编码
+     * <p>
+     * <font color="#666666">Get whether you need to URL encode the parameters</font>
+     *
+     * @return 是否需要对参数进行URL编码 <br /> <font color="#666666">Whether you need to URL encode the parameters</font>
+     */
+    public boolean isUrlEncode() {
+        return urlEncode;
+    }
 
     ///////////////////////////////////////////////////////////////////////
 

@@ -66,7 +66,6 @@ public enum ImContentType {
      */
     APPLICATION_OCTET_STREAM;
 
-
     /**
      * 转换内容类型完整描述字符
      * <p>

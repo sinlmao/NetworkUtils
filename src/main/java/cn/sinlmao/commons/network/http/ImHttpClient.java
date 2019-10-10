@@ -30,6 +30,7 @@ import com.alibaba.fastjson.JSONObject;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.*;
 
@@ -160,6 +161,7 @@ public final class ImHttpClient {
         httpConnection.setRequestProperty("Accept", "*/*");
         //设置内容类型及编码
         httpConnection.setRequestProperty("Content-Type", imRequest.getContentType().toString() + "; charset=" + imRequest.getCharset());
+        //httpConnection.setRequestProperty("Content-Type", imRequest.getContentType().toString());
 
         //如果需要长连接
         if (imRequest.isKeepAlive() || imRequest.getContentType() == ImContentType.MULTIPART_FORM_DATA) {
@@ -447,8 +449,9 @@ public final class ImHttpClient {
      *
      * @param imRequest
      * @return
+     * @throws UnsupportedEncodingException
      */
-    private static String getInputDataStringForm(ImRequest imRequest) {
+    private static String getInputDataStringForm(ImRequest imRequest) throws UnsupportedEncodingException {
         return getInputDataStringForm(imRequest, false);
     }
 
@@ -458,8 +461,9 @@ public final class ImHttpClient {
      * @param imRequest
      * @param forceKeyValueModel
      * @return
+     * @throws UnsupportedEncodingException
      */
-    private static String getInputDataStringForm(ImRequest imRequest, boolean forceKeyValueModel) {
+    private static String getInputDataStringForm(ImRequest imRequest, boolean forceKeyValueModel) throws UnsupportedEncodingException {
         //当InputData不为空时
         if (imRequest.getInputData() != null) {
 
@@ -478,7 +482,11 @@ public final class ImHttpClient {
                 } else {
                     JSONObject json = imRequest.getInputData(JSONObject.class);
                     for (String key : json.keySet()) {
-                        inputData += (key + "=" + json.getString(key) + "&");
+                        if (imRequest.isUrlEncode()) {
+                            inputData += (key + "=" + URLEncoder.encode(json.getString(key), imRequest.getCharset()) + "&");
+                        } else {
+                            inputData += (key + "=" + json.getString(key) + "&");
+                        }
                     }
                     inputData = inputData.substring(0, inputData.length() - 1);
                 }
@@ -491,7 +499,11 @@ public final class ImHttpClient {
                 } else {
                     Map<String, String> map = imRequest.getInputData(Map.class);
                     for (String key : map.keySet()) {
-                        inputData += (key + "=" + map.get(key) + "&");
+                        if (imRequest.isUrlEncode()) {
+                            inputData += (key + "=" + URLEncoder.encode(map.get(key), imRequest.getCharset()) + "&");
+                        } else {
+                            inputData += (key + "=" + map.get(key) + "&");
+                        }
                     }
                     inputData = inputData.substring(0, inputData.length() - 1);
                 }
@@ -504,7 +516,11 @@ public final class ImHttpClient {
                     json.put(imFormData.getName(), imFormData.getValue());
                     inputData = json.toJSONString();
                 } else {
-                    inputData = (imFormData.getName() + "=" + imFormData.getValue());
+                    if (imRequest.isUrlEncode()) {
+                        inputData = (imFormData.getName() + "=" + URLEncoder.encode(imFormData.getValue(), imRequest.getCharset()));
+                    } else {
+                        inputData = (imFormData.getName() + "=" + imFormData.getValue());
+                    }
                 }
             }
 
