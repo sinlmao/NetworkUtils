@@ -73,6 +73,25 @@ public final class ImHttpClient {
         //初始化分隔符（如果为文件上传(multipart/form-data)模式的时候）
         String boundary = "--------------------------" + String.valueOf(System.currentTimeMillis()); // boundary就是request头和上传文件内容的分隔符
 
+        //取得系统（JAVA/JDK）原代理服务相关配置
+        String system_http_proxyHost = System.getProperty("http.proxyHost", "");
+        String system_https_proxyHost = System.getProperty("https.proxyHost", "");
+        String system_http_proxyPort = System.getProperty("http.proxyPort", "");
+        String system_https_proxyPort = System.getProperty("https.proxyPort", "");
+
+        //检测是否配置代理服务器（或抓包工具）
+        if (imRequest.isEnableProxyServer()) {
+            System.setProperty("http.proxyHost", imRequest.getProxyServerHost());
+            System.setProperty("https.proxyHost", imRequest.getProxyServerHost());
+            System.setProperty("http.proxyPort", imRequest.getProxyServerPort());
+            System.setProperty("https.proxyPort", imRequest.getProxyServerPort());
+        } else {
+            System.setProperty("http.proxyHost", system_http_proxyHost);
+            System.setProperty("https.proxyHost", system_https_proxyHost);
+            System.setProperty("http.proxyPort", system_http_proxyPort);
+            System.setProperty("https.proxyPort", system_https_proxyPort);
+        }
+
         //如果没有配置为允许非标准使用，进行标准检查
         if (!imRequest.isAllowNonStandard()) {
             //如果内容类型没有使用表单（x-www-form-urlencoded）
@@ -440,6 +459,12 @@ public final class ImHttpClient {
         //返回Header和Cookie
         imResponse.setFullHeaders(headers);
         imResponse.setFullCookie(cookieStr);
+
+        //还原系统代理配置
+        System.setProperty("http.proxyHost", system_http_proxyHost);
+        System.setProperty("https.proxyHost", system_https_proxyHost);
+        System.setProperty("http.proxyPort", system_http_proxyPort);
+        System.setProperty("https.proxyPort", system_https_proxyPort);
 
         return imResponse;
     }

@@ -59,6 +59,10 @@ public class ImRequest {
     private Map<String, String> headers = new HashMap<String, String>();
     private Map<String, String> cookies = new HashMap<String, String>();
 
+    private boolean enableProxyServer = false;
+    private String proxyServerHost;
+    private String proxyServerPort;
+
     /**
      * 传入URL构造一个ImRequest
      * <p>
@@ -347,17 +351,78 @@ public class ImRequest {
     /**
      * 设置是否需要对参数进行URL编码
      * <p>
-     * 请注意，如果不在GET方法时或者在配置强制使用URL发送数据后使用将可能导致数据传输异常
+     * 请注意，如果不在GET方法时或者不在配置强制使用URL发送数据后使用将可能导致数据传输异常
      * <p>
      * <font color="#666666">Set whether URL encoding of parameters is required</font>
      * <p>
-     * <font color="#666666">Please note that data transfer exceptions may occur if not used in the GET method or after configuring a mandatory URL to send data.</font>
+     * <font color="#666666">Please note that if you do not use the GET method or do not use the mandatory URL to send data, it may cause abnormal data transmission.</font>
      *
      * @param urlEncode 是否强制使用URL发送数据 <br /> <font color="#666666">Whether you need to URL encode the parameters</font>
      * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setUrlEncode(boolean urlEncode) {
         this.urlEncode = urlEncode;
+        return this;
+    }
+
+    /**
+     * 设置启用通过代理服务器（抓包工具/特殊需要）访问
+     * <p>
+     * 【实验性功能】该功能为实验性功能，未能测试是否会对整体工程造成额外影响
+     * <p>
+     * 请注意，如果代理服务器（或抓包工具）配置不当或者无代理服务时可能导致访问异常
+     * <p>
+     * <font color="#666666">【Experimental function】 This function is an experimental function. Failure to test will have an additional impact on the overall project.</font>
+     * <p>
+     * <font color="#666666">Set to enable access via a proxy server (capture tool/special needs)</font>
+     * <p>
+     * <font color="#666666">Please note that if the proxy server (or the capture tool) is misconfigured or has no proxy service, it may cause an access exception.</font>
+     *
+     * @param host 代理服务器（或抓包工具）的IP/地址 <br /> <font color="#666666">IP address/address of the proxy server (or capture tool)</font>
+     * @param port 代理服务器（或抓包工具）的端口 <br /> <font color="#666666">Port of the proxy server (or capture tool)</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
+     */
+    public ImRequest enableProxyServer(String host, int port) {
+        this.enableProxyServer = true;
+        this.proxyServerHost = host;
+        this.proxyServerPort = String.valueOf(port);
+        return this;
+    }
+
+    /**
+     * [本地代理] 设置启用通过代理服务器（抓包工具/特殊需要）访问
+     * <p>
+     * 【实验性功能】该功能为实验性功能，未能测试是否会对整体工程造成额外影响
+     * <p>
+     * 请注意，如果代理服务器（或抓包工具）配置不当或者无代理服务时可能导致访问异常
+     * <p>
+     * <font color="#666666">【Experimental function】 This function is an experimental function. Failure to test will have an additional impact on the overall project.</font>
+     * <p>
+     * <font color="#666666">[Local Agent] Setting is enabled to access through a proxy server (capture tool/special needs)</font>
+     * <p>
+     * <font color="#666666">Please note that if the proxy server (or the capture tool) is misconfigured or has no proxy service, it may cause an access exception.</font>
+     *
+     * @param port 代理服务器（或抓包工具）的端口 <br /> <font color="#666666">Port of the proxy server (or capture tool)</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
+     */
+    public ImRequest enableProxyServer(int port) {
+        this.enableProxyServer = true;
+        this.proxyServerHost = "127.0.0.1";
+        this.proxyServerPort = String.valueOf(port);
+        return this;
+    }
+
+    /**
+     * 设置禁用通过代理服务器（抓包工具/特殊需要）访问
+     * <p>
+     * <font color="#666666">Setting disabled access via proxy server (capture tool/special needs)</font>
+     *
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
+     */
+    public ImRequest disableProxyServer() {
+        this.enableProxyServer = false;
+        this.proxyServerHost = "";
+        this.proxyServerPort = "";
         return this;
     }
 
@@ -822,4 +887,18 @@ public class ImRequest {
         return cookies.size();
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    protected boolean isEnableProxyServer() {
+        return enableProxyServer;
+    }
+
+    protected String getProxyServerHost() {
+        return proxyServerHost;
+    }
+
+    protected String getProxyServerPort() {
+        return proxyServerPort;
+    }
 }
