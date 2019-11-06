@@ -2,7 +2,7 @@
 
 > A Simple, Lightly Java whit HTTP / FTP network integration operational class library.
 >
-> `update：2019-10-10`  `ver：1.3.7`  `license：Apache 2.0`
+> `update：2019-11-06`  `ver：1.4.0`  `license：Apache 2.0`
 
 *This document is partially translated using a translation tool. If there is something wrong, please forgive me.*
 

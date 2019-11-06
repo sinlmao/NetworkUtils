@@ -45,6 +45,7 @@ public class ImRequest {
     private ImMethod method = ImMethod.GET;
     private String charset = "utf-8";
     private Object inputData;
+    private Object queryParams;
     private int bytesLength = 4096;
     private ImContentType contentType = ImContentType.APPLICATION_X_WWW_FORM_URLENCODED;
     private String contentTypeStr;
@@ -55,6 +56,7 @@ public class ImRequest {
     private boolean restfulMode = false;
     private boolean forceInUrlSendData = false;
     private boolean urlEncode = false;
+    private boolean tomcatCompatible = false;
 
     private Map<String, String> headers = new HashMap<String, String>();
     private Map<String, String> cookies = new HashMap<String, String>();
@@ -219,6 +221,45 @@ public class ImRequest {
     }
 
     /**
+     * 设置String类型查询参数数据
+     * <p>
+     * <font color="#666666">Set String type query parameter data</font>
+     *
+     * @param queryParams String类型查询参数数据 <br/> <font color="#666666">String type query parameter data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
+     */
+    public ImRequest setQueryParams(String queryParams) {
+        this.queryParams = queryParams;
+        return this;
+    }
+
+    /**
+     * 设置Map类型查询参数数据
+     * <p>
+     * <font color="#666666">Set Map type query parameter data</font>
+     *
+     * @param queryParams Map类型查询参数数据 <br/> <font color="#666666">Map type query parameter data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
+     */
+    public ImRequest setQueryParams(Map<String, String> queryParams) {
+        this.queryParams = queryParams;
+        return this;
+    }
+
+    /**
+     * 设置JSONObject类型查询参数数据
+     * <p>
+     * <font color="#666666">Set JSONObject type query parameter data</font>
+     *
+     * @param queryParams JSONObject类型查询参数数据 <br/> <font color="#666666">JSONObject type query parameter data</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
+     */
+    public ImRequest setQueryParams(JSONObject queryParams) {
+        this.queryParams = queryParams;
+        return this;
+    }
+
+    /**
      * 设置BytesLength长度
      * <p>
      * 默认为4096
@@ -357,7 +398,7 @@ public class ImRequest {
      * <p>
      * <font color="#666666">Please note that if you do not use the GET method or do not use the mandatory URL to send data, it may cause abnormal data transmission.</font>
      *
-     * @param urlEncode 是否强制使用URL发送数据 <br /> <font color="#666666">Whether you need to URL encode the parameters</font>
+     * @param urlEncode 是否需要对参数进行URL编码 <br /> <font color="#666666">Whether you need to URL encode the parameters</font>
      * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setUrlEncode(boolean urlEncode) {
@@ -423,6 +464,19 @@ public class ImRequest {
         this.enableProxyServer = false;
         this.proxyServerHost = "";
         this.proxyServerPort = "";
+        return this;
+    }
+
+    /**
+     * 设置是否需要兼容Tomcat
+     * <p>
+     * <font color="#666666">Set whether need for Tomcat compatibility</font>
+     *
+     * @param tomcatCompatible 是否需要兼容Tomcat <br /> <font color="#666666">Whether you need for Tomcat compatibility</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
+     */
+    public ImRequest setTomcatCompatible(boolean tomcatCompatible) {
+        this.tomcatCompatible = tomcatCompatible;
         return this;
     }
 
@@ -711,6 +765,17 @@ public class ImRequest {
         return urlEncode;
     }
 
+    /**
+     * 获取是否需要Tomcat兼容
+     * <p>
+     * <font color="#666666">Get the need for Tomcat compatibility</font>
+     *
+     * @return 是否需要Tomcat兼容 <br /> <font color="#666666">Whether you need for Tomcat compatibility</font>
+     */
+    public boolean isTomcatCompatible() {
+        return tomcatCompatible;
+    }
+
     ///////////////////////////////////////////////////////////////////////
 
     /**
@@ -773,6 +838,35 @@ public class ImRequest {
      */
     public <T> T getInputData(Class<T> type) {
         return (T) inputData;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+
+    /**
+     * 获取Request会话的查询参数数据
+     * <p>
+     * <font color="#666666">Get the Request query parameter data</font>
+     *
+     * @return Request会话的输入数据 <br /> <font color="#666666">Request query parameter data</font>
+     */
+    public Object getQueryParams() {
+        return queryParams;
+    }
+
+    /**
+     * 根据指定的类型获取Request会话的输入数据
+     * <p>
+     * 比如需要获得一个String类型的属性，则代码为：getQueryParams(String.class)
+     * <p>
+     * <font color="#666666">According to the specified type get the Request query parameter data</font>
+     * <p>
+     * <font color="#666666">For example, if you need to get a property of type String, the code is: getQueryParams(String.class)</font>
+     *
+     * @param type 指定的类型 <br /> <font color="#666666">Specified type</font>
+     * @return Request会话的输入数据 <br /> <font color="#666666">Request query parameter data</font>
+     */
+    public <T> T getQueryParams(Class<T> type) {
+        return (T) queryParams;
     }
 
     ///////////////////////////////////////////////////////////////////////

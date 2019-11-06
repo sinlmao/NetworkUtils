@@ -39,6 +39,13 @@ public final class MethodException extends RuntimeException {
     public final static String MethodInappropriate = "Can't use an inappropriate Method.";
 
     /**
+     * 返回当方法为GET时，同时使用InputData和QueryParams是不标准的异常说明
+     * <p>
+     * <font color="#666666">Return a when the method is GET, using both InputData and QueryParams is not a standard exception description</font>
+     */
+    public final static String SimultaneouslySetInputDataAndQueryParamsInappropriate = "If use GET Method, Can't simultaneously set InputData and QueryParams.";
+
+    /**
      * 构建一个方法（Method）相关异常/警告
      * <p>
      * <font color="#666666">Build a Method related exception/warning</font>

@@ -7,7 +7,7 @@
 
     <groupId>cn.sinlmao.commons</groupId>
     <artifactId>network</artifactId>
-    <version>1.3.7</version>
+    <version>1.4.0</version>
     <name>Sinlmao Commons Network Utils</name>
     <description>Sinlmao Commons Network Utils</description>
     <url>https://github.com/sinlmao/NetworkUtils</url>

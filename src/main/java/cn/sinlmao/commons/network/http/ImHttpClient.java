@@ -19,10 +19,7 @@ import cn.sinlmao.commons.network.bean.ImBytesData;
 import cn.sinlmao.commons.network.bean.ImFileData;
 import cn.sinlmao.commons.network.bean.ImFormData;
 import cn.sinlmao.commons.network.bean.ImMultipartFormData;
-import cn.sinlmao.commons.network.exception.ContentTypeException;
-import cn.sinlmao.commons.network.exception.DataTypeException;
-import cn.sinlmao.commons.network.exception.IgnoreSSLException;
-import cn.sinlmao.commons.network.exception.MethodException;
+import cn.sinlmao.commons.network.exception.*;
 import cn.sinlmao.commons.network.tools.IgnoreSSLTool;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -125,6 +122,17 @@ public final class ImHttpClient {
                     throw new MethodException(MethodException.MethodInappropriate);
                 }
             }
+            //如果已经传入Query Parameter
+            if (imRequest.getQueryParams() != null) {
+                //如果URL中包含试图额外传值的行为，抛出异常告知开发者
+                if (imRequest.getUrl().contains("?")) {
+                    throw new QueryParamsException(QueryParamsException.AfterQueryParamsURLInappropriate);
+                }
+                //如果方法为GET，且同时InputData，抛出异常告知开发者
+                if (imRequest.getMethod() == ImMethod.GET && imRequest.getInputData() != null) {
+                    throw new MethodException(MethodException.SimultaneouslySetInputDataAndQueryParamsInappropriate);
+                }
+            }
         }
 
         //当时设置为强制在URL中传值时，进行一些必要的强制校验（不可忽略和关闭）
@@ -141,6 +149,10 @@ public final class ImHttpClient {
             if (imRequest.getContentType() != ImContentType.APPLICATION_X_WWW_FORM_URLENCODED) {
                 throw new ContentTypeException(ContentTypeException.ContentTypeInappropriate);
             }
+            //如果额外已经设置Query Parameter
+            if (imRequest.getQueryParams() != null) {
+                throw new QueryParamsException(QueryParamsException.AfterSetQueryParamsCanNotUseForceInUrlSendData);
+            }
         }
 
         //获得URL字符
@@ -150,13 +162,24 @@ public final class ImHttpClient {
         if (imRequest.isForceInUrlSendData()) {
             if (imRequest.getInputData() != null) {
                 //初始化URL值字符串
-                String urlPars = getInputDataStringForm(imRequest, true);
+                String urlPars = getInputDataToString(imRequest, true);
                 //组装URL和URL需要传的值数据
                 if (urlStr.contains("?")) {
                     urlStr += ("&" + urlPars);
                 } else {
                     urlStr += ("?" + urlPars);
                 }
+            }
+        }
+        //在URL中设置Query Params
+        if (imRequest.getQueryParams() != null) {
+            //初始化URL值字符串
+            String urlPars = getQueryParamsToString(imRequest);
+            //组装URL和URL需要传的值数据
+            if (urlStr.contains("?")) {
+                urlStr += ("&" + urlPars);
+            } else {
+                urlStr += ("?" + urlPars);
             }
         }
 
@@ -209,16 +232,29 @@ public final class ImHttpClient {
             }
         }
 
+        //开始处理Cookie
+        StringBuilder cookieStrs = new StringBuilder();
+
         //如果存在Cookie定义，则设置Cookie值
         if (imRequest.getCookieSize() > 0) {
-            Set<String> cookieNames = imRequest.getHeaderNames();
-            StringBuilder cookieStrs = new StringBuilder();
+            Set<String> cookieNames = imRequest.getCookieNames();
             for (String cookieName : cookieNames) {
                 cookieStrs.append(cookieName + "=" + imRequest.getCookieData(cookieName));
                 cookieStrs.append(";");
             }
-            String cookieStr = cookieStrs.substring(0, cookieStrs.length() - 1);
-            httpConnection.setRequestProperty("Cookie", cookieStr);
+        }
+
+        //如果需要Tomcat兼容，则需要添加必须的Cookie
+        if (imRequest.isTomcatCompatible()) {
+            if (imRequest.getCookieData("JSESSIONID") == null || "".equals(imRequest.getCookieData("JSESSIONID").trim())) {
+                cookieStrs.append("JSESSIONID=" + UUID.randomUUID().toString().replace("-", "").toUpperCase());
+                cookieStrs.append(";");
+            }
+        }
+
+        //设置Cookie
+        if (cookieStrs.length() > 1) {
+            httpConnection.setRequestProperty("Cookie", cookieStrs.substring(0, cookieStrs.length() - 1));
         }
 
         //如果存在InputData值，则设置InputData值
@@ -234,7 +270,7 @@ public final class ImHttpClient {
                 if (imRequest.getContentType() != ImContentType.APPLICATION_X_WWW_FORM_URLENCODED) {
 
                     //获取InputData的String形式
-                    inputData = getInputDataStringForm(imRequest);
+                    inputData = getInputDataToString(imRequest);
 
                     httpConnection.setDoOutput(true);
                     httpConnection.setDoInput(true);
@@ -250,7 +286,7 @@ public final class ImHttpClient {
                     }
                 } else {    //如果内容类型为表单（x-www-form-urlencoded）
 
-                    inputData = getInputDataStringForm(imRequest, true);
+                    inputData = getInputDataToString(imRequest, true);
 
                     httpConnection.setDoOutput(true);
                     httpConnection.setDoInput(true);
@@ -476,8 +512,8 @@ public final class ImHttpClient {
      * @return
      * @throws UnsupportedEncodingException
      */
-    private static String getInputDataStringForm(ImRequest imRequest) throws UnsupportedEncodingException {
-        return getInputDataStringForm(imRequest, false);
+    private static String getInputDataToString(ImRequest imRequest) throws UnsupportedEncodingException {
+        return getInputDataToString(imRequest, false);
     }
 
     /**
@@ -488,7 +524,7 @@ public final class ImHttpClient {
      * @return
      * @throws UnsupportedEncodingException
      */
-    private static String getInputDataStringForm(ImRequest imRequest, boolean forceKeyValueModel) throws UnsupportedEncodingException {
+    private static String getInputDataToString(ImRequest imRequest, boolean forceKeyValueModel) throws UnsupportedEncodingException {
         //当InputData不为空时
         if (imRequest.getInputData() != null) {
 
@@ -550,6 +586,56 @@ public final class ImHttpClient {
             }
 
             return inputData;
+        }
+        return null;
+    }
+
+    /**
+     * 获取QueryParams的String形式（含JSON字符、KeyValue字符）
+     *
+     * @param imRequest
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    private static String getQueryParamsToString(ImRequest imRequest) throws UnsupportedEncodingException {
+        //当InputData不为空时
+        if (imRequest.getQueryParams() != null) {
+
+            //初始化返回对象
+            String queryParams = "";
+
+            //如果是String类型
+            if (imRequest.getQueryParams() instanceof String) {
+                queryParams = imRequest.getQueryParams(String.class);
+            }
+            //如果是JSON类型
+            //if (imRequest.getQueryParams() instanceof JSONObject) {
+            if (imRequest.getQueryParams().getClass() == JSONObject.class) {
+                JSONObject json = imRequest.getQueryParams(JSONObject.class);
+                for (String key : json.keySet()) {
+                    if (imRequest.isUrlEncode()) {
+                        queryParams += (key + "=" + URLEncoder.encode(json.getString(key), imRequest.getCharset()) + "&");
+                    } else {
+                        queryParams += (key + "=" + json.getString(key) + "&");
+                    }
+                }
+                queryParams = queryParams.substring(0, queryParams.length() - 1);
+            }
+            //如果是Map类型
+            //if (imRequest.getQueryParams() instanceof Map) {
+            if (imRequest.getQueryParams().getClass() != JSONObject.class && imRequest.getQueryParams() instanceof Map) {
+                Map<String, String> map = imRequest.getQueryParams(Map.class);
+                for (String key : map.keySet()) {
+                    if (imRequest.isUrlEncode()) {
+                        queryParams += (key + "=" + URLEncoder.encode(map.get(key), imRequest.getCharset()) + "&");
+                    } else {
+                        queryParams += (key + "=" + map.get(key) + "&");
+                    }
+                }
+                queryParams = queryParams.substring(0, queryParams.length() - 1);
+            }
+
+            return queryParams;
         }
         return null;
     }

@@ -2,7 +2,7 @@
 
 > 一个简单地、轻量级的 Java HTTP、FTP Network 集成、封装的操作类库。
 >
-> `update：2019-10-10`  `ver：1.3.7`  `license：Apache 2.0`
+> `update：2019-11-06`  `ver：1.4.0`  `license：Apache 2.0`
 
 ----------
 
