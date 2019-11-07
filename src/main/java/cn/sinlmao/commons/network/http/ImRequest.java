@@ -56,7 +56,8 @@ public class ImRequest {
     private boolean restfulMode = false;
     private boolean forceInUrlSendData = false;
     private boolean urlEncode = false;
-    private boolean tomcatCompatible = false;
+    private boolean tomcatLowVersionCompatible = false;
+    private String userAgent;
 
     private Map<String, String> headers = new HashMap<String, String>();
     private Map<String, String> cookies = new HashMap<String, String>();
@@ -468,19 +469,32 @@ public class ImRequest {
     }
 
     /**
-     * 设置是否需要兼容Tomcat
+     * 设置是否需要兼容低版本Tomcat
      * <p>
-     * <font color="#666666">Set whether need for Tomcat compatibility</font>
+     * <font color="#666666">Set whether need for low version Tomcat compatibility</font>
      *
-     * @param tomcatCompatible 是否需要兼容Tomcat <br /> <font color="#666666">Whether you need for Tomcat compatibility</font>
+     * @param tomcatLowVersionCompatible 是否需要兼容低版本Tomcat <br /> <font color="#666666">Whether you need for low version Tomcat compatibility</font>
      * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
-    public ImRequest setTomcatCompatible(boolean tomcatCompatible) {
-        this.tomcatCompatible = tomcatCompatible;
+    public ImRequest setTomcatLowVersionCompatible(boolean tomcatLowVersionCompatible) {
+        this.tomcatLowVersionCompatible = tomcatLowVersionCompatible;
         return this;
     }
 
-    ///////////////////////////////////////////////////////////////////////
+    /**
+     * 设置用户代理（User-Agent）信息
+     * <p>
+     * <font color="#666666">Set the Use Agent （User-Agent）  information</font>
+     *
+     * @param userAgent 用户代理（User-Agent）信息 <br/> <font color="#666666">Use Agent （User-Agent）  information</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
+     */
+    public ImRequest setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+        return this;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * 添加Header，当数据已经存在，则不再添加
@@ -766,14 +780,14 @@ public class ImRequest {
     }
 
     /**
-     * 获取是否需要Tomcat兼容
+     * 获取是否需要Tomcat低版本兼容
      * <p>
-     * <font color="#666666">Get the need for Tomcat compatibility</font>
+     * <font color="#666666">Get the need for low version Tomcat compatibility</font>
      *
-     * @return 是否需要Tomcat兼容 <br /> <font color="#666666">Whether you need for Tomcat compatibility</font>
+     * @return 是否需要Tomcat低版本兼容 <br /> <font color="#666666">Whether you need for low version Tomcat compatibility</font>
      */
-    public boolean isTomcatCompatible() {
-        return tomcatCompatible;
+    public boolean isTomcatLowVersionCompatible() {
+        return tomcatLowVersionCompatible;
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -809,6 +823,23 @@ public class ImRequest {
      */
     public String getCharset() {
         return charset;
+    }
+
+    /**
+     * 获取Request会话的用户代理（User-Agent）属性
+     * <p>
+     * <font color="#666666">Get the Request User Agent（User-Agent） attribute</font>
+     *
+     * @return Request会话的用户代理（User-Agent）属性 <br /> <font color="#666666">Request User Agent（User-Agent） attribute</font>
+     */
+    public String getUserAgent() {
+        if (userAgent == null || "".equals(userAgent.trim())) {
+            userAgent = "ImHttpClient/"
+                    + ImHttpClient.VERSION + " ("
+                    + System.getProperty("os.name", "--") + " " + System.getProperty("os.arch", "--") + " " + System.getProperty("os.version", "--") + "; "
+                    + "Java " + System.getProperty("java.version", "--") + ")";
+        }
+        return userAgent;
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -911,7 +942,7 @@ public class ImRequest {
         return contentType.toString();
     }
 
-    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * 根据Header键获得对应值

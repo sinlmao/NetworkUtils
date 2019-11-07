@@ -15,10 +15,7 @@
  */
 package cn.sinlmao.commons.network.http;
 
-import cn.sinlmao.commons.network.bean.ImBytesData;
-import cn.sinlmao.commons.network.bean.ImFileData;
-import cn.sinlmao.commons.network.bean.ImFormData;
-import cn.sinlmao.commons.network.bean.ImMultipartFormData;
+import cn.sinlmao.commons.network.bean.*;
 import cn.sinlmao.commons.network.exception.*;
 import cn.sinlmao.commons.network.tools.IgnoreSSLTool;
 import com.alibaba.fastjson.JSON;
@@ -48,11 +45,66 @@ import java.util.*;
  */
 public final class ImHttpClient {
 
+    public final static String VERSION = "1.4.1";
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private final static String PREFIX = "--";
     private final static String WRAP = System.getProperty("line.separator");
 
     /**
-     * 发送请求
+     * 发起一个带会话状态的请求
+     * <p>
+     * <font color="#666666">Send a request with a session state</font>
+     *
+     * @param imRequest ImRequest会话请求数据 <br/> <font color="#666666">ImRequest Request data</font>
+     * @param imSession ImSession会话状态数据 <br/> <font color="#666666">ImSession session state data</font>
+     * @return ImResponse会话响应对象 <br/> <font color="#666666">ImResponse Response object</font>
+     * @throws SessionException     会话状态控制相关异常/警告 <br/> <font color="#666666">Session state related exception/warning</font>
+     * @throws ContentTypeException 内容类型（ContentType）使用相关异常/警告 <br/> <font color="#666666">Content Type (ContentType) uses related exceptions/warnings</font>
+     * @throws DataTypeException    数据类型使用相关异常/警告 <br/> <font color="#666666">Data type usage related exceptions/warnings</font>
+     * @throws MethodException      方法（Method）使用相关异常/警告 <br/> <font color="#666666">Method uses related exceptions/warnings</font>
+     * @throws IgnoreSSLException   忽略SSL相关异常/警告 <br/> <font color="#666666">Ignore SSL related exceptions/warnings</font>
+     * @throws QueryParamsException 查询参数（QueryParams）相关异常/警告类 <br/> <font color="#666666">Query parameters (QueryParams) related exception/warning</font>
+     * @throws IOException          IO异常 <br/> <font color="#666666">IO exception</font>
+     * @since 1.4.1
+     */
+    public static ImResponse send(ImRequest imRequest, ImSession imSession)
+            throws SessionException, ContentTypeException, DataTypeException, MethodException, IgnoreSSLException, QueryParamsException, IOException {
+
+        //非空判断
+        if (imRequest == null || imSession == null) {
+            throw new NullPointerException();
+        }
+
+        //处理Header数据和状态
+        if (imSession.getHeaders().size() > 0) {
+            imRequest.setHeader(imSession.getHeaders());
+        }
+        //处理Cookie数据和状态
+        if (imSession.getCookies().size() > 0) {
+            imRequest.setCookie(imSession.getCookies());
+        }
+
+        //获得ImResponse对象
+        ImResponse imResponse = send(imRequest);
+
+        //处理Cookie数据并管理
+        if (imResponse.getCookieSize() > 0) {
+            Set<String> cookieNames = imResponse.getCookieNames();
+            for (String cookieName : cookieNames) {
+                if (imSession.getCookies().containsKey(cookieName)) {
+                    imSession.getCookies().remove(cookieName);
+                }
+                imSession.getCookies().put(cookieName, imResponse.getCookieData(cookieName));
+            }
+        }
+
+        return imResponse;
+    }
+
+    /**
+     * 发起请求
      * <p>
      * <font color="#666666">Send Request</font>
      *
@@ -62,10 +114,16 @@ public final class ImHttpClient {
      * @throws DataTypeException    数据类型使用相关异常/警告 <br/> <font color="#666666">Data type usage related exceptions/warnings</font>
      * @throws MethodException      方法（Method）使用相关异常/警告 <br/> <font color="#666666">Method uses related exceptions/warnings</font>
      * @throws IgnoreSSLException   忽略SSL相关异常/警告 <br/> <font color="#666666">Ignore SSL related exceptions/warnings</font>
+     * @throws QueryParamsException 查询参数（QueryParams）相关异常/警告类 <br/> <font color="#666666">Query parameters (QueryParams) related exception/warning</font>
      * @throws IOException          IO异常 <br/> <font color="#666666">IO exception</font>
      */
     public static ImResponse send(ImRequest imRequest)
-            throws ContentTypeException, DataTypeException, MethodException, IgnoreSSLException, IOException {
+            throws ContentTypeException, DataTypeException, MethodException, IgnoreSSLException, QueryParamsException, IOException {
+
+        //非空判断
+        if (imRequest == null) {
+            throw new NullPointerException();
+        }
 
         //初始化分隔符（如果为文件上传(multipart/form-data)模式的时候）
         String boundary = "--------------------------" + String.valueOf(System.currentTimeMillis()); // boundary就是request头和上传文件内容的分隔符
@@ -197,6 +255,8 @@ public final class ImHttpClient {
         httpConnection.setRequestMethod(imRequest.getMethod().toString());
         //设置是否使用缓存
         httpConnection.setUseCaches(imRequest.isUseCache());
+        //设置User-Agent
+        httpConnection.setRequestProperty("User-Agent", imRequest.getUserAgent());
         //设置接收编码
         httpConnection.setRequestProperty("Accept-Charset", imRequest.getCharset());
         //设置接收内容类型
@@ -244,8 +304,8 @@ public final class ImHttpClient {
             }
         }
 
-        //如果需要Tomcat兼容，则需要添加必须的Cookie
-        if (imRequest.isTomcatCompatible()) {
+        //如果需要Tomcat低版本兼容，则需要添加必须的Cookie
+        if (imRequest.isTomcatLowVersionCompatible()) {
             if (imRequest.getCookieData("JSESSIONID") == null || "".equals(imRequest.getCookieData("JSESSIONID").trim())) {
                 cookieStrs.append("JSESSIONID=" + UUID.randomUUID().toString().replace("-", "").toUpperCase());
                 cookieStrs.append(";");
@@ -470,25 +530,71 @@ public final class ImHttpClient {
 
         //获得Header和Cookie
         Map<String, List<String>> headers = httpConnection.getHeaderFields();
+        //获得Header键数据
         Set<String> headerNames = headers.keySet();
+        //遍历Header
         for (Iterator<String> iterator = headerNames.iterator(); iterator.hasNext(); ) {
+            //获得Header键值
             String headerName = iterator.next();
+            //处理Cookie数据
             if ("Set-Cookie".equals(headerName)) {
+                //获得Cookie数据
                 List<String> headerData = headers.get(headerName);
+                //初始化StringBuilder
                 StringBuilder builder = new StringBuilder();
+                //遍历Cookie数据
                 for (String data : headerData) {
-                    builder.append(data).toString();
+                    //拼接Cookie属性字符串
+                    builder.append(data).append(",");
+                    //分割数据
                     String[] strs_arry = data.split("; ");
+                    //初始化Cookie属性对象
+                    ImResponseCookie imResponseCookie = new ImResponseCookie();
                     for (String str : strs_arry) {
-                        String[] str_arry = str.split("=");
-                        if (str_arry.length == 2) {
-                            imResponse.addCookie(str_arry[0], str_arry[1]);
+                        //构建数组，以存放Cookie分割信息
+                        String[] str_arry = new String[2];
+                        //获得需要分割的索引
+                        int index = str.indexOf("=");
+                        //如果没有=号，说此为标记符，此时只需要获得键值
+                        if (index < 0) {
+                            index = str.length();
+                        }
+                        //设置Cookie分割后的信息
+                        str_arry[0] = str.substring(0, index);
+                        //判断是否有=号
+                        if (str.indexOf("=") > 0) {
+                            str_arry[1] = str.substring(index + 1);
                         } else {
-                            imResponse.addCookie(str_arry[0], null);
+                            //如果没有=号，说此为标记符
+                            str_arry[1] = "null";
+                        }
+                        //开始处理Cookie属性
+                        if ("domain".equalsIgnoreCase(str_arry[0])) {   //处理Cookie的domain属性
+                            imResponseCookie.setDomain(str_arry[1]);
+                        } else if ("path".equalsIgnoreCase(str_arry[0])) {  //处理Cookie的path属性
+                            imResponseCookie.setPath(str_arry[1]);
+                        } else if ("expires".equalsIgnoreCase(str_arry[0])) {   //处理Cookie的expires属性
+                            imResponseCookie.setExpires(str_arry[1]);
+                        } else if ("max-age".equalsIgnoreCase(str_arry[0])) {   //处理Cookie的max-age属性
+                            imResponseCookie.setMaxAge(str_arry[1]);
+                        } else if ("secure".equalsIgnoreCase(str_arry[0])) {    //处理Cookie的secure属性
+                            imResponseCookie.setSecure(true);
+                        } else if ("httponly".equalsIgnoreCase(str_arry[0])) {  //处理Cookie的httpOnly属性
+                            imResponseCookie.setHttpOnly(true);
+                        } else {
+                            //处理Cookie的Kay-Value属性
+                            if (imResponseCookie.getName() == null) {
+                                imResponseCookie.setName(str_arry[0]);
+                                imResponseCookie.setValue(str_arry.length > 2 ? "null" : str_arry[1]);
+                                imResponse.addCookie(str_arry[0], str_arry.length > 2 ? "null" : str_arry[1]);
+                            }
                         }
                     }
+                    //添加到Cookie属性数据
+                    imResponse.addCookieProperty(imResponseCookie);
                 }
-                cookieStr = builder.toString();
+                //设置Cookie完整字符串数据
+                cookieStr = builder.substring(0, builder.length() - 1).toString();
             }
         }
 
@@ -533,7 +639,11 @@ public final class ImHttpClient {
 
             //如果是String类型
             if (imRequest.getInputData() instanceof String) {
-                inputData = imRequest.getInputData(String.class);
+                if (imRequest.isUrlEncode()) {
+                    inputData = URLEncoder.encode(imRequest.getInputData(String.class), imRequest.getCharset());
+                } else {
+                    inputData = imRequest.getInputData(String.class);
+                }
             }
             //如果是JSON类型
             //if (imRequest.getInputData() instanceof JSONObject) {
@@ -606,7 +716,11 @@ public final class ImHttpClient {
 
             //如果是String类型
             if (imRequest.getQueryParams() instanceof String) {
-                queryParams = imRequest.getQueryParams(String.class);
+                if (imRequest.isUrlEncode()) {
+                    queryParams = URLEncoder.encode(imRequest.getQueryParams(String.class), imRequest.getCharset());
+                } else {
+                    queryParams = imRequest.getQueryParams(String.class);
+                }
             }
             //如果是JSON类型
             //if (imRequest.getQueryParams() instanceof JSONObject) {
@@ -634,7 +748,6 @@ public final class ImHttpClient {
                 }
                 queryParams = queryParams.substring(0, queryParams.length() - 1);
             }
-
             return queryParams;
         }
         return null;

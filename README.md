@@ -2,7 +2,7 @@
 
 > 一个简单地、轻量级的 Java HTTP、FTP Network 集成、封装的操作类库。
 >
-> `update：2019-11-06`  `ver：1.4.0`  `license：Apache 2.0`
+> `update：2019-11-08`  `ver：1.4.2`  `license：Apache 2.0`
 
 ----------
 
@@ -26,6 +26,7 @@
 >  - 支持快捷设置InData数据；
 >  - 支持配置忽略SSL证书验证（v1.2.5+）；
 >  - 支持文件上传（v1.3.0+）；
+>  - 支持会话状态管理（v1.4.1+）；
 
 **`v1.2.1`** 开始较之前有相对比较大的变更，如果直接升级还请注意使用情况。考虑到向下兼容的问题，`v1.1.x` 版本的相关类保留但标记为过期，并且不再维护（除BUG外）。
 
@@ -38,14 +39,14 @@
     <dependency>
         <groupId>cn.sinlmao.commons</groupId>
         <artifactId>network</artifactId>
-        <version>1.3.7</version>
+        <version>1.4.2</version>
     </dependency>
 
 ## 2. Android（Gradle）
 
 如果在Android中使用（Java 1.8+），在Gradle设置如下：
 
-    implementation 'cn.sinlmao.commons:network:1.3.7'
+    implementation 'cn.sinlmao.commons:network:1.4.2'
 
 # 三、使用说明
 
@@ -160,5 +161,42 @@ HTTP文件上传是 Sinlmao Commons Network Utils `v1.3.0` 开始支持的新特
     String rs = imResponse.getStringContent();
     //打印返回数据
     System.out.println(rs);
+
+### 3.2.8 使用QueryString请求（v1.4.0+）
+
+从 `v1.4.0` 我们开始支持QueryString请求的新特性，用于更好的支持或专项用于URL传参的场景。代码如下：
+
+    //包装参数
+    Map<String, String> pars = new HashMap<String, String>();
+    pars.put("q", "baidu");
+    pars.put("ie", "utf-8");
+    //构建Request
+    ImRequest imRequest = new ImRequest("url");
+    //传入QueryString参数
+    imRequest.setQueryParams(pars);
+    //发送请求
+    ImResponse imResponse = ImHttpClient.send(imRequest);
+    //获得返回数据
+    String rs = imResponse.getStringContent();
+    //打印返回数据
+    System.out.println(rs);
+
+### 3.2.9 会话状态管理（v1.4.1+）
+
+会话状态管理，这是从 Sinlmao Commons Network Utils `v1.4.1` 开始支持的新特性，使用时请注意更新版本。会话状态管理会自动帮您管理与服务端的状态或身份数据，简化在业务代码上的复杂逻辑。使用时只需要配置甚至简单构造一个 ImSession 即可，完全不需要您的额外参与，示例代码如下：
+
+    //构建Session
+    ImSession imSession = new ImSession();
+    //构建Request
+    ImRequest imRequest = new ImRequest("url");
+    //发送请求
+    ImResponse imResponse = ImHttpClient.send(imRequest, imSession);
+    
+### 3.2.10 自定义用户代理（User-Agent，UA）信息（v1.4.1+）
+
+`v1.4.1` 还有有一个新的特性，就是可以自定义用户代理（User-Agent，UA）信息，示例代码如下：
+
+    //自定义User-Agent
+    imRequest.setUserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.163 Safari/535.1");
 
   [1]: README.en.md

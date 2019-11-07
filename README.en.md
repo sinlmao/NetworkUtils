@@ -2,7 +2,7 @@
 
 > A Simple, Lightly Java whit HTTP / FTP network integration operational class library.
 >
-> `update：2019-11-06`  `ver：1.4.0`  `license：Apache 2.0`
+> `update：2019-11-08`  `ver：1.4.2`  `license：Apache 2.0`
 
 *This document is partially translated using a translation tool. If there is something wrong, please forgive me.*
 
@@ -26,6 +26,7 @@ The features currently released (or the operational features provided) are as fo
 >  - Support for convenient setting of InputData data;
 >  - Support configuration to ignore SSL certificate verification (v1.2.5+);
 >  - Support file Upload (v1.3.0+);
+>  - Support session state management (v1.4.1+);
 
 **`v1.2.1`** starts to have relatively large changes before, if you upgrade directly, please pay attention to the use. Considering the issue of backward compatibility, the related classes of the `v1.1.x` version are reserved but marked as expired and are no longer maintained (except for BUGs).
 
@@ -38,14 +39,14 @@ Introduced by Maven, set directly in the POM:
     <dependency>
         <groupId>cn.sinlmao.commons</groupId>
         <artifactId>network</artifactId>
-        <version>1.3.7</version>
+        <version>1.4.2</version>
     </dependency>
 
 ## 2.2 Android（Gradle）
 
 If used in Android (Java 1.8+), the settings in Gradle:
 
-    implementation 'cn.sinlmao.commons:network:1.3.7'
+    implementation 'cn.sinlmao.commons:network:1.4.2'
 
 # III. Instruction Manual
 
@@ -135,7 +136,7 @@ We have all experienced the need to submit a series of parameters to the server 
     //Pass in JSONObject type data (simulation)
     imRequest.setInputData(JSONObject);
 
-### 2.7 File Upload (v1.3.0+)
+### 3.2.7 File Upload (v1.3.0+)
 
 HTTP file upload is a new feature supported by Sinalmao Commons Network Utils `v1.3.0`. It encapsulates complex and even very abstract file upload code logic and simplifies it into a simple data type. With a consistent call method, only specific settings need to be set. With content types and methods, you can easily implement file upload requirements. code show as below:
 
@@ -161,5 +162,41 @@ HTTP file upload is a new feature supported by Sinalmao Commons Network Utils `v
     //Print return data
     System.out.println(rs);
 
+### 3.2.8 Using QueryString Request (v1.4.0+)
+
+From `v1.4.0` we started supporting the new features of QueryString requests for better support or special scenarios for URL passing. code show as below:
+
+    //Packaging parameters
+    Map<String, String> pars = new HashMap<String, String>();
+    Pars.put("q", "baidu");
+    Pars.put("ie", "utf-8");
+    //Build Request
+    ImRequest imRequest = new ImRequest("url");
+    //Incoming QueryString parameter
+    imRequest.setQueryParams(pars);
+    //send request
+    ImResponse imResponse = ImHttpClient.send(imRequest);
+    //Get the return data
+    String rs = imResponse.getStringContent();
+    //Print return data
+    System.out.println(rs);
+
+### 3.2.9 Session State Management (v1.4.1+)
+
+Session state management, which is a new feature supported from Sinlmao Commons Network Utils `v1.4.1`. Please pay attention to the updated version when using it. Session state management automatically manages the state or identity data with the server and simplifies the complex logic on the business code. You only need to configure or even simply construct an ImSession when you use it. You don't need your extra participation at all. The sample code is as follows:
+
+    //Build Session
+    ImSession imSession = new ImSession();
+    //Build Request
+    ImRequest imRequest = new ImRequest("url");
+    //send request
+    mResponse imResponse = ImHttpClient.send(imRequest, imSession);
+
+### 3.2.10 Custom User Agent (UA) Information (v1.4.1+)
+
+There is also a new feature in `v1.4.1`, which is to customize the User-Agent (UA) information. The sample code is as follows:
+
+    //Custom User-Agent
+    imRequest.setUserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.163 Safari/535.1");
 
   [1]: README.md

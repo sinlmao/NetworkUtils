@@ -15,6 +15,8 @@
  */
 package cn.sinlmao.commons.network.http;
 
+import cn.sinlmao.commons.network.bean.ImResponseCookie;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +46,7 @@ public final class ImResponse {
     private Map<String, List<String>> headers = new HashMap<String, List<String>>();
     private String cookieStr;
     private Map<String, String> cookies = new HashMap<String, String>();
+    private Map<String, ImResponseCookie> cookiePropertys = new HashMap<String, ImResponseCookie>();
 
     ///////////////////////////////////////////////////////////////////////
 
@@ -123,6 +126,20 @@ public final class ImResponse {
      */
     protected ImResponse addCookie(String name, String data) {
         cookies.put(name, data);
+        return this;
+    }
+
+    /**
+     * [内部] 添加Cookies属性数据
+     * <p>
+     * <font color="#666666">[Internal] Add cookie property data</font>
+     *
+     * @param imResponseCookie Cookie键 <br/> <font color="#666666">Cookie property data</font>
+     * @return ImResponse ImResponse响应实体对象 <br/> ImResponse response entity object</font>
+     * @since 1.4.1
+     */
+    protected ImResponse addCookieProperty(ImResponseCookie imResponseCookie) {
+        cookiePropertys.put(imResponseCookie.getName(), imResponseCookie);
         return this;
     }
 
@@ -225,6 +242,18 @@ public final class ImResponse {
      */
     public String getCookieData(String name) {
         return cookies.get(name);
+    }
+
+    /**
+     * 根据Cookie键获取对象属性
+     * <p>
+     * <font color="#666666">Get the object property according to the Cookie key</font>
+     *
+     * @param name Cookie键 <br/> <font color="#666666">Cookie key</font>
+     * @return Cookie值 <br/> <font color="#666666">Cookie property</font>
+     */
+    public ImResponseCookie getCookieProperty(String name) {
+        return cookiePropertys.get(name);
     }
 
     /**
