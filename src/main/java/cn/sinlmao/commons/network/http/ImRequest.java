@@ -18,6 +18,7 @@ package cn.sinlmao.commons.network.http;
 import cn.sinlmao.commons.network.bean.ImBytesData;
 import cn.sinlmao.commons.network.bean.ImFileData;
 import cn.sinlmao.commons.network.bean.ImMultipartFormData;
+import cn.sinlmao.commons.network.callback.ImHttpClientCallback;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.HashMap;
@@ -58,6 +59,8 @@ public class ImRequest {
     private boolean urlEncode = false;
     private boolean tomcatLowVersionCompatible = false;
     private String userAgent;
+    private boolean async = false;
+    private ImHttpClientCallback callback;
 
     private Map<String, String> headers = new HashMap<String, String>();
     private Map<String, String> cookies = new HashMap<String, String>();
@@ -494,6 +497,42 @@ public class ImRequest {
         return this;
     }
 
+    /**
+     * 设置是否异步执行请求
+     * <p>
+     * <font color="#666666">Set whether to execute the request asynchronously</font>
+     * <p>
+     * 请注意，执行异步请求后，您的代码将不会在过程中同步，返回的ImResponse是一个空值，您需要实现ImHttpCallback获得相应正确的ImResponse
+     * <p>
+     * <font color="#666666">Note that after executing an asynchronous request, your code will not be synchronized in the process, the returned ImResponse is a null value, you need to implement ImHttpCallback to get the correct ImResponse</font>
+     *
+     * @param async 是否异步执行请求 <br /> <font color="#666666">Whether to execute the request asynchronously</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
+     * @see ImHttpClientCallback
+     */
+    public ImRequest setAsync(boolean async) {
+        this.async = async;
+        return this;
+    }
+
+    /**
+     * 设置是否异步执行请求
+     * <p>
+     * <font color="#666666">Set whether to execute the request asynchronously</font>
+     * <p>
+     * 请注意，执行异步请求后，您的代码将不会在过程中同步，返回的ImResponse是一个空值，您需要实现ImHttpCallback获得相应正确的ImResponse
+     * <p>
+     * <font color="#666666">Note that after executing an asynchronous request, your code will not be synchronized in the process, the returned ImResponse is a null value, you need to implement ImHttpCallback to get the correct ImResponse</font>
+     *
+     * @param callback 是否异步执行请求 <br /> <font color="#666666">Whether to execute the request asynchronously</font>
+     * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
+     * @see ImHttpClientCallback
+     */
+    public ImRequest setCallback(ImHttpClientCallback callback) {
+        this.callback = callback;
+        return this;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -556,7 +595,7 @@ public class ImRequest {
      * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setHeader(String name, String value) {
-        if (!headers.containsKey(name)) {
+        if (headers.containsKey(name)) {
             headers.remove(name);
         }
         headers.put(name, value);
@@ -659,7 +698,7 @@ public class ImRequest {
      * @return ImRequest对象实体 <br/> <font color="#666666">ImRequest object entity</font>
      */
     public ImRequest setCookie(String name, String value) {
-        if (!cookies.containsKey(name)) {
+        if (cookies.containsKey(name)) {
             cookies.remove(name);
         }
         cookies.put(name, value);
@@ -790,6 +829,40 @@ public class ImRequest {
         return tomcatLowVersionCompatible;
     }
 
+    /**
+     * 获取Request会话的用户代理（User-Agent）属性
+     * <p>
+     * <font color="#666666">Get the Request User Agent（User-Agent） attribute</font>
+     *
+     * @return Request会话的用户代理（User-Agent）属性 <br /> <font color="#666666">Request User Agent（User-Agent） attribute</font>
+     */
+    public String getUserAgent() {
+        if (userAgent == null || "".equals(userAgent.trim())) {
+            userAgent = "ImHttpClient/"
+                    + ImHttpClient.VERSION + " ("
+                    + System.getProperty("os.name", "--") + " " + System.getProperty("os.arch", "--")
+                    + " " + System.getProperty("os.version", "--") + "; "
+                    + "Java " + System.getProperty("java.version", "--") + ")";
+        }
+        return userAgent;
+    }
+
+    /**
+     * 获取是否异步执行请求
+     * <p>
+     * <font color="#666666">Get whether to execute the request asynchronously</font>
+     * <p>
+     * 请注意，执行异步请求后，您的代码将不会在过程中同步，返回的ImResponse是一个空值，您需要实现ImHttpCallback获得相应正确的ImResponse
+     * <p>
+     * <font color="#666666">Note that after executing an asynchronous request, your code will not be synchronized in the process, the returned ImResponse is a null value, you need to implement ImHttpCallback to get the correct ImResponse</font>
+     *
+     * @return 是否异步执行请求 <br/> <font color="#666666">Whether to execute the request asynchronously</font>
+     * @see ImHttpClientCallback
+     */
+    public boolean isAsync() {
+        return async;
+    }
+
     ///////////////////////////////////////////////////////////////////////
 
     /**
@@ -823,23 +896,6 @@ public class ImRequest {
      */
     public String getCharset() {
         return charset;
-    }
-
-    /**
-     * 获取Request会话的用户代理（User-Agent）属性
-     * <p>
-     * <font color="#666666">Get the Request User Agent（User-Agent） attribute</font>
-     *
-     * @return Request会话的用户代理（User-Agent）属性 <br /> <font color="#666666">Request User Agent（User-Agent） attribute</font>
-     */
-    public String getUserAgent() {
-        if (userAgent == null || "".equals(userAgent.trim())) {
-            userAgent = "ImHttpClient/"
-                    + ImHttpClient.VERSION + " ("
-                    + System.getProperty("os.name", "--") + " " + System.getProperty("os.arch", "--") + " " + System.getProperty("os.version", "--") + "; "
-                    + "Java " + System.getProperty("java.version", "--") + ")";
-        }
-        return userAgent;
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -1014,7 +1070,6 @@ public class ImRequest {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
     protected boolean isEnableProxyServer() {
         return enableProxyServer;
     }
@@ -1025,5 +1080,9 @@ public class ImRequest {
 
     protected String getProxyServerPort() {
         return proxyServerPort;
+    }
+
+    protected ImHttpClientCallback getCallback() {
+        return callback;
     }
 }

@@ -2,7 +2,7 @@
 
 > 一个简单地、轻量级的 Java HTTP、FTP Network 集成、封装的操作类库。
 >
-> `update：2019-11-08`  `ver：1.4.2`  `license：Apache 2.0`
+> `update：2019-11-12`  `ver：1.4.3`  `license：Apache 2.0`
 
 ----------
 
@@ -60,6 +60,7 @@ Sinlmao Commons Network Utils 的构成非常简洁明了，分别由下面的�
 >  - **ImRequest** 发起HTTP请求的Request的数据包装类
 >  - **ImMethod** 用于指定 HTTP Request（ImRequest）的Method枚举类
 >  - **ImResponse** 完成HTTP请求的数据包装类
+>  - **ImSession** 用于存储会话状态控制的数据对象类
 
 ## 3.2 简单示例
 

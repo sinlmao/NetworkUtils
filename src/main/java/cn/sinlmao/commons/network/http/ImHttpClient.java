@@ -16,6 +16,8 @@
 package cn.sinlmao.commons.network.http;
 
 import cn.sinlmao.commons.network.bean.*;
+import cn.sinlmao.commons.network.callback.ImHttpClientCallback;
+import cn.sinlmao.commons.network.callback.ImSessionCallback;
 import cn.sinlmao.commons.network.exception.*;
 import cn.sinlmao.commons.network.tools.IgnoreSSLTool;
 import com.alibaba.fastjson.JSON;
@@ -27,6 +29,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * <b>HTTP Client实现类</b>
@@ -39,74 +43,92 @@ import java.util.*;
  * using the send method to initiate the request.
  *
  * @author Sinlmao
+ * @version 1.4.3
  * @program Sinlmao Commons Network Utils
  * @description HTTP Client实现类
  * @create 2019-08-01 11:11
  */
 public final class ImHttpClient {
 
-    public final static String VERSION = "1.4.1";
+    public final static String VERSION = "1.4.3";
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private final static String PREFIX = "--";
     private final static String WRAP = System.getProperty("line.separator");
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private static ThreadFactory THREAD_FACTORY = Executors.defaultThreadFactory();
+
     /**
      * 发起一个带会话状态的请求
      * <p>
      * <font color="#666666">Send a request with a session state</font>
+     * <p>
+     * 请注意，如果在ImRequest中指示为异步请求，那么此时返回的ImResponse将会是空值，需要在ImRequest中另行实现ImHttpCallback接口才能获得返回值
+     * <p>
+     * <font color="#666666">Note that if the asynchronous request is indicated in the ImRequest, then the ImResponse returned at this time will be null,
+     * and the ImHttpCallback interface needs to be implemented separately in the ImRequest to get the return value.</font>
      *
      * @param imRequest ImRequest会话请求数据 <br/> <font color="#666666">ImRequest Request data</font>
      * @param imSession ImSession会话状态数据 <br/> <font color="#666666">ImSession session state data</font>
      * @return ImResponse会话响应对象 <br/> <font color="#666666">ImResponse Response object</font>
-     * @throws SessionException     会话状态控制相关异常/警告 <br/> <font color="#666666">Session state related exception/warning</font>
-     * @throws ContentTypeException 内容类型（ContentType）使用相关异常/警告 <br/> <font color="#666666">Content Type (ContentType) uses related exceptions/warnings</font>
-     * @throws DataTypeException    数据类型使用相关异常/警告 <br/> <font color="#666666">Data type usage related exceptions/warnings</font>
-     * @throws MethodException      方法（Method）使用相关异常/警告 <br/> <font color="#666666">Method uses related exceptions/warnings</font>
-     * @throws IgnoreSSLException   忽略SSL相关异常/警告 <br/> <font color="#666666">Ignore SSL related exceptions/warnings</font>
-     * @throws QueryParamsException 查询参数（QueryParams）相关异常/警告类 <br/> <font color="#666666">Query parameters (QueryParams) related exception/warning</font>
-     * @throws IOException          IO异常 <br/> <font color="#666666">IO exception</font>
+     * @throws SessionException        会话状态控制相关异常/警告 <br/> <font color="#666666">Session state related exception/warning</font>
+     * @throws ContentTypeException    内容类型（ContentType）使用相关异常/警告 <br/> <font color="#666666">Content Type (ContentType) uses related exceptions/warnings</font>
+     * @throws DataTypeException       数据类型使用相关异常/警告 <br/> <font color="#666666">Data type usage related exceptions/warnings</font>
+     * @throws MethodException         方法（Method）使用相关异常/警告 <br/> <font color="#666666">Method uses related exceptions/warnings</font>
+     * @throws IgnoreSSLException      忽略SSL相关异常/警告 <br/> <font color="#666666">Ignore SSL related exceptions/warnings</font>
+     * @throws QueryParamsException    查询参数（QueryParams）相关异常/警告类 <br/> <font color="#666666">Query parameters (QueryParams) related exception/warning</font>
+     * @throws AuthenticationException 身份认证相关异常/警告类 <br/> <font color="#666666">Authentication related exception/warning</font>
+     * @throws IOException             IO异常 <br/> <font color="#666666">IO exception</font>
+     * @see ImRequest
+     * @see ImSession
      * @since 1.4.1
      */
     public static ImResponse send(ImRequest imRequest, ImSession imSession)
-            throws SessionException, ContentTypeException, DataTypeException, MethodException, IgnoreSSLException, QueryParamsException, IOException {
+            throws SessionException, ContentTypeException, DataTypeException, MethodException, IgnoreSSLException, QueryParamsException, AuthenticationException, IOException {
 
         //非空判断
         if (imRequest == null || imSession == null) {
             throw new NullPointerException();
         }
 
-        //处理Header数据和状态
-        if (imSession.getHeaders().size() > 0) {
-            imRequest.setHeader(imSession.getHeaders());
-        }
-        //处理Cookie数据和状态
-        if (imSession.getCookies().size() > 0) {
-            imRequest.setCookie(imSession.getCookies());
-        }
-
-        //获得ImResponse对象
-        ImResponse imResponse = send(imRequest);
-
-        //处理Cookie数据并管理
-        if (imResponse.getCookieSize() > 0) {
-            Set<String> cookieNames = imResponse.getCookieNames();
-            for (String cookieName : cookieNames) {
-                if (imSession.getCookies().containsKey(cookieName)) {
-                    imSession.getCookies().remove(cookieName);
+        //如果是异步执行
+        if (imRequest.isAsync()) {
+            //异步执行
+            THREAD_FACTORY.newThread(() -> {
+                ImHttpClientCallback callback = imRequest.getCallback();
+                try {
+                    //具体执行
+                    ImResponse imResponse = execute(imRequest, imSession);
+                    //如果已经设置回调接口，执行回调
+                    if (callback != null) {
+                        callback.onSuccess(imRequest, imResponse);
+                        callback.onComplete(imRequest, imResponse);
+                    }
+                } catch (ContentTypeException | DataTypeException | MethodException | IgnoreSSLException | QueryParamsException | IOException e) {
+                    if (callback != null) {
+                        callback.onError(imRequest);
+                        callback.onComplete(imRequest, null);
+                    }
                 }
-                imSession.getCookies().put(cookieName, imResponse.getCookieData(cookieName));
-            }
+            }).start();
+            return null;
+        } else {    //如果不是异步执行（同步执行）
+            return execute(imRequest, imSession);
         }
-
-        return imResponse;
     }
 
     /**
      * 发起请求
      * <p>
      * <font color="#666666">Send Request</font>
+     * <p>
+     * 请注意，如果在ImRequest中指示为异步请求，那么此时返回的ImResponse将会是空值，需要在ImRequest中另行实现ImHttpCallback接口才能获得返回值
+     * <p>
+     * <font color="#666666">Note that if the asynchronous request is indicated in the ImRequest, then the ImResponse returned at this time will be null,
+     * and the ImHttpCallback interface needs to be implemented separately in the ImRequest to get the return value.</font>
      *
      * @param imRequest ImRequest会话请求数据 <br/> <font color="#666666">ImRequest Request data</font>
      * @return ImResponse会话响应对象 <br/> <font color="#666666">ImResponse Response object</font>
@@ -116,6 +138,7 @@ public final class ImHttpClient {
      * @throws IgnoreSSLException   忽略SSL相关异常/警告 <br/> <font color="#666666">Ignore SSL related exceptions/warnings</font>
      * @throws QueryParamsException 查询参数（QueryParams）相关异常/警告类 <br/> <font color="#666666">Query parameters (QueryParams) related exception/warning</font>
      * @throws IOException          IO异常 <br/> <font color="#666666">IO exception</font>
+     * @see ImRequest
      */
     public static ImResponse send(ImRequest imRequest)
             throws ContentTypeException, DataTypeException, MethodException, IgnoreSSLException, QueryParamsException, IOException {
@@ -124,6 +147,47 @@ public final class ImHttpClient {
         if (imRequest == null) {
             throw new NullPointerException();
         }
+
+        //如果是异步执行
+        if (imRequest.isAsync()) {
+            //异步执行
+            THREAD_FACTORY.newThread(() -> {
+                ImHttpClientCallback callback = imRequest.getCallback();
+                try {
+                    //具体执行
+                    ImResponse imResponse = execute(imRequest);
+                    //如果已经设置回调接口，执行回调
+                    if (callback != null) {
+                        callback.onSuccess(imRequest, imResponse);
+                        callback.onComplete(imRequest, imResponse);
+                    }
+                } catch (ContentTypeException | DataTypeException | MethodException | IgnoreSSLException | QueryParamsException | IOException e) {
+                    if (callback != null) {
+                        callback.onError(imRequest);
+                        callback.onComplete(imRequest, null);
+                    }
+                }
+            }).start();
+            return null;
+        } else {    //如果不是异步执行（同步执行）
+            return execute(imRequest);
+        }
+    }
+
+    /**
+     * 【内部方法】 发起会话请求
+     *
+     * @param imRequest ImRequest会话请求数据 <br/> <font color="#666666">ImRequest Request data</font>
+     * @return ImResponse会话响应对象 <br/> <font color="#666666">ImResponse Response object</font>
+     * @throws ContentTypeException 内容类型（ContentType）使用相关异常/警告 <br/> <font color="#666666">Content Type (ContentType) uses related exceptions/warnings</font>
+     * @throws DataTypeException    数据类型使用相关异常/警告 <br/> <font color="#666666">Data type usage related exceptions/warnings</font>
+     * @throws MethodException      方法（Method）使用相关异常/警告 <br/> <font color="#666666">Method uses related exceptions/warnings</font>
+     * @throws IgnoreSSLException   忽略SSL相关异常/警告 <br/> <font color="#666666">Ignore SSL related exceptions/warnings</font>
+     * @throws QueryParamsException 查询参数（QueryParams）相关异常/警告类 <br/> <font color="#666666">Query parameters (QueryParams) related exception/warning</font>
+     * @throws IOException          IO异常 <br/> <font color="#666666">IO exception</font>
+     */
+    private static ImResponse execute(ImRequest imRequest)
+            throws ContentTypeException, DataTypeException, MethodException, IgnoreSSLException, QueryParamsException, IOException {
 
         //初始化分隔符（如果为文件上传(multipart/form-data)模式的时候）
         String boundary = "--------------------------" + String.valueOf(System.currentTimeMillis()); // boundary就是request头和上传文件内容的分隔符
@@ -251,6 +315,15 @@ public final class ImHttpClient {
         URL url = new URL(urlStr);
         //获得HttpURLConnection
         HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
+
+        //获得回调接口
+        ImHttpClientCallback callback = imRequest.getCallback();
+        //如果已经定义回调接口
+        if (callback != null) {
+            //执行回调接口
+            callback.onCallRequest(imRequest);
+        }
+
         //设置Method
         httpConnection.setRequestMethod(imRequest.getMethod().toString());
         //设置是否使用缓存
@@ -612,6 +685,101 @@ public final class ImHttpClient {
     }
 
     /**
+     * 【内部方法】 发起一个带会话状态的请求
+     *
+     * @param imRequest ImRequest会话请求数据 <br/> <font color="#666666">ImRequest Request data</font>
+     * @return ImResponse会话响应对象 <br/> <font color="#666666">ImResponse Response object</font>
+     * @throws ContentTypeException 内容类型（ContentType）使用相关异常/警告 <br/> <font color="#666666">Content Type (ContentType) uses related exceptions/warnings</font>
+     * @throws DataTypeException    数据类型使用相关异常/警告 <br/> <font color="#666666">Data type usage related exceptions/warnings</font>
+     * @throws MethodException      方法（Method）使用相关异常/警告 <br/> <font color="#666666">Method uses related exceptions/warnings</font>
+     * @throws IgnoreSSLException   忽略SSL相关异常/警告 <br/> <font color="#666666">Ignore SSL related exceptions/warnings</font>
+     * @throws QueryParamsException 查询参数（QueryParams）相关异常/警告类 <br/> <font color="#666666">Query parameters (QueryParams) related exception/warning</font>
+     * @throws IOException          IO异常 <br/> <font color="#666666">IO exception</font>
+     */
+    private static ImResponse execute(ImRequest imRequest, ImSession imSession)
+            throws ContentTypeException, DataTypeException, MethodException, IgnoreSSLException, QueryParamsException, IOException {
+
+        //处理Header数据和状态
+        if (imSession.getHeaders().size() > 0) {
+            imRequest.setHeader(imSession.getHeaders());
+        }
+        //处理Cookie数据和状态
+        if (imSession.getCookies().size() > 0) {
+            imRequest.setCookie(imSession.getCookies());
+        }
+
+        //获得回调接口
+        ImSessionCallback callback = imSession.getCallback();
+
+        //如果已经设置回调接口，执行回调
+        if (callback != null) {
+            //获得是否正在执行回调中
+            if (!imSession.ExecCallbackNow) {
+                //是否需要身份认证
+                if (imSession.isNeedAuthentication()) {
+                    //是否需要自动取得身份认证
+                    if (imSession.isAutoAuthentication()) {
+                        //获得最大尝试次数
+                        int count = imSession.getAutoAuthenticationTryCount();
+                        //设置为正在执行回调中
+                        imSession.ExecCallbackNow = true;
+                        //获得是否取得身份认证
+                        boolean isAuthentication = callback.isAuthentication(imSession, imRequest);
+                        //循环取得身份认证
+                        while (!isAuthentication && count > 0) {
+                            //设置为已结束执行回调
+                            imSession.ExecCallbackNow = false;
+                            //设置为正在执行回调中
+                            imSession.ExecCallbackNow = true;
+                            //开始执行取得身份认证
+                            callback.doAuthentication(imSession, imRequest);
+                            //设置为已结束执行回调
+                            imSession.ExecCallbackNow = false;
+                            //尝试次数减少
+                            count--;
+                            imSession.ExecCallbackNow = true;
+                            //获得是否取得身份认证
+                            isAuthentication = callback.isAuthentication(imSession, imRequest);
+                            //如果已经取得身份认证，则设置为已结束执行回调
+                            if (isAuthentication) {
+                                imSession.ExecCallbackNow = false;
+                            }
+                        }
+                        //是否取得身份认证，此时如果还未取得身份认证，则抛出异常
+                        if (!isAuthentication) {
+                            throw new AuthenticationException(AuthenticationException.NotHaveAuthentication);
+                        }
+                    } else {
+                        throw new AuthenticationException(AuthenticationException.NotHaveAuthentication);
+                    }
+                }
+            }
+        }
+
+        //重新处理Header数据和状态
+        if (imSession.getHeaders().size() > 0) {
+            imRequest.setHeader(imSession.getHeaders());
+        }
+        //重新处理Cookie数据和状态
+        if (imSession.getCookies().size() > 0) {
+            imRequest.setCookie(imSession.getCookies());
+        }
+
+        //获得ImResponse
+        ImResponse imResponse = execute(imRequest);
+
+        //处理Cookie数据并管理
+        if (imResponse.getCookieSize() > 0) {
+            Set<String> cookieNames = imResponse.getCookieNames();
+            for (String cookieName : cookieNames) {
+                imSession.setCookie(cookieName, imResponse.getCookieData(cookieName));
+            }
+        }
+
+        return imResponse;
+    }
+
+    /**
      * 获取InputData的String形式（含JSON字符、KeyValue字符）
      *
      * @param imRequest
@@ -630,7 +798,9 @@ public final class ImHttpClient {
      * @return
      * @throws UnsupportedEncodingException
      */
-    private static String getInputDataToString(ImRequest imRequest, boolean forceKeyValueModel) throws UnsupportedEncodingException {
+    private static String getInputDataToString(ImRequest imRequest, boolean forceKeyValueModel) throws
+            UnsupportedEncodingException {
+
         //当InputData不为空时
         if (imRequest.getInputData() != null) {
 
@@ -759,7 +929,8 @@ public final class ImHttpClient {
      * @return
      * @throws IOException
      */
-    private static ByteArrayOutputStream toByteArrayOutputStream(InputStream input, int bytesLength) throws IOException {
+    private static ByteArrayOutputStream toByteArrayOutputStream(InputStream input, int bytesLength) throws
+            IOException {
         if (bytesLength == 0) {
             bytesLength = 4096;
         }

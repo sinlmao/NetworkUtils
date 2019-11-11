@@ -2,7 +2,7 @@
 
 > A Simple, Lightly Java whit HTTP / FTP network integration operational class library.
 >
-> `update：2019-11-08`  `ver：1.4.2`  `license：Apache 2.0`
+> `update：2019-11-12`  `ver：1.4.3`  `license：Apache 2.0`
 
 *This document is partially translated using a translation tool. If there is something wrong, please forgive me.*
 
@@ -60,6 +60,7 @@ The composition of the Sinlmao Commons Network Utils is very straightforward, wi
 >  - **ImRequest** The data wrapper class of the Request that initiated the HTTP request
 >  - **ImMethod** Method enumeration class for specifying HTTP Request (ImRequest)
 >  - **ImResponse** Data wrapper class that completes the HTTP request
+>  - **ImSession** Data object class for storing session state control
 
 ## 3.2 Simple example
 
