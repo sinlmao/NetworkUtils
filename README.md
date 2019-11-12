@@ -2,7 +2,7 @@
 
 > 一个简单地、轻量级的 Java HTTP、FTP Network 集成、封装的操作类库。
 >
-> `update：2019-11-12`  `ver：1.4.3`  `license：Apache 2.0`
+> `update：2019-11-12`  `ver：1.4.4`  `license：Apache 2.0`
 
 ----------
 
@@ -39,14 +39,14 @@
     <dependency>
         <groupId>cn.sinlmao.commons</groupId>
         <artifactId>network</artifactId>
-        <version>1.4.2</version>
+        <version>1.4.4</version>
     </dependency>
 
 ## 2. Android（Gradle）
 
 如果在Android中使用（Java 1.8+），在Gradle设置如下：
 
-    implementation 'cn.sinlmao.commons:network:1.4.2'
+    implementation 'cn.sinlmao.commons:network:1.4.4'
 
 # 三、使用说明
 
@@ -60,7 +60,10 @@ Sinlmao Commons Network Utils 的构成非常简洁明了，分别由下面的�
 >  - **ImRequest** 发起HTTP请求的Request的数据包装类
 >  - **ImMethod** 用于指定 HTTP Request（ImRequest）的Method枚举类
 >  - **ImResponse** 完成HTTP请求的数据包装类
+>  - **ImContentType** 用于指定 HTTP 内容类型（ContentType）的枚举类
+>  - **ImCharset** 用于指定 HTTP 常见编码的枚举类
 >  - **ImSession** 用于存储会话状态控制的数据对象类
+>  - **ImUserAgent** 常见User-Agent（UA）数据类
 
 ## 3.2 简单示例
 
@@ -199,5 +202,91 @@ HTTP文件上传是 Sinlmao Commons Network Utils `v1.3.0` 开始支持的新特
 
     //自定义User-Agent
     imRequest.setUserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.163 Safari/535.1");
+
+你也可用通过 `ImUserAgent` 类快捷设置。
+
+### 3.2.11 异步模式支持（v1.4.3+）
+
+异步模式的访问可能很多业务上都可能会需要，之前你的需要自行实现，而在 `v1.4.3` 以后，我们新增了异步的模式。简单到直接设置一个标记即可，不过执行异步请求后，您的代码将不会在过程中同步，返回的ImResponse是一个空值，您需要实现ImHttpCallback获得相应正确的ImResponse。示例代码如下：
+
+    imRequest.setAsync(true);   //设置异步标识
+
+### 3.2.12 业务回调接口（v1.4.3+）
+
+业务回调接口主要用在需要嵌入自有业务逻辑的场景。目前支持会话状态控制业务回调和HTTP请求业务回调。使用回调接口前，你需要先实现接口。
+
+假设现在要实现一个带登录的会话状态控制业务，那么应该先实现 `ImSessionCallback` 接口，示例：
+
+    public class TestSessionCallbackImpl implements ImSessionCallback {
+    
+        @Override
+        public boolean isAuthentication(ImSession imSession, ImRequest request) {
+            return imSession.getExtraValue("isLogin") != null && (boolean) imSession.getExtraValue("isLogin");
+        }
+    
+        @Override
+        public boolean doAuthentication(ImSession imSession, ImRequest imRequest) {
+            try {
+                //包装参数
+                Map<String, String> pars = new HashMap<String, String>();
+                
+                ....相关逻辑代码
+                
+                //构建Request
+                ImRequest request = new ImRequest("xxxxxxx");
+                //传入参数
+                request.setInputData(pars);
+                //发送请求，务必传入会话控制对象
+                ImResponse imResponse = ImHttpClient.send(request, imSession);
+    
+                //获得返回数据
+                JSONObject rs = JSON.parseObject(imResponse.getStringContent());
+    
+                //模拟判断登录成功
+                if (rs.getIntValue("status") == 200) {
+                    imSession.addExtra("isLogin", true);
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+    }
+
+业务代码简单示例如下：
+
+    //构建会话状态控制对象类
+    ImSession imSession = new ImSession();
+    
+    //必须配置才能生效业务接口回调
+    imSession.setNeedAuthentication(true);
+    imSession.setAutoAuthentication(true);
+    
+    //设置回调接口
+    imSession.setCallback(new TestSessionCallbackImpl());
+    
+    //包装参数
+    Map<String, String> pars = new HashMap<String, String>();
+    pars.put("getType", "auto");
+    
+    ImRequest imRequest = new ImRequest("xxxxxxx");
+
+    ....相关逻辑代码
+    
+    //发送请求，务必传入会话控制对象
+    ImResponse imResponse = ImHttpClient.send(imRequest, imSession);
+    
+    ....相关逻辑代码
+
+### 3.2.13 代理/抓包支持（v1.3.7+）
+
+我们其实在 `v1.3.7` 的时候就添加了一项实验性功能，支持可配置被抓包（任意抓包代理工具），用以调试抓包，也用在一些特殊的网络环境的时候。经过了这么多版本的迭代，已经相对比较可用，现在我们决定公开这个特性。要开启这个特性非常简单，只需要如下代码：
+
+    //配置代理支持
+    imRequest.enableProxyServer(端口号);
+
 
   [1]: README.en.md

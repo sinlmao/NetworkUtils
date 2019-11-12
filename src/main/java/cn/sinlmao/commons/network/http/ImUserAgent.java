@@ -68,6 +68,28 @@ public class ImUserAgent {
     public final static String UA_PC_WINDOWS_EDGE_NEW = "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.16 Safari/537.36 Edg/79.0.309.15";
 
     /**
+     * PC端Windows Edge浏览器UA
+     * <p>
+     * 采集版本：15.15063
+     * <p>
+     * <font color="#666666">PC side Windows Edge browser UA</font>
+     * <p>
+     * <font color="#666666">Acquisition version: 15.15063</font>
+     */
+    public final static String UA_PC_WINDOWS_EDGE = "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063";
+
+    /**
+     * PC端Windows 微信UA
+     * <p>
+     * 采集版本：70.0.1
+     * <p>
+     * <font color="#666666">PC side Windows WeChat UA</font>
+     * <p>
+     * <font color="#666666">Acquisition version: WeChat 7.0.5</font>
+     */
+    public final static String UA_PC_WINDOWS_WEIXIN = "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36 QBCore/4.0.1278.400 QQBrowser/9.0.2524.400 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2875.116 Safari/537.36 NetType/WIFI MicroMessenger/7.0.5 WindowsWechat";
+
+    /**
      * PC端Windows Internet Explorer(IE) 6 浏览器UA
      * <p>
      * 采集版本：6
@@ -101,7 +123,7 @@ public class ImUserAgent {
     public final static String UA_PC_WINDOWS_IE8 = "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0)";
 
     /**
-     * PC端Windows Internet Explorer(IE) 9浏览器UA
+     * PC端Windows Internet Explorer(IE) 9 浏览器UA
      * <p>
      * 采集版本：9
      * <p>
@@ -140,9 +162,9 @@ public class ImUserAgent {
      * <p>
      * <font color="#666666">iPhone WeChat UA</font>
      * <p>
-     * <font color="#666666">Acquisition version: iOS 12 / WeChat 6.3.22</font>
+     * <font color="#666666">Acquisition version: iOS 12 / WeChat 7.0.8</font>
      */
-    public final static String UA_IPHONE_WEIXIN = "Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16A366 wxwork/2.5.8 MicroMessenger/6.3.22 Language/zh";
+    public final static String UA_IPHONE_WEIXIN = "Mozilla/5.0 (iPhone; CPU iPhone OS 12_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/7.0.8(0x17000820) NetType/WIFI Language/zh_CN";
 
     /**
      * iPhone端UA
@@ -151,9 +173,9 @@ public class ImUserAgent {
      * <p>
      * <font color="#666666">iPhone UA</font>
      * <p>
-     * <font color="#666666">Acquisition version: OS 10.1</font>
+     * <font color="#666666">Acquisition version: OS 12</font>
      */
-    public final static String UA_IPHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 10_1 like Mac OS X) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0 MQQBrowser/8.8.2 Mobile/14B72c Safari/602.1 MttCustomUA/2 QBWebViewType/1 WKType/1";
+    public final static String UA_IPHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 12_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.2 Mobile/15E148 Safari/604.1";
 
     /**
      * Android端UA
@@ -164,18 +186,18 @@ public class ImUserAgent {
      * <p>
      * <font color="#666666">Acquisition version: Android 8.1.0</font>
      */
-    public final static String UA_ANDROID = "Mozilla/5.0 (Linux; U; Android 8.1.0; zh-cn; BLA-AL00 Build/HUAWEIBLA-AL00) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.132 MQQBrowser/8.9 Mobile Safari/537.36";
+    public final static String UA_ANDROID = "Mozilla/5.0 (Linux; U; Android 10; zh-cn; LIO-AL00 Build/HUAWEILIO-AL00) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/9.8 Mobile Safari/537.36";
 
     /**
      * Android端微信UA
      * <p>
-     * 采集版本：Android 8.1 / 微信 6.3.22
+     * 采集版本：Android 10 / 微信 7.0.8.1540
      * <p>
      * <font color="#666666">Android WeChat UA</font>
      * <p>
-     * <font color="#666666">Acquisition version: iOS 12 / WeChat 6.7.3.1360</font>
+     * <font color="#666666">Acquisition version: Android 10 / WeChat 7.0.8.1540</font>
      */
-    public final static String UA_ANDROID_WEIXIN = "Mozilla/5.0 (Linux; Android 8.1; PAR-AL00 Build/HUAWEIPAR-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.132 MQQBrowser/6.2 TBS/044304 Mobile Safari/537.36 MicroMessenger/6.7.3.1360(0x26070333) NetType/WIFI Language/zh_CN Process/tools";
+    public final static String UA_ANDROID_WEIXIN = "Mozilla/5.0 (Linux; Android 10; LIO-AL00 Build/HUAWEILIO-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/6.2 TBS/045008 Mobile Safari/537.36 MMWEBID/3848 MicroMessenger/7.0.8.1540(0x27000834) Process/tools NetType/WIFI Language/zh_CN ABI/arm64";
 
     /**
      * iPad端UA
@@ -187,5 +209,28 @@ public class ImUserAgent {
      * <font color="#666666">Acquisition version: iOS 10.2</font>
      */
     public final static String UA_IPAD = "Mozilla/5.0 (iPad; CPU iPhone OS 10_2 like Mac OS X) AppleWebKit/602.3.12 (KHTML, like Gecko) Version/10.0 MQQBrowser/7.4.1 Mobile/14C92 Safari/8536.25 MttCustomUA/2 QBWebViewType/1";
+
+    /**
+     * OSX端UA
+     * <p>
+     * 采集版本：OSX
+     * <p>
+     * <font color="#666666">OSX UA</font>
+     * <p>
+     * <font color="#666666">Acquisition version: OSX 10.15</font>
+     */
+    public final static String UA_OSX = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.2 Safari/605.1.15";
+
+
+    /**
+     * OSX端微信UA
+     * <p>
+     * 采集版本：iOS 10.2
+     * <p>
+     * <font color="#666666">OSX WeChat UA</font>
+     * <p>
+     * <font color="#666666">Acquisition version: iOS 10.15 / WeChat 2.3.27</font>
+     */
+    public final static String UA_OSX_WEIXIN = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) MicroMessenger/2.3.27(0x12031b13) MacWechat NetType/WIFI WindowsWechat";
 
 }

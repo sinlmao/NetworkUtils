@@ -2,7 +2,7 @@
 
 > A Simple, Lightly Java whit HTTP / FTP network integration operational class library.
 >
-> `update：2019-11-12`  `ver：1.4.3`  `license：Apache 2.0`
+> `update：2019-11-12`  `ver：1.4.4`  `license：Apache 2.0`
 
 *This document is partially translated using a translation tool. If there is something wrong, please forgive me.*
 
@@ -39,14 +39,14 @@ Introduced by Maven, set directly in the POM:
     <dependency>
         <groupId>cn.sinlmao.commons</groupId>
         <artifactId>network</artifactId>
-        <version>1.4.2</version>
+        <version>1.4.4</version>
     </dependency>
 
 ## 2.2 Android（Gradle）
 
 If used in Android (Java 1.8+), the settings in Gradle:
 
-    implementation 'cn.sinlmao.commons:network:1.4.2'
+    implementation 'cn.sinlmao.commons:network:1.4.4'
 
 # III. Instruction Manual
 
@@ -56,11 +56,14 @@ Since **`v1.2.1`**, the new Sinlmao Commons Network Utils has been switched to t
 
 The composition of the Sinlmao Commons Network Utils is very straightforward, with the following classes forming a complete HTTP service:
 
->  - **ImHttpClient** Main class used to initiate HTTP requests
->  - **ImRequest** The data wrapper class of the Request that initiated the HTTP request
->  - **ImMethod** Method enumeration class for specifying HTTP Request (ImRequest)
->  - **ImResponse** Data wrapper class that completes the HTTP request
+>  - **ImHttpClient** Main class for initiating HTTP requests
+>  - **ImRequest** Data wrapper class for Request that initiates HTTP request
+>  - **ImMethod** Method enumeration class for specifying HTTP request (ImRequest)
+>  - **ImResponse** Data wrapper class for completing HTTP requests
+>  - **ImContentType** An enumeration class for specifying the HTTP content type (ContentType)
+>  - **ImCharset** is used to specify the enumeration class for HTTP common encoding
 >  - **ImSession** Data object class for storing session state control
+>  - **ImUserAgent** Common User-Agent (UA) data class
 
 ## 3.2 Simple example
 
@@ -199,5 +202,91 @@ There is also a new feature in `v1.4.1`, which is to customize the User-Agent (U
 
     //Custom User-Agent
     imRequest.setUserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.163 Safari/535.1");
+    
+You can also use the `ImUserAgent` class to quickly set up.
+
+### 3.2.11 Asynchronous mode support (v1.4.3+)
+
+Access in asynchronous mode may be required in many business situations, and you need to implement it yourself before, and after `v1.4.3`, we have added asynchronous mode. Simply set a flag directly, but after executing the asynchronous request, your code will not be synchronized in the process, the returned ImResponse is a null value, you need to implement ImHttpCallback to get the correct ImResponse. The sample code is as follows:
+
+    //Set the asynchronous
+    imRequest.setAsync(true);
+    
+### 3.2.12 Business Callback Interface (v1.4.3+)
+
+The service callback interface is mainly used in scenarios where you need to embed your own business logic. Currently supports session state control service callbacks and HTTP request service callbacks. Before using the callback interface, you need to implement the interface first.
+
+Assuming that you want to implement a session state control service with login, you should implement the `ImSessionCallback` interface first. Example:
+
+    public class TestSessionCallbackImpl implements ImSessionCallback {
+    
+        @Override
+        public boolean isAuthentication(ImSession imSession, ImRequest request) {
+            return imSession.getExtraValue("isLogin") != null && (boolean) imSession.getExtraValue("isLogin");
+        }
+    
+        @Override
+        public boolean doAuthentication(ImSession imSession, ImRequest imRequest) {
+            try {
+                //Packaging parameters
+                Map<String, String> pars = new HashMap<String, String>();
+                
+                ....Related logic code
+                
+                //Build Request
+                ImRequest request = new ImRequest("xxxxxxx");
+                //Incoming parameters
+                request.setInputData(pars);
+                //Send a request, be sure to pass in the session control object
+                ImResponse imResponse = ImHttpClient.send(request, imSession);
+    
+                //Get return data
+                JSONObject rs = JSON.parseObject(imResponse.getStringContent());
+    
+                //Simulation judges successful login
+                if (rs.getIntValue("status") == 200) {
+                    imSession.addExtra("isLogin", true);
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+    }
+    
+A simple example of a business code is as follows:
+    
+    //Build session state control object class
+    ImSession imSession = new ImSession();
+    
+    //Must be configured to validate the business interface callback
+    imSession.setNeedAuthentication(true);
+    imSession.setAutoAuthentication(true);
+    
+    //Set the callback interface
+    imSession.setCallback(new TestSessionCallbackImpl());
+    
+    //Packaging parameters
+    Map<String, String> pars = new HashMap<String, String>();
+    pars.put("getType", "auto");
+    
+    ImRequest imRequest = new ImRequest("xxxxxxx");
+
+    ....Related logic code
+    
+    //Send a request, be sure to pass in the session control object
+    ImResponse imResponse = ImHttpClient.send(imRequest, imSession);
+    
+    ....Related logic code
+
+### 3.2.13 Proxy/Capture Support (v1.3.7+)
+
+We actually added an experimental function in `v1.3.7` to support configurable captured packets (any packet capture agent tool) to debug capture packets, and also used in some special network environments. After so many versions of the iteration, it has been relatively available, and now we decided to expose this feature. To enable this feature is very simple, just the following code:
+
+    //Configuring proxy support
+    imRequest.enableProxyServer(端口号);
 
   [1]: README.md

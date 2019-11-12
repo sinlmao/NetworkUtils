@@ -109,7 +109,7 @@ public final class ImHttpClient {
                     }
                 } catch (ContentTypeException | DataTypeException | MethodException | IgnoreSSLException | QueryParamsException | IOException e) {
                     if (callback != null) {
-                        callback.onError(imRequest);
+                        callback.onError(imRequest, e);
                         callback.onComplete(imRequest, null);
                     }
                 }
@@ -163,7 +163,7 @@ public final class ImHttpClient {
                     }
                 } catch (ContentTypeException | DataTypeException | MethodException | IgnoreSSLException | QueryParamsException | IOException e) {
                     if (callback != null) {
-                        callback.onError(imRequest);
+                        callback.onError(imRequest, e);
                         callback.onComplete(imRequest, null);
                     }
                 }

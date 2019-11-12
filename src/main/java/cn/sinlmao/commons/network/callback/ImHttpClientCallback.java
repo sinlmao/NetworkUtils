@@ -50,8 +50,9 @@ public interface ImHttpClientCallback {
      * 仅在异步时才会执行
      *
      * @param imRequest ImRequest会话请求数据 <br/> <font color="#666666">ImRequest Request data</font>
+     * @param throwable 错误/异常数据 <br/> <font color="#666666">Error/abnormal data</font>
      */
-    void onError(ImRequest imRequest);
+    void onError(ImRequest imRequest, Throwable throwable);
 
     /**
      * HTTP请求成功时回调
