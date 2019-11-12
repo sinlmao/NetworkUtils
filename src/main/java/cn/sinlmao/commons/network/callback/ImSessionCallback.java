@@ -68,4 +68,19 @@ public interface ImSessionCallback {
      */
     boolean doAuthentication(ImSession imSession, ImRequest imRequest);
 
+    /**
+     * 执行时发生错误的回调
+     * <p>
+     * 仅在异步时才会执行
+     * <p>
+     * <font color="#666666">An error callback occurred during execution</font>
+     * <p>
+     * <font color="#666666">Executed only when asynchronous</font>
+     *
+     * @param imSession ImSession会话状态控制对象 <br/> <font color="#666666">ImSession session state control object</font>
+     * @param imRequest ImRequest会话请求数据 <br/> <font color="#666666">ImRequest Request data</font>
+     * @param throwable 错误/异常数据 <br/> <font color="#666666">Error/abnormal data</font>
+     */
+    void onError(ImSession imSession, ImRequest imRequest, Throwable throwable);
+
 }

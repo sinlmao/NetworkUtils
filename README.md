@@ -2,7 +2,7 @@
 
 > 一个简单地、轻量级的 Java HTTP、FTP Network 集成、封装的操作类库。
 >
-> `update：2019-11-12`  `ver：1.4.4`  `license：Apache 2.0`
+> `update：2019-11-13`  `ver：1.4.5`  `license：Apache 2.0`
 
 ----------
 
@@ -39,14 +39,14 @@
     <dependency>
         <groupId>cn.sinlmao.commons</groupId>
         <artifactId>network</artifactId>
-        <version>1.4.4</version>
+        <version>1.4.5</version>
     </dependency>
 
 ## 2. Android（Gradle）
 
 如果在Android中使用（Java 1.8+），在Gradle设置如下：
 
-    implementation 'cn.sinlmao.commons:network:1.4.4'
+    implementation 'cn.sinlmao.commons:network:1.4.5'
 
 # 三、使用说明
 
@@ -113,21 +113,21 @@ Sinlmao Commons Network Utils 的构成非常简洁明了，分别由下面的�
     //设置身份 - Header 方式
     imRequest.addHeader("token", "your token");
 
-### 3.2.4 添加Cookie
+### 3.2.5 添加Cookie
 
 除了可以添加Header，当然也可以添加Cookie，同样非常地简单：
 
     //设置Cookie
     imRequest.addCookie("key", "value");
 
-### 3.2.5 忽略SSL证书验证（v1.2.5+）
+### 3.2.6 忽略SSL证书验证（v1.2.5+）
 
 尽管SSL证书验证可以极大增加会话的可信度，但更多的时候我们并不需要验证SSL的证书，尤其是一些自签名的证书，可以通过以下代码忽略SSL证书验证：
 
     //配置忽略证书
     imRequest.setIgnoreSSLCertVerify(true);
 
-### 3.2.6 设置多种类型的InputData（v1.2.3+）
+### 3.2.7 设置多种类型的InputData（v1.2.3+）
 
 我们都经历过需要向服务端接口（或某个其它URL）提交一系列参数，参数可能数量多且数据类型复杂。如果都转成String显得非常的啰嗦和麻烦，所以在 Sinlmao Commons Network Utils 中，可以接收String、Map<String, String>、JSONObject（fastjson），ImHttpClient 会自动转换合适的格式。用法模拟代码如下：
 
@@ -140,7 +140,7 @@ Sinlmao Commons Network Utils 的构成非常简洁明了，分别由下面的�
     //传入JSONObject类型的数据（模拟）
     imRequest.setInputData(JSONObject);
 
-### 3.2.7 文件上传（v1.3.0+）
+### 3.2.8 文件上传（v1.3.0+）
 
 HTTP文件上传是 Sinlmao Commons Network Utils `v1.3.0` 开始支持的新特性，将复杂甚至非常抽象的文件上传代码逻辑封装并将其简化成一个简单地数据类型，通过一致的调用方法，只需要设置特定的内容类型和方法，你可以很简单的实现文件上传需求。代码如下：
 
@@ -166,7 +166,7 @@ HTTP文件上传是 Sinlmao Commons Network Utils `v1.3.0` 开始支持的新特
     //打印返回数据
     System.out.println(rs);
 
-### 3.2.8 使用QueryString请求（v1.4.0+）
+### 3.2.9 使用QueryString请求（v1.4.0+）
 
 从 `v1.4.0` 我们开始支持QueryString请求的新特性，用于更好的支持或专项用于URL传参的场景。代码如下：
 
@@ -185,7 +185,7 @@ HTTP文件上传是 Sinlmao Commons Network Utils `v1.3.0` 开始支持的新特
     //打印返回数据
     System.out.println(rs);
 
-### 3.2.9 会话状态管理（v1.4.1+）
+### 3.2.10 会话状态管理（v1.4.1+）
 
 会话状态管理，这是从 Sinlmao Commons Network Utils `v1.4.1` 开始支持的新特性，使用时请注意更新版本。会话状态管理会自动帮您管理与服务端的状态或身份数据，简化在业务代码上的复杂逻辑。使用时只需要配置甚至简单构造一个 ImSession 即可，完全不需要您的额外参与，示例代码如下：
 
@@ -196,7 +196,7 @@ HTTP文件上传是 Sinlmao Commons Network Utils `v1.3.0` 开始支持的新特
     //发送请求
     ImResponse imResponse = ImHttpClient.send(imRequest, imSession);
     
-### 3.2.10 自定义用户代理（User-Agent，UA）信息（v1.4.1+）
+### 3.2.11 自定义用户代理（User-Agent，UA）信息（v1.4.1+）
 
 `v1.4.1` 还有有一个新的特性，就是可以自定义用户代理（User-Agent，UA）信息，示例代码如下：
 
@@ -205,15 +205,15 @@ HTTP文件上传是 Sinlmao Commons Network Utils `v1.3.0` 开始支持的新特
 
 你也可用通过 `ImUserAgent` 类快捷设置。
 
-### 3.2.11 异步模式支持（v1.4.3+）
+### 3.2.12 异步模式支持（v1.4.3+）
 
-异步模式的访问可能很多业务上都可能会需要，之前你的需要自行实现，而在 `v1.4.3` 以后，我们新增了异步的模式。简单到直接设置一个标记即可，不过执行异步请求后，您的代码将不会在过程中同步，返回的ImResponse是一个空值，您需要实现ImHttpCallback获得相应正确的ImResponse。示例代码如下：
+异步模式的访问可能很多业务上都可能会需要，之前你需要自行实现，而在 `v1.4.3` 以后，我们新增了异步的模式。简单到直接设置一个标记即可，不过执行异步请求后，你的代码将不会在过程中同步，返回的ImResponse是一个空值，你需要实现ImHttpCallback获得相应正确的ImResponse。示例代码如下：
 
     imRequest.setAsync(true);   //设置异步标识
 
-### 3.2.12 业务回调接口（v1.4.3+）
+### 3.2.13 业务回调接口（v1.4.3+）
 
-业务回调接口主要用在需要嵌入自有业务逻辑的场景。目前支持会话状态控制业务回调和HTTP请求业务回调。使用回调接口前，你需要先实现接口。
+业务回调接口主要用在需要嵌入自有业务逻辑的场景。目前支持会话状态控制业务回调和HTTP请求业务回调（从 `v1.4.3` 开始支持）。使用回调接口前，你需要先实现接口。
 
 假设现在要实现一个带登录的会话状态控制业务，那么应该先实现 `ImSessionCallback` 接口，示例：
 
@@ -254,6 +254,8 @@ HTTP文件上传是 Sinlmao Commons Network Utils `v1.3.0` 开始支持的新特
                 return false;
             }
         }
+        
+        ....相关逻辑代码
     }
 
 业务代码简单示例如下：
@@ -270,7 +272,8 @@ HTTP文件上传是 Sinlmao Commons Network Utils `v1.3.0` 开始支持的新特
     
     //包装参数
     Map<String, String> pars = new HashMap<String, String>();
-    pars.put("getType", "auto");
+    
+    ....相关逻辑代码
     
     ImRequest imRequest = new ImRequest("xxxxxxx");
 
@@ -281,7 +284,7 @@ HTTP文件上传是 Sinlmao Commons Network Utils `v1.3.0` 开始支持的新特
     
     ....相关逻辑代码
 
-### 3.2.13 代理/抓包支持（v1.3.7+）
+### 3.2.14 代理/抓包支持（v1.3.7+）
 
 我们其实在 `v1.3.7` 的时候就添加了一项实验性功能，支持可配置被抓包（任意抓包代理工具），用以调试抓包，也用在一些特殊的网络环境的时候。经过了这么多版本的迭代，已经相对比较可用，现在我们决定公开这个特性。要开启这个特性非常简单，只需要如下代码：
 

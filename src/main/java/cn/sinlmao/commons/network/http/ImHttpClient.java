@@ -98,19 +98,26 @@ public final class ImHttpClient {
         if (imRequest.isAsync()) {
             //异步执行
             THREAD_FACTORY.newThread(() -> {
-                ImHttpClientCallback callback = imRequest.getCallback();
+                //获得回调接口
+                ImHttpClientCallback httpClientCallback = imRequest.getCallback();
+                ImSessionCallback sessionCallback = imSession.getCallback();
                 try {
                     //具体执行
                     ImResponse imResponse = execute(imRequest, imSession);
                     //如果已经设置回调接口，执行回调
-                    if (callback != null) {
-                        callback.onSuccess(imRequest, imResponse);
-                        callback.onComplete(imRequest, imResponse);
+                    if (httpClientCallback != null) {
+                        httpClientCallback.onSuccess(imRequest, imResponse);
+                        httpClientCallback.onComplete(imRequest, imResponse);
                     }
                 } catch (ContentTypeException | DataTypeException | MethodException | IgnoreSSLException | QueryParamsException | IOException e) {
-                    if (callback != null) {
-                        callback.onError(imRequest, e);
-                        callback.onComplete(imRequest, null);
+                    //如果已经设置回调接口，执行回调
+                    if (httpClientCallback != null) {
+                        httpClientCallback.onError(imRequest, e);
+                        httpClientCallback.onComplete(imRequest, null);
+                    }
+                } catch (AuthenticationException e) {
+                    if (sessionCallback != null) {
+                        sessionCallback.onError(imSession, imRequest, e);
                     }
                 }
             }).start();
@@ -689,15 +696,16 @@ public final class ImHttpClient {
      *
      * @param imRequest ImRequest会话请求数据 <br/> <font color="#666666">ImRequest Request data</font>
      * @return ImResponse会话响应对象 <br/> <font color="#666666">ImResponse Response object</font>
-     * @throws ContentTypeException 内容类型（ContentType）使用相关异常/警告 <br/> <font color="#666666">Content Type (ContentType) uses related exceptions/warnings</font>
-     * @throws DataTypeException    数据类型使用相关异常/警告 <br/> <font color="#666666">Data type usage related exceptions/warnings</font>
-     * @throws MethodException      方法（Method）使用相关异常/警告 <br/> <font color="#666666">Method uses related exceptions/warnings</font>
-     * @throws IgnoreSSLException   忽略SSL相关异常/警告 <br/> <font color="#666666">Ignore SSL related exceptions/warnings</font>
-     * @throws QueryParamsException 查询参数（QueryParams）相关异常/警告类 <br/> <font color="#666666">Query parameters (QueryParams) related exception/warning</font>
-     * @throws IOException          IO异常 <br/> <font color="#666666">IO exception</font>
+     * @throws ContentTypeException    内容类型（ContentType）使用相关异常/警告 <br/> <font color="#666666">Content Type (ContentType) uses related exceptions/warnings</font>
+     * @throws DataTypeException       数据类型使用相关异常/警告 <br/> <font color="#666666">Data type usage related exceptions/warnings</font>
+     * @throws MethodException         方法（Method）使用相关异常/警告 <br/> <font color="#666666">Method uses related exceptions/warnings</font>
+     * @throws IgnoreSSLException      忽略SSL相关异常/警告 <br/> <font color="#666666">Ignore SSL related exceptions/warnings</font>
+     * @throws QueryParamsException    查询参数（QueryParams）相关异常/警告类 <br/> <font color="#666666">Query parameters (QueryParams) related exception/warning</font>
+     * @throws AuthenticationException 身份认证相关异常/警告类 <br/> <font color="#666666">Authentication related exception/warning</font>
+     * @throws IOException             IO异常 <br/> <font color="#666666">IO exception</font>
      */
     private static ImResponse execute(ImRequest imRequest, ImSession imSession)
-            throws ContentTypeException, DataTypeException, MethodException, IgnoreSSLException, QueryParamsException, IOException {
+            throws ContentTypeException, DataTypeException, MethodException, IgnoreSSLException, QueryParamsException, AuthenticationException, IOException {
 
         //处理Header数据和状态
         if (imSession.getHeaders().size() > 0) {

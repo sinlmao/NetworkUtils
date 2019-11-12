@@ -2,7 +2,7 @@
 
 > A Simple, Lightly Java whit HTTP / FTP network integration operational class library.
 >
-> `update：2019-11-12`  `ver：1.4.4`  `license：Apache 2.0`
+> `update：2019-11-13`  `ver：1.4.5`  `license：Apache 2.0`
 
 *This document is partially translated using a translation tool. If there is something wrong, please forgive me.*
 
@@ -39,14 +39,14 @@ Introduced by Maven, set directly in the POM:
     <dependency>
         <groupId>cn.sinlmao.commons</groupId>
         <artifactId>network</artifactId>
-        <version>1.4.4</version>
+        <version>1.4.5</version>
     </dependency>
 
 ## 2.2 Android（Gradle）
 
 If used in Android (Java 1.8+), the settings in Gradle:
 
-    implementation 'cn.sinlmao.commons:network:1.4.4'
+    implementation 'cn.sinlmao.commons:network:1.4.5'
 
 # III. Instruction Manual
 
@@ -113,21 +113,21 @@ Many times we need to indicate identity in the Header (that is, pass the value i
     //Set identity - Header mode
     imRequest.addHeader("token", "your token");
 
-### 3.2.4 Add Cookie
+### 3.2.5 Add Cookie
 
 In addition to the ability to add a Header, of course, you can also add a cookie, which is also very simple:
 
     //Set Cookies
     imRequest.addCookie("key", "value");
 
-### 3.2.5 Ignore SSL certificate verification (v1.2.5+)
+### 3.2.6 Ignore SSL certificate verification (v1.2.5+)
 
 Although SSL certificate verification can greatly increase the credibility of the session, more often we do not need to verify the SSL certificate, especially some self-signed certificates, you can ignore the SSL certificate verification by the following code:
 
     //Configuring ignore certificates
     imRequest.setIgnoreSSLCertVerify(true);
 
-### 3.2.6 Set multiple types of InputData(v1.2.3+)
+### 3.2.7 Set multiple types of InputData(v1.2.3+)
 
 We have all experienced the need to submit a series of parameters to the server interface (or some other URL), the number of parameters may be large and the data type is complex. If you turn into a String, it is very embarrassing and troublesome, so in Sinlmao Commons Network Utils, you can receive String, Map<String, String>, JSONObject (fastjson), ImHttpClient will automatically convert the appropriate format. The usage simulation code is as follows:
 
@@ -140,7 +140,7 @@ We have all experienced the need to submit a series of parameters to the server 
     //Pass in JSONObject type data (simulation)
     imRequest.setInputData(JSONObject);
 
-### 3.2.7 File Upload (v1.3.0+)
+### 3.2.8 File Upload (v1.3.0+)
 
 HTTP file upload is a new feature supported by Sinalmao Commons Network Utils `v1.3.0`. It encapsulates complex and even very abstract file upload code logic and simplifies it into a simple data type. With a consistent call method, only specific settings need to be set. With content types and methods, you can easily implement file upload requirements. code show as below:
 
@@ -166,7 +166,7 @@ HTTP file upload is a new feature supported by Sinalmao Commons Network Utils `v
     //Print return data
     System.out.println(rs);
 
-### 3.2.8 Using QueryString Request (v1.4.0+)
+### 3.2.9 Using QueryString Request (v1.4.0+)
 
 From `v1.4.0` we started supporting the new features of QueryString requests for better support or special scenarios for URL passing. code show as below:
 
@@ -185,7 +185,7 @@ From `v1.4.0` we started supporting the new features of QueryString requests for
     //Print return data
     System.out.println(rs);
 
-### 3.2.9 Session State Management (v1.4.1+)
+### 3.2.10 Session State Management (v1.4.1+)
 
 Session state management, which is a new feature supported from Sinlmao Commons Network Utils `v1.4.1`. Please pay attention to the updated version when using it. Session state management automatically manages the state or identity data with the server and simplifies the complex logic on the business code. You only need to configure or even simply construct an ImSession when you use it. You don't need your extra participation at all. The sample code is as follows:
 
@@ -196,7 +196,7 @@ Session state management, which is a new feature supported from Sinlmao Commons 
     //send request
     mResponse imResponse = ImHttpClient.send(imRequest, imSession);
 
-### 3.2.10 Custom User Agent (UA) Information (v1.4.1+)
+### 3.2.11 Custom User Agent (UA) Information (v1.4.1+)
 
 There is also a new feature in `v1.4.1`, which is to customize the User-Agent (UA) information. The sample code is as follows:
 
@@ -205,16 +205,16 @@ There is also a new feature in `v1.4.1`, which is to customize the User-Agent (U
     
 You can also use the `ImUserAgent` class to quickly set up.
 
-### 3.2.11 Asynchronous mode support (v1.4.3+)
+### 3.2.12 Asynchronous mode support (v1.4.3+)
 
-Access in asynchronous mode may be required in many business situations, and you need to implement it yourself before, and after `v1.4.3`, we have added asynchronous mode. Simply set a flag directly, but after executing the asynchronous request, your code will not be synchronized in the process, the returned ImResponse is a null value, you need to implement ImHttpCallback to get the correct ImResponse. The sample code is as follows:
+Access in asynchronous mode may be required in many business situations. You need to implement it yourself before, and after `v1.4.3` , we have added asynchronous mode. Simply set a flag directly, but after executing the asynchronous request, your code will not be synchronized in the process, the returned ImResponse is a null value, you need to implement ImHttpCallback to get the correct ImResponse. The sample code is as follows:
 
     //Set the asynchronous
     imRequest.setAsync(true);
     
-### 3.2.12 Business Callback Interface (v1.4.3+)
+### 3.2.13 Business Callback Interface (v1.4.3+)
 
-The service callback interface is mainly used in scenarios where you need to embed your own business logic. Currently supports session state control service callbacks and HTTP request service callbacks. Before using the callback interface, you need to implement the interface first.
+The service callback interface is mainly used in scenarios where you need to embed your own business logic. Session state control service callbacks and HTTP request service callbacks are currently supported (supported from `v1.4.3` ). Before using the callback interface, you need to implement the interface first.
 
 Assuming that you want to implement a session state control service with login, you should implement the `ImSessionCallback` interface first. Example:
 
@@ -255,6 +255,8 @@ Assuming that you want to implement a session state control service with login, 
                 return false;
             }
         }
+        
+        ....Related logic code
     }
     
 A simple example of a business code is as follows:
@@ -271,7 +273,8 @@ A simple example of a business code is as follows:
     
     //Packaging parameters
     Map<String, String> pars = new HashMap<String, String>();
-    pars.put("getType", "auto");
+    
+    ....Related logic code
     
     ImRequest imRequest = new ImRequest("xxxxxxx");
 
@@ -282,11 +285,11 @@ A simple example of a business code is as follows:
     
     ....Related logic code
 
-### 3.2.13 Proxy/Capture Support (v1.3.7+)
+### 3.2.14 Proxy/Capture Support (v1.3.7+)
 
 We actually added an experimental function in `v1.3.7` to support configurable captured packets (any packet capture agent tool) to debug capture packets, and also used in some special network environments. After so many versions of the iteration, it has been relatively available, and now we decided to expose this feature. To enable this feature is very simple, just the following code:
 
     //Configuring proxy support
-    imRequest.enableProxyServer(端口号);
+    imRequest.enableProxyServer(Port);
 
   [1]: README.md
